@@ -2,9 +2,13 @@ Package: FarmCPU
 Type: Package
 Title: FarmCPU iteratively used fixed and random effect models for powerful and efficient genome-wide association studies (GWAS)
 Version: 0.1.0
-Authors@R: c(person("Liu", "Xiaolei", email = "unknown_email@unknown.com", role = c("aut", "cre")), person("Zhang", "Zhiwu", email = "unknown_email@unknown.com", role = c("aut", "cre")))
+Authors@R: c(person("Liu", "Xiaolei", email = "unknown_email@unknown.com", role = c("aut")), person("Zhang", "Zhiwu", email = "unknown_email@unknown.com", role = c("aut", "cre")))
 Maintainer: Zhiwu Zhang <not_a_real_email@gmail.com>
 Description: Here we present a user-friendly R GWAS package called FarmCPU (Fixed and random model Circulating Probability Unification), it implemented a method we recently developed to address the “confounding problem” and used several mathematical or programming strategies to increase the speed and save memory in order to make FarmCPU adapted for big data. Now, FarmCPU can deal with a data with 500,000 samples and 500,000 markers in three days.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Imports:
+    bigmemory,
+    biganalytics,
+    compiler
