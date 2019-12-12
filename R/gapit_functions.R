@@ -7,7 +7,7 @@ function(){
 #Objective 3: Comprehensive output to interpret data and results;
 #Objective 4: Informative tables and high quality figures for reports and publication;
 
-#Methods implimented: 
+#Methods implimented:
 # 1. GLM (Structure or Q method for GWAS, Pritchard et. al. Genetics, 2000)
 # 2. MLM (Q+K, Yu et. al. Nature Genetics, 2006)
 # 3. gBLUP (Marker based kinship, Zhang et. al. Journal of Animal Science, 2007)
@@ -23,7 +23,7 @@ function(){
 #Designed by Zhiwu Zhang
 #Authors of paper on Bioinformatics (2012, 28:2397-2399): Alex Lipka, Feng Tian, Qishan Wang, Xiaolei Liu, Meng Li,You Tang and Zhiwu Zhang
 #Authors of paper on Plant Genome (2016, Vol 9, No. 2): You Tang, Xiaolei Liu, Jiabo Wang, Meng Li, Qishan Wang, Feng Tian, Zhongbin Su, Yuchun Pan, Di Liu, Alexander E. Lipka, Edward S. Buckler, and Zhiwu Zhang
-if(!require(multtest)) 
+if(!require(multtest))
 {
 	if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
@@ -103,8 +103,8 @@ function(x=0,h2=.5,r=.25){
 function(Z,GA,KG){
 #Object: To split a group kinship into two blocks containing individuals with and without phenotype
 #Output: GAU,KW,KO,KWO
-#Authors: Zhiwu Zhang and Alex Lipka 
-# Last update: April 14, 2011 
+#Authors: Zhiwu Zhang and Alex Lipka
+# Last update: April 14, 2011
 ##############################################################################################
 # To separate group kiship into two blocks: with and without phenotype.
 # A group goes to with phenotype as loog as it has one phenotyped individual.
@@ -171,16 +171,16 @@ return(list(GAU=GAU,KW=KW,KO=KO,KWO=KWO))
 function(Y=NULL,CV=NULL,Z=NULL,KI=NULL,GK=NULL,GD=NULL,GM=NULL,
               method=NULL,delta=NULL,vg=NULL,ve=NULL,LD=0.01,GTindex=NULL,
               file.output=TRUE,opt="extBIC"){
-#Object: To calculate p-values of SNPs by using method of GLM, MLM, CMLM, FaST, SUPER and DC  
+#Object: To calculate p-values of SNPs by using method of GLM, MLM, CMLM, FaST, SUPER and DC
 #Straitegy: NA
 #Output: GWAS, GPS,REMLs,vg,ve,delta
-#intput: 
+#intput:
 #Y: phenotype with columns of taxa,Y1,Y2...
 #CV: covariate variables with columns of taxa, v1,v2...
 #GD: same as GK. This is the genotype to screen, the columns are taxa,SNP1,SNP2,...
 #GK: Genotype data in numerical format, taxa goes to row and snp go ti columns. the first column is taxa
 #GM: Genotype map with columns of snpID,chromosome and position
-#method: Options are GLM, MLM, CMLM, FaST, SUPER ,FARM-CPU and DC 
+#method: Options are GLM, MLM, CMLM, FaST, SUPER ,FARM-CPU and DC
 #Authors: Zhiwu Zhang
 #Last update: November 2, 2011
 ##############################################################################################
@@ -191,7 +191,7 @@ if(method=="GLM"){
 #print("---------------screening by GLM----------------------------------")
   #print(GTindex)
   myGAPIT <- GAPIT(
-  Y=Y,			
+  Y=Y,
   CV=CV,
   Z=Z,
   KI=KI,
@@ -200,11 +200,11 @@ if(method=="GLM"){
   model=("GLM"),
   QC=FALSE,
   GTindex=GTindex,
-  file.output=file.output				
+  file.output=file.output
   )
-  GWAS=myGAPIT$GWAS 
-  GPS=myGAPIT$GPS 
-  REMLs=myGAPIT$REMLs  
+  GWAS=myGAPIT$GWAS
+  GPS=myGAPIT$GPS
+  REMLs=myGAPIT$REMLs
   delta=myGAPIT$ve/myGAPIT$va
   vg=myGAPIT$vg
   ve=myGAPIT$ve
@@ -215,21 +215,21 @@ if(method=="MLM"){
 #print("---------------screening by MLM----------------------------------")
 
   myGAPIT <- GAPIT(
-  Y=Y,			
+  Y=Y,
   CV=CV,
   Z=Z,
   KI=KI,
   GD=GD,
   GM=GM,
-  group.from=nrow(Y),			
+  group.from=nrow(Y),
   group.to=nrow(Y),
   QC=FALSE,
   GTindex=GTindex,
-  file.output=file.output				
+  file.output=file.output
   )
-  GWAS=myGAPIT$GWAS 
-  GPS=myGAPIT$GPS 
-  REMLs=myGAPIT$REMLs  
+  GWAS=myGAPIT$GWAS
+  GPS=myGAPIT$GPS
+  REMLs=myGAPIT$REMLs
   delta=myGAPIT$ve/myGAPIT$va
   vg=myGAPIT$vg
   ve=myGAPIT$ve
@@ -239,21 +239,21 @@ if(method=="MLM"){
 if(method=="CMLM"){
 #print("---------------screening by CMLM----------------------------------")
   myGAPIT <- GAPIT(
-  Y=Y,			
+  Y=Y,
   CV=CV,
   Z=Z,
   KI=KI,
   GD=GD,
   GM=GM,
-  group.from=1,			
+  group.from=1,
   group.to=nrow(Y),
   QC=FALSE,
   GTindex=GTindex,
-  file.output=file.output				
+  file.output=file.output
   )
-  GWAS=myGAPIT$GWAS 
-  GPS=myGAPIT$GPS 
-  REMLs=myGAPIT$REMLs  
+  GWAS=myGAPIT$GWAS
+  GPS=myGAPIT$GPS
+  REMLs=myGAPIT$REMLs
   delta=myGAPIT$ve/myGAPIT$va
   vg=myGAPIT$vg
   ve=myGAPIT$ve
@@ -269,9 +269,9 @@ if(method=="FaST" | method=="SUPER"| method=="DC")
   {
 
     myFaSTREML=GAPIT.get.LL(pheno=matrix(Y[,-1],nrow(Y),1),geno=NULL,snp.pool=as.matrix(GK[,-1]),X0=as.matrix(cbind(matrix(1,nrow(CV),1),CV[,-1])))
-    
-#print("Transfer data...")    
-    REMLs=-2*myFaSTREML$LL  
+
+#print("Transfer data...")
+    REMLs=-2*myFaSTREML$LL
     delta=myFaSTREML$delta
     vg=myFaSTREML$vg
     ve=myFaSTREML$ve
@@ -349,7 +349,7 @@ CV=CV[taxa_CV%in%taxa_Y,]
 
 KI= GAPIT.kinship.VanRaden(snps=as.matrix(GD[,-1]))
 colnames(KI)=as.character(GD[,1])
- 
+
 if(is.null(CV))
 {
 mymlmm=mlmm(
@@ -405,7 +405,7 @@ REMLs=NULL
 colnames(GWAS)=c("SNP","Chromosome","Position","P.value","effec","maf","nobs")
 
 }
-#print("GAPIT.Bread succeed!")  
+#print("GAPIT.Bread succeed!")
 return (list(GWAS=GWAS, GPS=GPS,REMLs=REMLs,vg=vg,ve=ve,delta=delta))
 } #end of GAPIT.Bread
 #=============================================================================================
@@ -423,7 +423,7 @@ function(Y=NULL,CV=NULL,GK=NULL){
     #Last update: November 2, 2015
 ##############################################################################################
     #print("GAPIT.Burger in progress...")
-    
+
     if(!is.null(CV)){
         #CV=as.matrix(CV)#change CV to a matrix when it is a vector xiaolei changed here
 		#theCV=as.matrix(cbind(matrix(1,nrow(CV),1),CV)) ###########for FarmCPU
@@ -432,7 +432,7 @@ function(Y=NULL,CV=NULL,GK=NULL){
     }else{
         theCV=matrix(1,nrow(Y),1)
     }
-    
+
 #handler of single column GK
 n=nrow(GK)
 m=ncol(GK)
@@ -447,7 +447,7 @@ myFaSTREML=GAPIT.get.LL(pheno=matrix(Y[,-1],nrow(Y),1),geno=NULL,snp.pool=theGK,
     delta=myFaSTREML$delta
     vg=myFaSTREML$vg
     ve=myFaSTREML$ve
-    
+
     #print("GAPIT.Burger succeed!")
     return (list(REMLs=REMLs,vg=vg,ve=ve,delta=delta))
 } #end of GAPIT.Burger.Bus
@@ -475,21 +475,21 @@ if(method=="GLM"){
 #print("---------------screening by GLM----------------------------------")
 
   myGAPIT <- GAPIT(
-  Y=Y,			
+  Y=Y,
   CV=CV,
   Z=Z,
   KI=KI,
   GD=GD,
   GM=GM,
-  group.from=0,			
+  group.from=0,
   group.to=0,
   QC=FALSE,
   GTindex=GTindex,
-  file.output=F				
+  file.output=F
   )
-  GWAS=myGAPIT$GWAS 
-  GPS=myGAPIT$GPS 
-  REMLs=myGAPIT$REMLs  
+  GWAS=myGAPIT$GWAS
+  GPS=myGAPIT$GPS
+  REMLs=myGAPIT$REMLs
   delta=myGAPIT$ve/myGAPIT$va
   vg=myGAPIT$vg
   ve=myGAPIT$ve
@@ -500,21 +500,21 @@ if(method=="MLM"){
 #print("---------------screening by MLM----------------------------------")
 
   myGAPIT <- GAPIT(
-  Y=Y,			
+  Y=Y,
   CV=CV,
   Z=Z,
   KI=KI,
   GD=GD,
   GM=GM,
-  group.from=nrow(Y),			
+  group.from=nrow(Y),
   group.to=nrow(Y),
   QC=FALSE,
   GTindex=GTindex,
-  file.output=F				
+  file.output=F
   )
-  GWAS=myGAPIT$GWAS 
-  GPS=myGAPIT$GPS 
-  REMLs=myGAPIT$REMLs  
+  GWAS=myGAPIT$GWAS
+  GPS=myGAPIT$GPS
+  REMLs=myGAPIT$REMLs
   delta=myGAPIT$ve/myGAPIT$va
   vg=myGAPIT$vg
   ve=myGAPIT$ve
@@ -524,21 +524,21 @@ if(method=="MLM"){
 if(method=="CMLM"){
 #print("---------------screening by CMLM----------------------------------")
   myGAPIT <- GAPIT(
-  Y=Y,			
+  Y=Y,
   CV=CV,
   Z=Z,
   KI=KI,
   GD=GD,
   GM=GM,
-  group.from=1,			
+  group.from=1,
   group.to=nrow(Y),
   QC=FALSE,
   GTindex=GTindex,
-  file.output=F				
+  file.output=F
   )
-  GWAS=myGAPIT$GWAS 
-  GPS=myGAPIT$GPS 
-  REMLs=myGAPIT$REMLs  
+  GWAS=myGAPIT$GWAS
+  GPS=myGAPIT$GPS
+  REMLs=myGAPIT$REMLs
   delta=myGAPIT$ve/myGAPIT$va
   vg=myGAPIT$vg
   ve=myGAPIT$ve
@@ -555,8 +555,8 @@ if(method=="FaST" | method=="SUPER"| method=="DC")
     #print("!!!!!!!!!!!!!!!!")
     myFaSTREML=GAPIT.get.LL(pheno=matrix(Y[,-1],nrow(Y),1),geno=NULL,snp.pool=as.matrix(GK[,-1]),X0=as.matrix(cbind(matrix(1,nrow(CV),1),CV[,-1])))
     #print(myFaSTREML)
-#print("Transfer data...")    
-    REMLs=-2*myFaSTREML$LL  
+#print("Transfer data...")
+    REMLs=-2*myFaSTREML$LL
     delta=myFaSTREML$delta
     vg=myFaSTREML$vg
     ve=myFaSTREML$ve
@@ -642,13 +642,13 @@ print(n)
     aim_chro=as.character(aim_marker[,2])
     aim_position=as.numeric(as.character(aim_marker[,3]))
     position=as.numeric(as.matrix(GM)[,3])
-    aim_area=GM[,2]==aim_chro&position<(aim_position+windowsize)&position>(aim_position-windowsize)    
+    aim_area=GM[,2]==aim_chro&position<(aim_position+windowsize)&position>(aim_position-windowsize)
     aim_matrix=as.matrix(table(aim_area))
     #print(aim_area)
     #print(setequal(aim_area,logical(0)))
     if(setequal(aim_area,logical(0))) next
     if(aim_matrix[rownames(aim_matrix)=="TRUE",1]<10) next
-        aim_area[GM[,1]==aim_marker[,1]]=FALSE      
+        aim_area[GM[,1]==aim_marker[,1]]=FALSE
         secondGD=GD[,c(TRUE,aim_area)]
         secondGM=GM[aim_area,]
         myGAPIT_Second <- FarmCPU(
@@ -819,12 +819,12 @@ if(n>0)
     aim_chro=as.character(aim_marker[,2])
     aim_position=as.numeric(as.character(aim_marker[,3]))
     position=as.numeric(as.matrix(GM)[,3])
-    aim_area=GM[,2]==aim_chro&position<(aim_position+windowsize)&position>(aim_position-windowsize)    
+    aim_area=GM[,2]==aim_chro&position<(aim_position+windowsize)&position>(aim_position-windowsize)
     aim_matrix=as.matrix(table(aim_area))
     if(setequal(aim_area,logical(0))) next
 
     if(aim_matrix[rownames(aim_matrix)=="TRUE",1]<10) next
-        aim_area[GM[,1]==aim_marker[,1]]=FALSE      
+        aim_area[GM[,1]==aim_marker[,1]]=FALSE
         secondGD=GD[,c(TRUE,aim_area)]
         secondGM=GM[aim_area,]
         myGAPIT_Second =Blink(Y=Y,GD=secondGD,GM=secondGM,CV=blink_CV,maxLoop=10,time.cal=T)
@@ -884,7 +884,7 @@ KI= GAPIT.kinship.VanRaden(snps=as.matrix(GD[,-1]))
 colnames(KI)=as.character(GD[,1])
 }else{
 print("The Kinship is provided by user !!")
-KI=KI[,-1] 
+KI=KI[,-1]
 #colnames(KI)=as.character(GD[,1])
 taxa_KI=as.character(colnames(KI))
 KI=KI[taxa_KI%in%as.character(GD[,1]),taxa_KI%in%as.character(GD[,1])]
@@ -955,7 +955,7 @@ REMLs=NULL
 colnames(GWAS)=c("SNP","Chromosome","Position","P.value","effect","maf","nobs")
 
 }
-#print("GAPIT.Bus succeed!")  
+#print("GAPIT.Bus succeed!")
 return (list(GWAS=GWAS, GPS=GPS,REMLs=REMLs,vg=vg,ve=ve,delta=delta,GVs=GR$GVs))
 } #end of GAPIT.Bus
 #=============================================================================================
@@ -973,7 +973,7 @@ function(X,Y){
 #Object: To convert character SNP genotpe to numerical
 #Output: Coresponding numerical value
 #Authors: Feng Tian and Zhiwu Zhang
-# Last update: May 30, 2011 
+# Last update: May 30, 2011
 ##############################################################################################
 #Z=X+Y
 
@@ -987,7 +987,7 @@ return(Z)
 ########## Following Apache License, we thank MVP developper to build these functions.
     ########## 1 creat P value scale in addtitional chromsome
     ########## 2 set col is same as GAPIT
-    ########## 3 
+    ########## 3
 circle.plot <- function(myr,type="l",x=NULL,lty=1,lwd=1,col="black",add=TRUE,n.point=1000)
 	{
 		curve(sqrt(myr^2-x^2),xlim=c(-myr,myr),n=n.point,ylim=c(-myr,myr),type=type,lty=lty,col=col,lwd=lwd,add=add)
@@ -1060,8 +1060,8 @@ Densitplot <- function(
 		col=colorRampPalette(col)(maxbin.num)
 		col.seg=NULL
 		for(i in 1 : length(chr.num)){
-			if(plot)	polygon(c(0, 0, max(pos.x[[i]]), max(pos.x[[i]])), 
-				c(-width/5 - band * (i - length(chr.num) - 1), width/5 - band * (i - length(chr.num) - 1), 
+			if(plot)	polygon(c(0, 0, max(pos.x[[i]]), max(pos.x[[i]])),
+				c(-width/5 - band * (i - length(chr.num) - 1), width/5 - band * (i - length(chr.num) - 1),
 				width/5 - band * (i - length(chr.num) - 1), -width/5 - band * (i - length(chr.num) - 1)), col="grey", border="grey")
 			if(!is.null(legend.max)){
 				if(legend.max < Maxbin.num){
@@ -1069,7 +1069,7 @@ Densitplot <- function(
 				}
 			}
 			col.seg <- c(col.seg, col[round(col.index[[i]] * length(col) / maxbin.num)])
-			if(plot)	segments(pos.x[[i]], -width/5 - band * (i - length(chr.num) - 1), pos.x[[i]], width/5 - band * (i - length(chr.num) - 1), 
+			if(plot)	segments(pos.x[[i]], -width/5 - band * (i - length(chr.num) - 1), pos.x[[i]], width/5 - band * (i - length(chr.num) - 1),
 			col=col[round(col.index[[i]] * length(col) / maxbin.num)], lwd=1)
 		}
 		if(length(map.xy.index) != 0){
@@ -1081,8 +1081,8 @@ Densitplot <- function(
 		if(plot)	mtext(at=seq(band, length(chr.num) * band, band),text=paste("Chr", chr.num, sep=""), side=2, las=2, font=1, cex=0.6, line=0.2)
 		if(plot)	axis(3, at=seq(0, chorm.maxlen, length=10), labels=c(NA, paste(round((seq(0, chorm.maxlen, length=10))[-1] / 1e6, 0), "Mb", sep="")),
 			font=1, cex.axis=0.8, tck=0.01, lwd=2, padj=1.2)
-		# image(c(chorm.maxlen-chorm.maxlen * legend.width / 20 , chorm.maxlen), 
-		# round(seq(band - width/5, (length(chr.num) * band + band) * legend.height / 2 , length=maxbin.num+1), 2), 
+		# image(c(chorm.maxlen-chorm.maxlen * legend.width / 20 , chorm.maxlen),
+		# round(seq(band - width/5, (length(chr.num) * band + band) * legend.height / 2 , length=maxbin.num+1), 2),
 		# t(matrix(0 : maxbin.num)), col=c("white", rev(heat.colors(maxbin.num))), add=TRUE)
 		legend.y <- round(seq(0, maxbin.num, length=legend.len))
 		len <- legend.y[2]
@@ -1121,7 +1121,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 	Pmap,
 	col=c("#377EB8", "#4DAF4A", "#984EA3", "#FF7F00"),
 	#col=c("darkgreen", "darkblue", "darkyellow", "darkred"),
-	
+
 	bin.size=1e6,
 	bin.max=NULL,
 	pch=19,
@@ -1139,7 +1139,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 	xaxs="i",
 	yaxs="r",
 	outward=TRUE,
-	threshold = 0.01, 
+	threshold = 0.01,
 	threshold.col="red",
 	threshold.lwd=1,
 	threshold.lty=2,
@@ -1201,7 +1201,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 	}
 
 	if(length(plot.type) !=1 | (!"d" %in% plot.type)){
-	
+
 		#order Pmap by the name of SNP
 		#Pmap=Pmap[order(Pmap[,1]),]
 		Pmap <- as.matrix(Pmap)
@@ -1227,7 +1227,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 		if(!is.null(ylim)){
 			if(length(ylim)==1) ylim <- c(0,ylim)
 		}
-		
+
 		if(is.null(conf.int.col))	conf.int.col <- NA
 		if(is.na(conf.int.col)){
 			conf.int=FALSE
@@ -1274,7 +1274,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 			pvalue.pos[p0.index] <- 1:sum(p0.index)
 		}
 		pvalue.pos.list <- tapply(pvalue.pos, Pmap[, 1], list)
-		
+
 		#scale the space parameter between chromosomes
 		if(!missing(band)){
 			band <- floor(band*(sum(sapply(pvalue.pos.list, max))/100))
@@ -1282,7 +1282,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 			band <- floor((sum(sapply(pvalue.pos.list, max))/100))
 		}
 		if(band==0)	band=1
-		
+
 		if(LOG10){
 			pvalueT[pvalueT <= 0] <- 1
 			pvalueT[pvalueT > 1] <- 1
@@ -1292,7 +1292,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 		#palette(heat.colors(1024)) #(heatmap)
 		#T=floor(1024/max(pvalue))
 		#plot(pvalue,pch=19,cex=0.6,col=(1024-floor(pvalue*T)))
-		
+
 		#print(col)
 		if(is.vector(col)){
 			col <- matrix(col,R,length(col),byrow=TRUE)
@@ -1312,7 +1312,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 			colx <- colx[!is.na(colx)]
 			N[i] <- ceiling(Nchr/length(colx))
 		}
-		
+
 		#insert the space into chromosomes and return the midpoint of each chromosome
 		ticks <- NULL
 		pvalue.posN <- NULL
@@ -1330,7 +1330,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 		}
 		pvalue.posN.list <- tapply(pvalue.posN, Pmap[, 1], list)
 		#NewP[[j]] <- pvalue
-		
+
 		#merge the pvalues of traits by column
 		if(LOG10){
 			logpvalueT <- -log10(pvalueT)
@@ -1379,10 +1379,10 @@ GAPIT.Circle.Manhatton.Plot <- function(
         signal.line.index=as.numeric(as.vector(xz[,1]))
         signal.lty=as.numeric(as.vector(xz[,2]))
 	    }#end is.null(xz)
-        
+
 		signal.line.index <- pvalue.posN[signal.line.index]
 	}
-	    
+
 
 
     if("c" %in% plot.type)
@@ -1420,14 +1420,14 @@ GAPIT.Circle.Manhatton.Plot <- function(
 			}
 		}
 		for(i in 1:R){
-		
+
 			#get the colors for each trait
 			colx <- col[i,]
 			colx <- colx[!is.na(colx)]
-			
+
 			#debug
 			#print(colx)
-			
+
 			#print(paste("Circular_Manhattan Plotting ",taxa[i],"...",sep=""))
 			pvalue <- pvalueT[,i]
 			logpvalue <- logpvalueT[,i]
@@ -1446,7 +1446,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 
 			if(outward==TRUE){
 				if(cir.chr==TRUE){
-					
+
 					#plot the boundary which represents the chromosomes
 					polygon.num <- 1000
 					#print(length(chr))
@@ -1461,7 +1461,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 
 							#print(length(X1chr))
 							if(is.null(chr.den.col)){
-								polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=rep(colx,ceiling(length(chr)/length(colx)))[k],border=rep(colx,ceiling(length(chr)/length(colx)))[k])	
+								polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=rep(colx,ceiling(length(chr)/length(colx)))[k],border=rep(colx,ceiling(length(chr)/length(colx)))[k])
 							}else{
 								if(cir.density){
 										polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col="grey",border="grey")
@@ -1483,10 +1483,10 @@ GAPIT.Circle.Manhatton.Plot <- function(
 								}else{
 										polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=chr.den.col,border=chr.den.col)
 								}
-							}		
+							}
 						}
 					}
-					
+
 					if(cir.density){
 
 						segments(
@@ -1506,9 +1506,9 @@ GAPIT.Circle.Manhatton.Plot <- function(
 							x.intersp=1,
 							yjust=0.5, xjust=0, xpd=TRUE
 						)
-						
+
 					}
-					
+
 					# XLine=(RR+cir.chr.h)*sin(2*pi*(1:TotalN)/TotalN)
 					# YLine=(RR+cir.chr.h)*cos(2*pi*(1:TotalN)/TotalN)
 					# lines(XLine,YLine,lwd=1.5)
@@ -1521,7 +1521,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 					}
 
 				}
-				
+
 				#plot the y axis of legend for each trait
 				if(cir.legend==TRUE){
 					#try to get the number after radix point
@@ -1546,13 +1546,13 @@ GAPIT.Circle.Manhatton.Plot <- function(
 					text(-r/15,r+H*(i-0.25)+cir.band*(i-1),round(Max*0.75,round.n),adj=1,col=cir.legend.col,cex=cir.legend.cex,font=2)
 					#text(-r/15,r+H*(i-0)+cir.band*(i-1),round(Max*1,round.n),adj=1,col=cir.legend.col,cex=cir.legend.cex,font=2)
 					#text(r/5,0.4*(i-1),taxa[i],adj=1,col=cir.legend.col,cex=cir.legend.cex,font=2)
-				    
+
 				}
 				X=(Cpvalue+r+H*(i-1)+cir.band*(i-1))*sin(2*pi*(pvalue.posN-round(band/2))/TotalN)
 				Y=(Cpvalue+r+H*(i-1)+cir.band*(i-1))*cos(2*pi*(pvalue.posN-round(band/2))/TotalN)
 				# plot point in figure
 				points(X[1:(length(X)-legend.bit)],Y[1:(length(Y)-legend.bit)],pch=19,cex=cex[1],col=rep(rep(colx,N[i]),add[[i]]))
-				
+
 				# plot significant line
 				if(!is.null(threshold)){
 					if(sum(threshold!=0)==length(threshold)){
@@ -1573,7 +1573,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 						}
 					}
 				}
-				
+
 				if(!is.null(threshold)){
 					if(sum(threshold!=0)==length(threshold)){
 						if(amplify==TRUE){
@@ -1584,14 +1584,14 @@ GAPIT.Circle.Manhatton.Plot <- function(
 								threshold <- sort(threshold, decreasing=TRUE)
 								significantline1=H*(min(threshold))/Max
 							}
-							
+
 							p_amp.index <- which(Cpvalue>=significantline1)
 							HX1=(Cpvalue[p_amp.index]+r+H*(i-1)+cir.band*(i-1))*sin(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
 							HY1=(Cpvalue[p_amp.index]+r+H*(i-1)+cir.band*(i-1))*cos(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
-							
+
 							#cover the points that exceed the threshold with the color "white"
 							points(HX1,HY1,pch=19,cex=cex[1],col="white")
-							
+
 								for(ll in 1:length(threshold)){
 									if(ll == 1){
 										if(LOG10){
@@ -1614,7 +1614,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 										HX1=(Cpvalue[p_amp.index]+r+H*(i-1)+cir.band*(i-1))*sin(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
 										HY1=(Cpvalue[p_amp.index]+r+H*(i-1)+cir.band*(i-1))*cos(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
 									}
-								
+
 									if(is.null(signal.col)){
 										# print(signal.pch)
 										points(HX1,HY1,pch=signal.pch,cex=signal.cex[ll]*cex[1],col=rep(rep(colx,N[i]),add[[i]])[p_amp.index])
@@ -1672,7 +1672,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 							X2chr=(2*cir.band+RR+cir.chr.h)*sin(2*pi*(polygon.index)/TotalN)
 							Y2chr=(2*cir.band+RR+cir.chr.h)*cos(2*pi*(polygon.index)/TotalN)
 								if(is.null(chr.den.col)){
-									polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=rep(colx,ceiling(length(chr)/length(colx)))[k],border=rep(colx,ceiling(length(chr)/length(colx)))[k])	
+									polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=rep(colx,ceiling(length(chr)/length(colx)))[k],border=rep(colx,ceiling(length(chr)/length(colx)))[k])
 								}else{
 									if(cir.density){
 										polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col="grey",border="grey")
@@ -1687,14 +1687,14 @@ GAPIT.Circle.Manhatton.Plot <- function(
 							X2chr=(2*cir.band+RR+cir.chr.h)*sin(2*pi*(polygon.index)/TotalN)
 							Y2chr=(2*cir.band+RR+cir.chr.h)*cos(2*pi*(polygon.index)/TotalN)
 							if(is.null(chr.den.col)){
-								polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=rep(colx,ceiling(length(chr)/length(colx)))[k],border=rep(colx,ceiling(length(chr)/length(colx)))[k])	
+								polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=rep(colx,ceiling(length(chr)/length(colx)))[k],border=rep(colx,ceiling(length(chr)/length(colx)))[k])
 							}else{
 									if(cir.density){
 										polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col="grey",border="grey")
 									}else{
 										polygon(c(rev(X1chr),X2chr),c(rev(Y1chr),Y2chr),col=chr.den.col,border=chr.den.col)
 									}
-							}	
+							}
 						}
 					}
 					if(cir.density){
@@ -1715,9 +1715,9 @@ GAPIT.Circle.Manhatton.Plot <- function(
 							x.intersp=1,
 							yjust=0.5, xjust=0, xpd=TRUE
 						)
-						
+
 					}
-					
+
 					if(cir.density){
 						circle.plot(myr=2*cir.band+RR+cir.chr.h,lwd=1.5,add=TRUE,col='grey')
 						circle.plot(myr=2*cir.band+RR,lwd=1.5,add=TRUE,col='grey')
@@ -1730,7 +1730,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 
 
 				if(cir.legend==TRUE){
-					
+
 					#try to get the number after radix point
 					if(Max<=1) {
 						round.n=nchar(as.character(10^(-ceiling(-log10(Max)))))-1
@@ -1755,15 +1755,15 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				    #text(r,0.4*(i-1),taxa[i],adj=1,col=cir.legend.col,cex=cir.legend.cex,font=2)
 
 				}
-				
+
 				X=(-Cpvalue+r+H*i+cir.band*(i-1))*sin(2*pi*(pvalue.posN-round(band/2))/TotalN)
 				Y=(-Cpvalue+r+H*i+cir.band*(i-1))*cos(2*pi*(pvalue.posN-round(band/2))/TotalN)
 				#points(X,Y,pch=19,cex=cex[1],col=rep(rep(colx,N[i]),add[[i]]))
 				points(X[1:(length(X)-legend.bit)],Y[1:(length(Y)-legend.bit)],pch=19,cex=cex[1],col=rep(rep(colx,N[i]),add[[i]]))
-				
+
 				if(!is.null(threshold)){
 					if(sum(threshold!=0)==length(threshold)){
-					
+
 						for(thr in 1:length(threshold)){
 							significantline1=ifelse(LOG10, H*(-log10(threshold[thr]))/Max, H*(threshold[thr])/Max)
 							#s1X=(significantline1+r+H*(i-1)+cir.band*(i-1))*sin(2*pi*(0:TotalN)/TotalN)
@@ -1786,10 +1786,10 @@ GAPIT.Circle.Manhatton.Plot <- function(
 							p_amp.index <- which(Cpvalue>=significantline1)
 							HX1=(-Cpvalue[p_amp.index]+r+H*i+cir.band*(i-1))*sin(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
 							HY1=(-Cpvalue[p_amp.index]+r+H*i+cir.band*(i-1))*cos(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
-							
+
 							#cover the points that exceed the threshold with the color "white"
 							points(HX1,HY1,pch=19,cex=cex[1],col="white")
-							
+
 								for(ll in 1:length(threshold)){
 									if(ll == 1){
 										if(LOG10){
@@ -1811,9 +1811,9 @@ GAPIT.Circle.Manhatton.Plot <- function(
 										p_amp.index <- which(Cpvalue>=significantline1 & Cpvalue < significantline0)
 										HX1=(-Cpvalue[p_amp.index]+r+H*i+cir.band*(i-1))*sin(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
 										HY1=(-Cpvalue[p_amp.index]+r+H*i+cir.band*(i-1))*cos(2*pi*(pvalue.posN[p_amp.index]-round(band/2))/TotalN)
-									
+
 									}
-								
+
 									if(is.null(signal.col)){
 										points(HX1,HY1,pch=signal.pch,cex=signal.cex[ll]*cex[1],col=rep(rep(colx,N[i]),add[[i]])[p_amp.index])
 									}else{
@@ -1823,7 +1823,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 						}
 					}
 				}
-				
+
 				if(cir.chr==TRUE){
 					ticks1=1.1*(2*cir.band+RR)*sin(2*pi*(ticks-round(band/2))/TotalN)
 					ticks2=1.1*(2*cir.band+RR)*cos(2*pi*(ticks-round(band/2))/TotalN)
@@ -1843,7 +1843,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 					ticks2=1.0*(RR+cir.band)*cos(2*pi*(ticks-round(band/2))/TotalN)
 					if(is.null(chr.labels)){
 						for(i in 1:length(ticks)){
-						
+
 							#adjust the angle of labels of circle plot
 							angle=360*(1-(ticks-round(band/2))[i]/TotalN)
 							text(ticks1[i],ticks2[i],chr.ori[i],srt=angle,font=2,cex=cex.axis)
@@ -1853,7 +1853,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 							angle=360*(1-(ticks-round(band/2))[i]/TotalN)
 							text(ticks1[i],ticks2[i],chr.labels[i],srt=angle,font=2,cex=cex.axis)
 						}
-					}	
+					}
 				}
 			}
 		}
@@ -1862,7 +1862,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 		taxa_col=append("red",taxa_col)
 		for(j in 1:(R+1)){
             text(r/5,0.4*(j-1),taxa[j],adj=1,col=taxa_col[j],cex=cir.legend.cex,font=2)
-				    
+
 		}
 		taxa=taxa[-1]
 		if(file.output) dev.off()
@@ -1882,7 +1882,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				par(xpd=TRUE)
 			}
 			for(i in 1:R){
-				print(paste("Multracks_QQ Plotting ",taxa[i],"...",sep=""))		
+				print(paste("Multracks_QQ Plotting ",taxa[i],"...",sep=""))
 				P.values=as.numeric(Pmap[,i+2])
 				P.values=P.values[!is.na(P.values)]
 				if(LOG10){
@@ -1901,7 +1901,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				}else{
 					log.P.values <- P.values
 				}
-				
+
 				#calculate the confidence interval of QQ-plot
 				if(conf.int){
 					N1=length(log.Quantiles)
@@ -1918,16 +1918,16 @@ GAPIT.Circle.Manhatton.Plot <- function(
 					c05 <- 1
 					c95 <- 1
 				}
-				
+
 				YlimMax <- max(floor(max(max(-log10(c05)), max(-log10(c95)))+1), floor(max(log.P.values)+1))
 				plot(NULL, xlim = c(0,floor(max(log.Quantiles)+1)), axes=FALSE, cex.axis=cex.axis, cex.lab=1.2,ylim=c(0,YlimMax),xlab ="", ylab="", main = taxa[i])
 				axis(1, at=seq(0,floor(max(log.Quantiles)+1),ceiling((max(log.Quantiles)+1)/10)), labels=seq(0,floor(max(log.Quantiles)+1),ceiling((max(log.Quantiles)+1)/10)), cex.axis=cex.axis)
 				axis(2, at=seq(0,YlimMax,ceiling(YlimMax/10)), labels=seq(0,YlimMax,ceiling(YlimMax/10)), cex.axis=cex.axis)
-				
+
 				#plot the confidence interval of QQ-plot
-				
+
 				if(conf.int)	polygon(c(log.Quantiles[index],log.Quantiles),c(-log10(c05)[index],-log10(c95)),col=conf.int.col,border=conf.int.col)
-				
+
 				if(!is.null(threshold.col)){par(xpd=FALSE); abline(a = 0, b = 1, col = threshold.col[1],lwd=2); par(xpd=TRUE)}
 				points(log.Quantiles, log.P.values, col = col[1],pch=1,cex=cex[3])
 				#print(max(log.Quantiles))
@@ -1939,7 +1939,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 						if(amplify==TRUE){
 							thre.index=which(log.P.values>=thre.line)
 							if(length(thre.index)!=0){
-							
+
 								#cover the points that exceed the threshold with the color "white"
 								points(log.Quantiles[thre.index],log.P.values[thre.index], col = "white",pch=19,cex=cex[3])
 								if(is.null(signal.col)){
@@ -1981,7 +1981,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				}
 				p_value_quantiles=(1:length(P.values))/(length(P.values)+1)
 				log.Quantiles <- -log10(p_value_quantiles)
-											
+
 				# calculate the confidence interval of QQ-plot
 				if(conf.int){
 					N1=length(log.Quantiles)
@@ -1995,14 +1995,14 @@ GAPIT.Circle.Manhatton.Plot <- function(
 					}
 					index=length(c95):1
 				}
-				
+
 				if(!conf.int){c05 <- 1; c95 <- 1}
-				
+
 				Pmap.min <- Pmap[,3:(R+2)]
 
 				YlimMax <- max(floor(max(max(-log10(c05)), max(-log10(c95)))+1), -log10(min(Pmap.min[Pmap.min > 0])))
 				plot(NULL, xlim = c(0,floor(max(log.Quantiles)+1)), axes=FALSE, cex.axis=cex.axis, cex.lab=1.2,ylim=c(0, floor(YlimMax+1)),xlab =expression(Expected~~-log[10](italic(p))), ylab = expression(Observed~~-log[10](italic(p))), main = "QQ plot")
-				#legend("topleft",taxa,col=t(col)[1:R],pch=1,pt.lwd=2,text.font=6,box.col=NA)			
+				#legend("topleft",taxa,col=t(col)[1:R],pch=1,pt.lwd=2,text.font=6,box.col=NA)
 				legend("topleft",taxa,col=qq_col[1:R],pch=1,pt.lwd=3,text.font=6,box.col=NA)
 				axis(1, at=seq(0,floor(max(log.Quantiles)+1),ceiling((max(log.Quantiles)+1)/10)), labels=seq(0,floor(max(log.Quantiles)+1),ceiling((max(log.Quantiles)+1)/10)), cex.axis=cex.axis)
 				axis(2, at=seq(0,floor(YlimMax+1),ceiling((YlimMax+1)/10)), labels=seq(0,floor((YlimMax+1)),ceiling((YlimMax+1)/10)), cex.axis=cex.axis)
@@ -2012,7 +2012,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 
 				# plot the confidence interval of QQ-plot
 				if(conf.int)	polygon(c(log.Quantiles[index],log.Quantiles),c(-log10(c05)[index],-log10(c95)),col=conf.int.col,border=conf.int.col)
-				
+
 				for(i in 1:R){
 					#print(paste("Multraits_QQ Plotting ",taxa[i],"...",sep=""))
 					P.values=as.numeric(Pmap[,i+2])
@@ -2033,24 +2033,24 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				    }else{
 					log.P.values <- P.values
 				    }
-				
-						
+
+
 					if((i == 1) & !is.null(threshold.col)){par(xpd=FALSE); abline(a = 0, b = 1, col = threshold.col[1],lwd=2); par(xpd=TRUE)}
 					#print(length(log.Quantiles))
-				    #print("!!!!!") 
+				    #print("!!!!!")
 					#points(log.Quantiles, log.P.values, col = t(col)[i],pch=1,lwd=3,cex=cex[3])
 					points(log.Quantiles, log.P.values, col = qq_col[i],pch=1,lwd=3,cex=cex[3])
-					
+
 					#print(max(log.Quantiles))
 					#
-	
+
 					if(!is.null(threshold)){
 						if(sum(threshold!=0)==length(threshold)){
 							thre.line=-log10(min(threshold))
 							if(amplify==TRUE){
 								thre.index=which(log.P.values>=thre.line)
 								if(length(thre.index)!=0){
-								
+
 									# cover the points that exceed the threshold with the color "white"
 									points(log.Quantiles[thre.index],log.P.values[thre.index], col = "white",pch=19,lwd=3,cex=cex[3])
 									if(is.null(signal.col)){
@@ -2096,7 +2096,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				}else{
 					log.P.values <- P.values
 				}
-				
+
 				#calculate the confidence interval of QQ-plot
 				if(conf.int){
 					N1=length(log.Quantiles)
@@ -2119,17 +2119,17 @@ GAPIT.Circle.Manhatton.Plot <- function(
 				plot(NULL, xlim = c(0,floor(max(log.Quantiles)+1)), axes=FALSE, cex.axis=cex.axis, cex.lab=1.2,ylim=c(0,YlimMax),xlab =expression(Expected~~-log[10](italic(p))), ylab = expression(Observed~~-log[10](italic(p))), main = paste("QQplot of",taxa[i]))
 				axis(1, at=seq(0,floor(max(log.Quantiles)+1),ceiling((max(log.Quantiles)+1)/10)), labels=seq(0,floor(max(log.Quantiles)+1),ceiling((max(log.Quantiles)+1)/10)), cex.axis=cex.axis)
 				axis(2, at=seq(0,YlimMax,ceiling(YlimMax/10)), labels=seq(0,YlimMax,ceiling(YlimMax/10)), cex.axis=cex.axis)
-				
+
 				#plot the confidence interval of QQ-plot
 				#print(log.Quantiles[index])
 				qq_col=rainbow(R)
 				#if(conf.int)	polygon(c(log.Quantiles[index],log.Quantiles),c(-log10(c05)[index],-log10(c95)),col=conf.int.col,border=conf.int.col)
 				if(conf.int)	polygon(c(log.Quantiles[index],log.Quantiles),c(-log10(c05)[index],-log10(c95)),col=qq_col[i],border=conf.int.col)
-				
+
 				if(!is.null(threshold.col)){par(xpd=FALSE); abline(a = 0, b = 1, col = threshold.col[1],lwd=2); par(xpd=TRUE)}
-				 
+
 				points(log.Quantiles, log.P.values, col = col[1],pch=19,cex=2)
-				
+
 				if(!is.null(threshold)){
 					if(sum(threshold!=0)==length(threshold)){
 						thre.line=-log10(min(threshold))
@@ -2155,7 +2155,7 @@ GAPIT.Circle.Manhatton.Plot <- function(
 		print("Multiple QQ plot has been finished!",quote=F)
 	}
 
-		
+
 
 
 
@@ -2168,29 +2168,29 @@ GAPIT.Circle.Manhatton.Plot <- function(
 function(KI,kinship.cluster = "average",kinship.group = "Mean",GN=nrow(KI),Timmer,Memory){
 #Object: To cluster individuals into groups based on kinship
 #Output: GA, KG
-#Authors: Alex Lipka and Zhiwu Zhang 
-# Last update: April 14, 2011 
+#Authors: Alex Lipka and Zhiwu Zhang
+# Last update: April 14, 2011
 ##############################################################################################
-Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP start") 
+Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP start")
 Memory=GAPIT.Memory(Memory=Memory,Infor="cp start")
 
 # Extract the line names
 line.names <- KI[,1]
 
-Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Does this change memory0") 
+Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Does this change memory0")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Does this change memory0")
 
 # Remove the first column of the kinship matrix, which is the line names
 KI <- KI[ ,-1]
 
 # Convert kinship to distance
-#distance.matrix <- 2 - KI 
+#distance.matrix <- 2 - KI
 
 
 #distance.matrix.as.dist <- as.dist(distance.matrix)
 #distance.matrix.as.dist <- as.dist(2 - KI)
 
-Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP distance") 
+Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP distance")
 Memory=GAPIT.Memory(Memory=Memory,Infor="cp distance")
 
 #print(paste("The value of kinship.cluster is ", kinship.cluster, sep = ""))
@@ -2204,21 +2204,21 @@ distance.matrix=dist(KI,upper=TRUE) #Jiabo Wang modified ,the dist is right func
 cluster.distance.matrix=hclust(distance.matrix,method=kinship.cluster)
 #cutree(out_hclust,k=3)
 
-Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP cluster") 
+Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP cluster")
 Memory=GAPIT.Memory(Memory=Memory,Infor="cp cluster")
 
 # Cutree will assign lines into k clusters
 group.membership <- cutree(cluster.distance.matrix, k = GN)
 compress_z=table(group.membership,paste(line.names))  #build compress z with group.membership
 
-Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP cutree") 
+Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP cutree")
 Memory=GAPIT.Memory(Memory=Memory,Infor="cp cutree")
 
 #calculate group kinship
 if(kinship.group == "Mean"){
 #This matrix ooperation is much faster than tapply function for  "Mean"
 x=as.factor(group.membership)
-#b = model.matrix(~x-1) 
+#b = model.matrix(~x-1)
 n=max(as.numeric(as.vector(x)))
 b=diag(n)[x,]
 
@@ -2254,22 +2254,22 @@ gc()
 #This part does not work yet
 #if(kinship.group == "Mean")
 #    KG<- tapply(kInCol[,1], list(kInCol[,2], kInCol[,3]), mean)
-if(kinship.group == "Max")    
+if(kinship.group == "Max")
     KG <- tapply(kInCol[,1], list(kInCol[,2], kInCol[,3]), max)
-if(kinship.group == "Min")   
-    KG <- tapply(kInCol[,1], list(kInCol[,2], kInCol[,3]), min)    
-if(kinship.group == "Median")  
-    KG <- tapply(kInCol[,1], list(kInCol[,2], kInCol[,3]), median)  
+if(kinship.group == "Min")
+    KG <- tapply(kInCol[,1], list(kInCol[,2], kInCol[,3]), min)
+if(kinship.group == "Median")
+    KG <- tapply(kInCol[,1], list(kInCol[,2], kInCol[,3]), median)
 } #this is end of brancing "Mean" and the rest
-    
-Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP calculation") 
+
+Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP calculation")
 Memory=GAPIT.Memory(Memory=Memory,Infor="cp calculation")
 
-# add line names 
+# add line names
 #GA <- data.frame(group.membership)
 GA <- data.frame(cbind(as.character(line.names),as.numeric(group.membership) ))
 
-#Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP Final") 
+#Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="CP Final")
 #Memory=GAPIT.Memory(Memory=Memory,Infor="CP Final")
 
 #write.table(KG, paste("KG_from_", kinship.group, "_Method.txt"), quote = FALSE, sep = "\t", row.names = FALSE,col.names = FALSE)
@@ -2284,16 +2284,16 @@ function(Compression = Compression, name.of.trait = name.of.trait){
 #Object: Conduct the Benjamini-Hochberg FDR-Controlling Procedure
 #Output: Three pdfs: One of the log likelihood function, one of the genetic and error variance component,
 #                    and one of the heritabilities
-#Authors: Alex Lipka and Zhiwu Zhang 
-# Last update: May 10, 2011 
+#Authors: Alex Lipka and Zhiwu Zhang
+# Last update: May 10, 2011
 ##############################################################################################
-#Graph the optimum compression 
+#Graph the optimum compression
 
 print("GAPIT.Compression.Visualization")
 #print(Compression)
 
 if(length(Compression)<=6) Compression=t(as.matrix(Compression[which(Compression[,4]!="NULL" | Compression[,4]!="NaN"),]))
-if(length(Compression)==6) Compression=matrix(Compression,1,6) 
+if(length(Compression)==6) Compression=matrix(Compression,1,6)
 #print("Compression matrix")
 #print(Compression)
 #print(length(Compression) )
@@ -2305,7 +2305,7 @@ if(length(Compression)<1) return() #no result
 #-------------------------------------------------------------------------------
 print("Pie chart")
 LL=as.numeric(Compression[,4])
-Compression.best=Compression[1,] 
+Compression.best=Compression[1,]
 variance=as.numeric(Compression.best[5:6])
 #colors <- c("grey50","grey70")
 colors <- c("#990000","dimgray")
@@ -2321,7 +2321,7 @@ legend <- paste(legend0, round(variance*100)/100, sep="")
 LL.best0=as.numeric(Compression.best[4]  )
 LL.best=paste("-2LL: ",floor(LL.best0*100)/100,sep="")
 label.comp=paste(c("Cluster method: ","Group method: ","Group number: "), Compression.best[c(1:3)], sep="")
-theOptimum=c(label.comp,LL.best) 
+theOptimum=c(label.comp,LL.best)
 #print(variance)
 pdf(paste("GAPIT.", name.of.trait,".Optimum.pdf", sep = ""), width = 14)
 par(mfrow = c(1,1), mar = c(1,1,5,5), lab = c(5,5,7))
@@ -2334,7 +2334,7 @@ text(1.5,.0, "The optimum compression", col= "gray10")
 for(i in 1:4){
 text(1.5,-.1*i, theOptimum[i], col= "gray10")
 }
-dev.off() 
+dev.off()
 
 #sort Compression by group number for plot order
 Compression=Compression[order(as.numeric(Compression[,3])),]
@@ -2354,7 +2354,7 @@ if(length(unique(Compression[,3]))>1)
 #print("Setting colors")
 color.vector.basic <- c("red","blue","black", "blueviolet","indianred","cadetblue","orange")
 color.vector.addition <- setdiff(c(colors()[grep("red",colors())], colors()[grep("blue",colors())]),color.vector.basic )
-color.vector.addition.mixed <- sample(color.vector.addition,max(0,((length(unique(Compression[,1])) * length(unique(Compression[,2])))-length(color.vector.basic))))  
+color.vector.addition.mixed <- sample(color.vector.addition,max(0,((length(unique(Compression[,1])) * length(unique(Compression[,2])))-length(color.vector.basic))))
 color.vector <- c(color.vector.basic,color.vector.addition.mixed )
 
 
@@ -2362,7 +2362,7 @@ color.vector <- c(color.vector.basic,color.vector.addition.mixed )
 line.vector <-  rep(1:(length(unique(Compression[,1])) * length(unique(Compression[,2]))))
 
 #We want to have a total of three plots, one displaying the likelihood function, one displaying the variance components, and one displaying the
-# heritability 
+# heritability
 
 pdf(paste("GAPIT.", name.of.trait,".Compression.multiple.group", ".pdf", sep = ""), width = 14)
 par(mfrow = c(2,3), mar = c(5,5,1,1), lab = c(5,5,7))
@@ -2376,32 +2376,32 @@ for(i in 1:length(unique(Compression[,1]))){
      if((i == 1)&(j == 1)) {
       Compression.subset <- Compression[which( (Compression[,1] == as.character(unique(Compression[,1])[i])) & (Compression[,2] == as.character(unique(Compression[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,4])  
+      y <- as.numeric(Compression.subset[,4])
       plot(y~x,type="l", pch = 30, lty = line.vector[i], ylim=c(min(as.numeric(Compression[,4])),max(as.numeric(Compression[,4]))), xlim = c(min(as.numeric(Compression[,3])),max(as.numeric(Compression[,3]))),
       col = color.vector[j], xlab = "Number of Groups", ylab = "-2Log Likelihoood",lwd=1 )
       label = paste(c(as.character(unique(Compression[,1]))[k]," ",as.character(unique(Compression[,2]))[j]), collapse = "")
       }
-  
+
     if((i != 1)|(j != 1)) {
-      k <- k+1   
+      k <- k+1
       Compression.subset <- Compression[which( (Compression[,1] == as.character(unique(Compression[,1])[i])) & (Compression[,2] == as.character(unique(Compression[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,4])  
+      y <- as.numeric(Compression.subset[,4])
       lines(y~x,type="l", pch = 30, lty = line.vector[i], col = color.vector[j])
       label = c(label, paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = ""))
-      }  
+      }
    }
  }
 #Make a legend
   #legend("topright",  label, fill = color.vector)
   legend.col= 1+floor(length(unique(Compression[,1])) * length(unique(Compression[,2]))/20)
-line.style=rep(1:length(unique(Compression[,1])), each = length(unique(Compression[,2])))      
+line.style=rep(1:length(unique(Compression[,1])), each = length(unique(Compression[,2])))
 line.color=rep(1:length(unique(Compression[,2])), length(unique(Compression[,1])))
 
 
-legend("topright",  label, col = color.vector[line.color], lty = line.style, ncol=legend.col,horiz=FALSE,bty="n") 
- 
- 
+legend("topright",  label, col = color.vector[line.color], lty = line.style, ncol=legend.col,horiz=FALSE,bty="n")
+
+
 # Make the genetic variance component plots
 #print("genetic variance")
 k <- 1
@@ -2411,24 +2411,24 @@ for(i in 1:length(unique(Compression[,1]))){
      if((i == 1)&(j == 1)) {
       Compression.subset <- Compression[which( (Compression[,1] == as.character(unique(Compression[,1])[i])) & (Compression[,2] == as.character(unique(Compression[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,5])  
+      y <- as.numeric(Compression.subset[,5])
       plot(y~x,type="l", pch = 17,  lty = line.vector[i], ylim=c(min(as.numeric(Compression[,5])),max(as.numeric(Compression[,5]))), xlim = c(min(as.numeric(Compression[,3])),max(as.numeric(Compression[,3]))),
       col = color.vector[j], xlab = "Number of Groups", ylab = "Genetic Variance", )
       #label = paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = "")
       }
-  
+
     if((i != 1)|(j != 1)) {
-      k <- k+1   
+      k <- k+1
       Compression.subset <- Compression[which( (Compression[,1] == as.character(unique(Compression[,1])[i])) & (Compression[,2] == as.character(unique(Compression[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,5])  
+      y <- as.numeric(Compression.subset[,5])
       lines(y~x,type="l", pch = 17, lty = line.vector[i], col = color.vector[j])
       #label = c(label, paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = ""))
-      }  
+      }
    }
  }
  #Make a legend
-  #legend("topleft",  label, fill = color.vector) 
+  #legend("topleft",  label, fill = color.vector)
 
 
 # Make the residual variance component plots
@@ -2439,24 +2439,24 @@ for(i in 1:length(unique(Compression[,1]))){
      if((i == 1)&(j == 1)) {
       Compression.subset <- Compression[which( (Compression[,1] == as.character(unique(Compression[,1])[i])) & (Compression[,2] == as.character(unique(Compression[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,6])  
+      y <- as.numeric(Compression.subset[,6])
       plot(y~x,type="l", pch = 17,  ylim=c(min(as.numeric(Compression[,6])),max(as.numeric(Compression[,6]))), xlim = c(min(as.numeric(Compression[,3])),max(as.numeric(Compression[,3]))),
       col = color.vector[j], xlab = "Number of Groups", ylab = "Residual Variance", )
       #label = paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = "")
       }
-  
+
     if((i != 1)|(j != 1)) {
-      k <- k+1   
+      k <- k+1
       Compression.subset <- Compression[which( (Compression[,1] == as.character(unique(Compression[,1])[i])) & (Compression[,2] == as.character(unique(Compression[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,6])  
+      y <- as.numeric(Compression.subset[,6])
       lines(y~x,type="l", pch = 17, lty = line.vector[i], col = color.vector[j])
       #label = c(label, paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = ""))
-      }  
+      }
    }
  }
  #Make a legend
-  #legend("topright",  label, fill = color.vector) 
+  #legend("topright",  label, fill = color.vector)
 
 
 #calculate total variance and h2
@@ -2474,27 +2474,27 @@ for(i in 1:length(unique(Compression.h2[,1]))){
      if((i == 1)&(j == 1)) {
       Compression.subset <- Compression.h2[which( (Compression.h2[,1] == as.character(unique(Compression.h2[,1])[i])) & (Compression.h2[,2] == as.character(unique(Compression.h2[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,8])  
+      y <- as.numeric(Compression.subset[,8])
       plot(y~x,type="l", pch = 17,  lty = line.vector[k], ylim=c(min(as.numeric(Compression.h2[,8])),max(as.numeric(Compression.h2[,8]))), xlim = c(min(as.numeric(Compression.h2[,3])),max(as.numeric(Compression.h2[,3]))),
       col = color.vector[1], xlab = "Number of Groups", ylab = "Total Variance", )
       #label = paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = "")
       }
-  
+
     if((i != 1)|(j != 1)) {
-      k <- k+1   
+      k <- k+1
       Compression.subset <- Compression.h2[which( (Compression.h2[,1] == as.character(unique(Compression.h2[,1])[i])) & (Compression.h2[,2] == as.character(unique(Compression.h2[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,8]) 
+      y <- as.numeric(Compression.subset[,8])
       lines(y~x,type="l", pch = 17, lty = line.vector[i], col = color.vector[j])
       #label = c(label, paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = ""))
-      }  
+      }
    }
  }
  #Make a legend
-  #legend("topright",  label, fill = color.vector) 
-  
+  #legend("topright",  label, fill = color.vector)
 
-# Make the heritability plots 
+
+# Make the heritability plots
 #print("h2 plot")
 k <- 1
 for(i in 1:length(unique(Compression[,1]))){
@@ -2503,38 +2503,38 @@ for(i in 1:length(unique(Compression[,1]))){
      if((i == 1)&(j == 1)) {
       Compression.subset <- Compression.h2[which( (Compression.h2[,1] == as.character(unique(Compression.h2[,1])[i])) & (Compression.h2[,2] == as.character(unique(Compression.h2[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,7]) 
+      y <- as.numeric(Compression.subset[,7])
 
       plot(y~x,type="l", pch = 17,  lty = line.vector[k], ylim=c(min(as.numeric(Compression.h2[,7])),max(as.numeric(Compression.h2[,7]))), xlim = c(min(as.numeric(Compression.h2[,3])),max(as.numeric(Compression.h2[,3]))),
       col = color.vector[1], xlab = "Number of Groups", ylab = "Heritability", )
       #label = paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = "")
       }
-  
+
     if((i != 1)|(j != 1)) {
-      k <- k+1   
+      k <- k+1
       Compression.subset <- Compression.h2[which( (Compression.h2[,1] == as.character(unique(Compression.h2[,1])[i])) & (Compression.h2[,2] == as.character(unique(Compression.h2[,2])[j]))  ),              ]
       x <- as.numeric(Compression.subset[,3])
-      y <- as.numeric(Compression.subset[,7])  
+      y <- as.numeric(Compression.subset[,7])
       lines(y~x,type="l", lty = line.vector[i], pch = 17, col = color.vector[j])
       #label = c(label, paste(c(as.character(unique(Compression[,1]))[i]," ",as.character(unique(Compression[,2]))[j]), collapse = ""))
-      }       
+      }
    }
  }
- 
+
  #Make a legend
-  #legend("topleft",  label, fill = color.vector) 
-  
+  #legend("topleft",  label, fill = color.vector)
+
 legend.col= 1+floor(length(unique(Compression[,1])) * length(unique(Compression[,2]))/20)
-line.style=rep(1:length(unique(Compression[,1])), each = length(unique(Compression[,2])))      
+line.style=rep(1:length(unique(Compression[,1])), each = length(unique(Compression[,2])))
 line.color=rep(1:length(unique(Compression[,2])), length(unique(Compression[,1])))
 
 
 
 # Make labels
       plot(0~0,axes=FALSE,type="l",ylab = "",xlab = "",frame.plot=FALSE)
-      legend("topleft",  label, col = color.vector[line.color], lty = line.style, ncol=legend.col,horiz=FALSE) 
-   
- 
+      legend("topleft",  label, col = color.vector[line.color], lty = line.style, ncol=legend.col,horiz=FALSE)
+
+
 dev.off()
 }#end of Graph compression with multiple groups
 
@@ -2575,7 +2575,7 @@ colnames(KG)=kt.name
 barplot(as.matrix(KG),  ylab= "Heritability", beside=TRUE, col=rainbow(length(unique(Compression[,2]))),ylim=c(0,1))
 
 legend("topleft", paste(t(ca.name)), cex=0.8,bty="n", fill=rainbow(length(unique(Compression[,2]))),horiz=TRUE)
-dev.off() 
+dev.off()
 } #end of Graph compression with single groups
 
 print("GAPIT.Compression.Visualization accomplished successfully!")
@@ -2642,7 +2642,7 @@ for(i in unique.sorted){
  x.col <- rep(NA, length(xs))
  x.col[which(xs==i)] <- 1
  x.col[which(xs!=i)] <- 0
- x.ind <- cbind(x.ind,x.col)                         
+ x.ind <- cbind(x.ind,x.col)
 }
 
 
@@ -2655,13 +2655,13 @@ print("GAPIT.Create.Indicator accomplished successfully!")
 
 `GAPIT.DP` <-
 function(G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,CV.Inheritance=NULL,GP=NULL,GK=NULL,
-                group.from=30 ,group.to=1000000,group.by=10,DPP=100000, 
-                kinship.cluster="average", kinship.group='Mean',kinship.algorithm="VanRaden",                                                    
+                group.from=30 ,group.to=1000000,group.by=10,DPP=100000,
+                kinship.cluster="average", kinship.group='Mean',kinship.algorithm="VanRaden",
                 bin.from=10000,bin.to=10000,bin.by=10000,inclosure.from=10,inclosure.to=10,inclosure.by=10,
-                SNP.P3D=TRUE,SNP.effect="Add",SNP.impute="Middle",PCA.total=0, SNP.fraction = 1, seed = 123, BINS = 20,SNP.test=TRUE, 
+                SNP.P3D=TRUE,SNP.effect="Add",SNP.impute="Middle",PCA.total=0, SNP.fraction = 1, seed = 123, BINS = 20,SNP.test=TRUE,
                     SNP.MAF=0,FDR.Rate = 1, SNP.FDR=1,SNP.permutation=FALSE,SNP.CV=NULL,SNP.robust="GLM", NJtree.group=NULL,NJtree.type=c("fan","unrooted"),plot.bin=10^6,PCA.col=NULL,PCA.3d=FALSE,
                 file.from=1, file.to=1, file.total=NULL, file.fragment = 99999,file.path=NULL,Inter.Plot=FALSE,Inter.type=c("m","q"),
-                file.G=NULL, file.Ext.G=NULL,file.GD=NULL, file.GM=NULL, file.Ext.GD=NULL,file.Ext.GM=NULL, 
+                file.G=NULL, file.Ext.G=NULL,file.GD=NULL, file.GM=NULL, file.Ext.GD=NULL,file.Ext.GM=NULL,
                 ngrid = 100, llim = -10, ulim = 10, esp = 1e-10, Multi_iter=FALSE,windowsize=5e9,
                 LD.chromosome=NULL,LD.location=NULL,LD.range=NULL, p.threshold=NA,QTN.threshold=0.01,maf.threshold=0.03,
                 sangwich.top=NULL,sangwich.bottom=NULL,QC=TRUE,GTindex=NULL,LD=0.1,
@@ -2670,7 +2670,7 @@ function(G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,CV.Inheritance=NULL,GP=NU
         method.GLM="fast.lm",method.sub="reward",method.sub.final="reward",method.bin="static",bin.size=c(1000000),bin.selection=c(10,20,50,100,200,500,1000),
         memo="",Prior=NULL,ncpus=1,maxLoop=3,threshold.output=.01, WS=c(1e0,1e3,1e4,1e5,1e6,1e7),alpha=c(.01,.05,.1,.2,.3,.4,.5,.6,.7,.8,.9,1),maxOut=100,QTN.position=NULL,
         converge=1,iteration.output=FALSE,acceleration=0,iteration.method="accum",PCA.View.output=TRUE,Geno.View.output=TRUE,plot.style="Oceanic",SUPER_GD=NULL,SUPER_GS=FALSE,CG=NULL,model="MLM"){
-#Object: To Data and Parameters  
+#Object: To Data and Parameters
 #Designed by Zhiwu Zhang
 #Writen by Jiabo Wang
 #Last update: Novenber 3, 2016
@@ -2681,11 +2681,11 @@ print("GAPIT.DP in process...")
 #print(kinship.algorithm)
 #print(NJtree.group)
 myGenotype<-GAPIT.Genotype(G=G,GD=GD,GM=GM,KI=KI,PCA.total=PCA.total,kinship.algorithm=kinship.algorithm,SNP.fraction=SNP.fraction,SNP.test=FALSE,
-                file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G, 
+                file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,
                 file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                 SNP.MAF=SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,NJtree.group=NJtree.group,NJtree.type=NJtree.type,
                 LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,
-                GP=GP,GK=GK,bin.size=NULL,inclosure.size=NULL, 
+                GP=GP,GK=GK,bin.size=NULL,inclosure.size=NULL,
                 sangwich.top=sangwich.top,sangwich.bottom=sangwich.bottom,GTindex=NULL,file.output=file.output, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero,Geno.View.output=Geno.View.output,PCA.col=PCA.col,PCA.3d=PCA.3d)
 
 # }
@@ -2718,12 +2718,12 @@ GD=cbind(as.data.frame(GT),GD)
   print("GAPIT.DP accomplished successfully for multiple traits. Results are saved")
   return (list(Y=NULL,G=G,GD=GD,GM=GI,KI=KI,Z=Z,CV=CV,CV.Inheritance= CV.Inheritance,GP=GP,GK=GK,PC=PC,GI=GI,
                 group.from= group.from ,group.to= group.to,group.by= group.by,DPP= DPP, name.of.trait=NULL,
-                kinship.cluster= kinship.cluster, kinship.group= kinship.group,kinship.algorithm= kinship.algorithm,NJtree.group=NJtree.group,NJtree.type=NJtree.type,PCA.col=PCA.col,PCA.3d=PCA.3d,                                              
+                kinship.cluster= kinship.cluster, kinship.group= kinship.group,kinship.algorithm= kinship.algorithm,NJtree.group=NJtree.group,NJtree.type=NJtree.type,PCA.col=PCA.col,PCA.3d=PCA.3d,
                 bin.from= bin.from,bin.to= bin.to,bin.by= bin.by,inclosure.from= inclosure.from,inclosure.to= inclosure.to,inclosure.by= inclosure.by,
-                SNP.P3D= SNP.P3D,SNP.effect= SNP.effect,SNP.impute= SNP.impute,PCA.total= PCA.total, SNP.fraction = SNP.fraction, seed = seed, 
+                SNP.P3D= SNP.P3D,SNP.effect= SNP.effect,SNP.impute= SNP.impute,PCA.total= PCA.total, SNP.fraction = SNP.fraction, seed = seed,
                 BINS = BINS,SNP.test=SNP.test, SNP.MAF= SNP.MAF,FDR.Rate = FDR.Rate, SNP.FDR= SNP.FDR,SNP.permutation= SNP.permutation,
-                SNP.CV= SNP.CV,SNP.robust= SNP.robust, file.from= file.from, file.to=file.to, file.total= file.total, file.fragment = file.fragment,file.path= file.path, 
-                file.G= file.G, file.Ext.G= file.Ext.G,file.GD= file.GD, file.GM= file.GM, file.Ext.GD= file.Ext.GD,file.Ext.GM= file.Ext.GM, 
+                SNP.CV= SNP.CV,SNP.robust= SNP.robust, file.from= file.from, file.to=file.to, file.total= file.total, file.fragment = file.fragment,file.path= file.path,
+                file.G= file.G, file.Ext.G= file.Ext.G,file.GD= file.GD, file.GM= file.GM, file.Ext.GD= file.Ext.GD,file.Ext.GM= file.Ext.GM,
                 ngrid = ngrid, llim = llim, ulim = ulim, esp = esp,Inter.Plot=Inter.Plot,Inter.type=Inter.type,
                 LD.chromosome= LD.chromosome,LD.location= LD.location,LD.range= LD.range,Multi_iter=Multi_iter,
                 sangwich.top= sangwich.top,sangwich.bottom= sangwich.bottom,QC= QC,GTindex= GTindex,LD= LD,GT=GT,
@@ -2734,7 +2734,7 @@ GD=cbind(as.data.frame(GT),GD)
                method.bin= method.bin,bin.size= bin.size,bin.selection= bin.selection,
         		memo= memo,Prior= Prior,ncpus=1,maxLoop= maxLoop,threshold.output= threshold.output,
         		WS= WS,alpha= alpha,maxOut= maxOut,QTN.position= QTN.position, converge=1,iteration.output= iteration.output,acceleration=0,
-        		iteration.method= iteration.method,PCA.View.output= PCA.View.output, 
+        		iteration.method= iteration.method,PCA.View.output= PCA.View.output,
                 p.threshold=p.threshold,QTN.threshold=QTN.threshold,
                 maf.threshold=maf.threshold,chor_taxa=chor_taxa,windowsize=windowsize,
         		Geno.View.output= Geno.View.output,plot.style= plot.style,SUPER_GD= SUPER_GD,SUPER_GS= SUPER_GS,CG=CG,plot.bin=plot.bin))
@@ -2870,7 +2870,7 @@ if(optOnly){
            #PEV = NULL, BLUE=NULL))
     }
   }
-  
+
 
   #Calculate the log likelihood function for the intercept only model
 
@@ -2917,10 +2917,10 @@ if(optOnly){
       }
       beta <- crossprod(iXX,XY) #Note: we can use crossprod here because iXX is symmetric
       X.beta <- X%*%beta
-      
+
       beta.cv=beta
       BLUE=X.beta
-      
+
       if(!is.null(K)){
               U.times.yv.minus.X.beta <- crossprod(U,(yv-X.beta))
               logLM <- 0.5*(-length(yv)*log(((2*pi)/length(yv))*crossprod(U.times.yv.minus.X.beta,U.times.yv.minus.X.beta))
@@ -3044,7 +3044,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Read file fragment")
 
     myFRG=GAPIT.Fragment( file.path=file.path,  file.total=file.total,file.G=file.G,file.Ext.G=file.Ext.G,
                           seed=seed,SNP.fraction=SNP.fraction,SNP.effect=SNP.effect,SNP.impute=SNP.impute,genoFormat=genoFormat,
-                          file.GD=file.GD,file.Ext.GD=file.Ext.GD,file.GM=file.GM,file.Ext.GM=file.Ext.GM,file.fragment=file.fragment,file=file,frag=frag, 
+                          file.GD=file.GD,file.Ext.GD=file.Ext.GD,file.GM=file.GM,file.Ext.GM=file.Ext.GM,file.fragment=file.fragment,file=file,frag=frag,
                            Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)
 
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Genotype file converted")
@@ -3063,7 +3063,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Genotype file converted")
           colnames(myFRG$GI)=c("SNP","Chromosome","Position")
           GI=as.matrix(myFRG$GI)
         }
-        
+
 
       if(!is.null(myFRG$GI))    {
         numSNP=ncol(myFRG$GD)
@@ -3078,21 +3078,21 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Genotype file converted")
 #Skip REML if xs is from a empty fragment file
 if(!is.null(xs))  {
 
-   
+
   if(is.null(dim(xs)) || nrow(xs) == 1)  xs <- matrix(xs, length(xs),1)
-  
+
   xs <- as.matrix(xs)
-  
+
     if(length(which(is.na(xs)))>0){    #for the case where fragments are read in
      if(SNP.impute == "Major") xs[which(is.na(xs))] = 2
      if(SNP.impute == "Minor") xs[which(is.na(xs))] = 0
      if(SNP.impute == "Middle") xs[which(is.na(xs))] = 1
     }
 
-  
+
   m <- ncol(xs) #number of SNPs
   t <- nrow(xs) #number of individuals
- 
+
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Before cleaning")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Before cleaning")
   #allocate spaces for SNPs
@@ -3154,23 +3154,23 @@ for (i in loopStart:mloop){
       if(Create.indicator){ #I need create indicators and then calculate the minor allele frequency
        condition.temp <- unique(xs[vids,i])
        #Define what a bit is
-       
+
        bit=nchar(as.character(xs[vids[1],i]))
-       
+
        #Expand on the "which" statement below to include all instances of missing data
-       
+
        if(bit==1)  condition <-  condition.temp[-which(condition.temp == "N")]
        if(bit==2)  condition <-  condition.temp[-which(condition.temp == "NN")]
-       
+
        #print("condition.temp is ")
        #print(condition.temp)
-                                                                                                                        
+
        #print("condition is")
        #print(condition)
-       
-       #print(paste("The value of i is ", i, sep = "")) 
-        
-       
+
+       #print(paste("The value of i is ", i, sep = ""))
+
+
        if(length(condition) <= 1){
         dfs[i, ] <- rep(NA, g)
         stats[i, ] <- rep(NA, g)
@@ -3185,18 +3185,18 @@ for (i in loopStart:mloop){
         normalCase=FALSE
         x.prev= vector(length = 0)
        }
-       
+
        }
        if(normalCase){
        #print("The head of xs[vids,i] is")
        #print(head(xs[vids,i]))
-      
+
       if(Create.indicator){     #I need create indicators and then calculate the minor allele frequency
-       
+
        indicator <-  GAPIT.Create.Indicator(xs[vids,i], SNP.impute = SNP.impute)
        xv <- indicator$x.ind
        vids <- !is.na(xv[,1]) #### Feng changed
-      
+
        vids.TRUE=which(vids==TRUE)
        vids.FALSE=which(vids==FALSE)
        ns=nrow(xv)
@@ -3204,22 +3204,22 @@ for (i in loopStart:mloop){
 
        maf[i]=min(ss/ns,1-ss/ns)
        nobs[i]=ns
-       
+
         q1 <- q0 + ncol(xv)    # This is done so that parameter estimates for all indicator variables are included
 
-       
+
         #These two matrices need to be reinitiated for each SNP.
         Xt <- matrix(NA,nr, q1)
         iXX=matrix(NA,q1,q1)
-       }       
+       }
       }
-     
+
       if(!Create.indicator){ #### Feng changed
 	   #print(xs[1:10,1:10])
 
        xv <- xs[vids,i]
        vids <- !is.na(xs[,i]) #### Feng changed
-      
+
        vids.TRUE=which(vids==TRUE)
        vids.FALSE=which(vids==FALSE)
        ns=length(xv)
@@ -3327,15 +3327,15 @@ for (i in loopStart:mloop){
 
 
       if(i >0 | file>file.from|frag>1) dfs[i, j] <- nr - q1
-    	if(i >0 | file>file.from|frag>1){ 
+    	if(i >0 | file>file.from|frag>1){
         if(!Create.indicator) X <- cbind(X0[vids, , drop = FALSE], xs[vids,i])
         if(Create.indicator){
           X <- cbind(X0[vids, , drop = FALSE], xv)
           #if(i == 1) {print("the head of X for running GWAS is")}
           #if(i == 1) {print(head(X))}
-        }       
-        
-      } 
+        }
+
+      }
        #Recalculate eig and REML if not using P3D  NOTE THIS USED TO BE BEFORE the two solid lines
       if(SNP.P3D==FALSE & !is.null(K))
       {
@@ -3364,14 +3364,14 @@ for (i in loopStart:mloop){
             }
             if(i > 0 | file>file.from |frag>1){
               #if(i ==1 & file==file.from&frag==1) Xt <- matrix(NA,nr, q1)
-             
+
              if(Create.indicator){
                 xst <- crossprod(U, X[,(q0+1):q1])
                 Xt[1:nr,1:q0] <- X0t
                 Xt[1:nr,(q0+1):q1] <- xst
-               
+
              }
-             
+
               #print(paste("i:",i,"q0:",q0,"q1:",q1,"nt:",nr,"XT row",nrow(Xt),"XT col",ncol(Xt),sep=" "))
              if(!Create.indicator){
                 xst <- crossprod(U, X[,ncol(X)])
@@ -3468,13 +3468,13 @@ for (i in loopStart:mloop){
 
 
           iXX[1:q0,1:q0]=B11
-          iXX[(q0+1):q1,(q0+1):q1]=solve(B22)  
+          iXX[(q0+1):q1,(q0+1):q1]=solve(B22)
           iXX[(q0+1):q1,1:q0]=NeginvB22B21
           iXX[1:q0,(q0+1):q1]=t(NeginvB22B21)
 
         }
 
-      
+
         if(!Create.indicator){
           B22 <- xstxst - XstX0%*%iX0X0%*%X0Xst
           invB22 <- 1/B22
@@ -3489,7 +3489,7 @@ for (i in loopStart:mloop){
           iXX[q1,q1]=1/B22
           iXX[q1,1:q0]=NeginvB22B21
           iXX[1:q0,q1]=NeginvB22B21
-          
+
 
         }
         #if(i == 1){
@@ -3511,13 +3511,13 @@ for (i in loopStart:mloop){
       #print(dim(iXX))
       #print("The length of XY is")
       #print(length(XY))
-      
+
       beta <- crossprod(iXX,XY) #Note: we can use crossprod here becase iXX is symmetric
       #print("beta was estimated")
 
 #-------------------------------------------------------------------------------------------------------------------->
 
-       
+
 #--------------------------------------------------------------------------------------------------------------------<
       if(i ==0 &file==file.from &frag==1 & !is.null(K))
       {
@@ -3526,8 +3526,8 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="ReducdModel")
 
         #beta.cv=beta
 
-        
-        
+
+
         XtimesBetaHat <- X%*%beta
 
         YminusXtimesBetaHat <- ys[j,]- XtimesBetaHat
@@ -3568,9 +3568,9 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="ReducdModel")
         if(inherits(C11, "try-error")) C11=vgs*ginv(crossprod(Xt,Xt))
 
         C21=-K%*%crossprod(Zt,Xt)%*%C11
-		Kinv=try(solve(K)  ,silent=TRUE  ) 
+		Kinv=try(solve(K)  ,silent=TRUE  )
         if(inherits(Kinv, "try-error")) Kinv=ginv(K)
-        
+
         if(!is.null(Z)) term.0=crossprod(Z,Z)/ves
         if(is.null(Z)) term.0=diag(1/ves,nrow(K))
 
@@ -3583,7 +3583,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="ReducdModel")
  #print(paste("The value of is.na(CVI) is", is.na(CVI),  sep = ""))
 if(!is.na(CVI)){
 		XCV=as.matrix(cbind(1,data.frame(CVI[,-1])))
-	
+
 		#CV.Inheritance specified
 		beta.Inheritance=beta
 		if(!is.null(CV.Inheritance)){
@@ -3592,7 +3592,7 @@ if(!is.na(CVI)){
 		}
 		#Interception only
 		if(length(beta)==1)XCV=X
-		
+
         BLUE=try(XCV%*%beta.Inheritance,silent=TRUE)
         if(inherits(BLUE, "try-error")) BLUE = NA
      #print("GAPIT just after BLUE")
@@ -3643,7 +3643,7 @@ if(i ==0 &file==file.from &frag==1 & !is.null(K))
         Memory=GAPIT.Memory(Memory=Memory,Infor="K normal")
 if(SNP.P3D == TRUE) K=1  #NOTE: When SNP.P3D == FALSE, this line will mess up the spectral decomposition of the kinship matrix at each SNP.
 rm(Dt)
-rm(Zt)            
+rm(Zt)
 rm(Kinv)
 rm(C11)
 rm(C21)
@@ -3680,22 +3680,22 @@ gc()
        if(!Create.indicator){
         #if(i<5)print(beta[q1])
         #if(i<5)print(iXX[q1, q1])
-        if(!is.null(K)) stats[i, j] <- beta[q1]/sqrt(iXX[q1, q1] *vgs) 
+        if(!is.null(K)) stats[i, j] <- beta[q1]/sqrt(iXX[q1, q1] *vgs)
         if(is.null(K)) stats[i, j] <- beta[q1]/sqrt(iXX[q1, q1] *ves)
         effect.est[i, ] <- beta[q1]
         ps[i, ] <- 2 * pt(abs(stats[i, ]), dfs[i, ],lower.tail = FALSE)
         if(is.na(ps[i,]))ps[i,]=1
         #print(c(i,ps[i,],stats[i,],beta[q1],iXX[q1, q1]))
-       } 
+       }
        if(Create.indicator){
-       
+
         F.num.first.two <- crossprod(beta[(q0+1):q1], solve(iXX[(q0+1):q1,(q0+1):q1]))
         if(!is.null(K)) stats[i, j] <- (F.num.first.two %*% beta[(q0+1):q1])/(length((q0+1):q1)*vgs)
         if(is.null(K)) stats[i, j] <- (F.num.first.two %*% beta[(q0+1):q1])/(length((q0+1):q1)*ves)
         effect.est <- rbind(effect.est, cbind(rep(i,length((q0+1):q1)), indicator$unique.SNPs, beta[(q0+1):q1])) #Replace with rbind
         ps[i, ] <- pf(stats[i, j], df1=length((q0+1):q1), df2=(nr-ncol(X)), lower.tail = FALSE) #Alex, are these denominator degrees of freedom correct?
         dfs[i,] <- nr-nrow(X)
-        
+
        }
               #Calculate the maximum full likelihood function value and the r square
 
@@ -3737,7 +3737,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Screening SNPs")
 # print(head(effect.est))
 #output p value for the genotype file
 if(!fullGD)
-{ 
+{
   #print("!!!!!!!!!!")
   #print(dim(GI))
   write.table(GI, paste("GAPIT.TMP.GI.",name.of.trait,file,".",frag,".txt",sep=""), quote = FALSE, sep = "\t", row.names = FALSE,col.names = TRUE)
@@ -3750,11 +3750,11 @@ if(!fullGD)
   write.table(tvalue, paste("GAPIT.TMP.tvalue.",name.of.trait,file,".",frag,".txt",sep=""), quote = FALSE, sep = "\t", row.names = FALSE,col.names = FALSE)
   write.table(stderr, paste("GAPIT.TMP.stderr.",name.of.trait,file,".",frag,".txt",sep=""), quote = FALSE, sep = "\t", row.names = FALSE,col.names = FALSE)
   write.table(effect.est, paste("GAPIT.TMP.effect.est.",name.of.trait,file,".",frag,".txt",sep=""), quote = FALSE, sep = "\t", row.names = FALSE,col.names = FALSE)
- 
+
   #rm(dfs,stats,ps,nobs,maf,GI)   #This cause problem on return
   #gc()
 }
- 
+
     frag=frag+1   #Progress to next fragment
 
 } #end of if(!is.null(X))
@@ -3792,7 +3792,7 @@ function(WS=c(1e0,1e3,1e4,1e5), GM=NULL,seqQTN=NULL,GWAS=NULL,maxOut=100,MaxBP=1
     ##############################################################################################
     #print("GAPIT.Power Started")
     if(is.null(seqQTN) | is.null(GM)) return(list(Power=NULL,FDR= NULL,TypeI= NULL,False= NULL,AUC.FDR= NULL,AUC.T1= NULL))
-    
+
     #store number fdr and t1 records
     NQTN=length(seqQTN)
     table=array(NA,dim=c(NQTN,2*length(WS)))
@@ -3808,7 +3808,7 @@ function(WS=c(1e0,1e3,1e4,1e5), GM=NULL,seqQTN=NULL,GWAS=NULL,maxOut=100,MaxBP=1
     powerlist=seq(1/length(QTN.list),1,length.out=length(QTN.list))
     #calculate number of false positives in each WS
     total.index=1:nrow(GM)
-    
+
     theWS=1
     for (theWS in 1:length(WS)){
         wsws=WS[theWS]
@@ -3859,9 +3859,9 @@ function(WS=c(1e0,1e3,1e4,1e5), GM=NULL,seqQTN=NULL,GWAS=NULL,maxOut=100,MaxBP=1
             fdr.record=rbind(fdr.record,final.fdr)
             t1.record=rbind(t1.record,final.t1)
         }
-        
+
     }
-    
+
     table=number.record
     fdrtable=fdr.record
     t1table=t1.record
@@ -3875,7 +3875,7 @@ function(WS=c(1e0,1e3,1e4,1e5), GM=NULL,seqQTN=NULL,GWAS=NULL,maxOut=100,MaxBP=1
         auc.final.t1=c(auc.final.t1,auc.t1)
     }
     return(list(P=cutoff,Power=powerlist,FDR=fdrtable,TypeI=t1table,False=table,AUC.FDR=auc.final.fdr,AUC.T1=auc.final.t1))
-    
+
 }#end of `GAPIT.FDR.TypeI`
 #=============================================================================================`GAPIT.FilterByTaxa` <-
 function(taxa,Data){
@@ -3909,7 +3909,7 @@ function(file.path=NULL,file.from=NULL, file.to=NULL,file.total=NULL,file.G=NULL
 #print("Fragmental reading...")
 genoFormat="hapmap"
 if(!is.null(file.GD)&is.null(file.G)) genoFormat="EMMA"
-  
+
 if(genoFormat=="hapmap"){
         #Initical G
         #print("Reading file...")
@@ -3923,7 +3923,7 @@ if(genoFormat=="hapmap"){
           G <- try(read.delim(paste(file.path,file.G,file, ".",file.Ext.G,sep=""),
                           head = FALSE,skip = skip.1, nrows = file.fragment),silent=TRUE )
         }
-        
+
         #print("processing the data...")
         if(inherits(G, "try-error"))  {
           G=NULL
@@ -3937,22 +3937,22 @@ if(genoFormat=="hapmap"){
 
         #print("Calling hapmap...")
         heading=(frag==1)
-        
+
         #Recording number of lineas read
         if(heading){
           n= nrow(G)-1
         }else{
           n= nrow(G)
-        } 
-       
+        }
+
        linesRead=n
-               
+
         #Sampling
        if(SNP.fraction<1){
 
           #print("Number of SNP in this pragment:")
           #print(n)
-          
+
           #set.seed(seed+(file*1000)+frag)
           #mySample=sample(1:n,max(2,floor(n*as.numeric(as.vector(SNP.fraction)))))
           mySample=sample(1:n,max(2,floor(n*SNP.fraction)))
@@ -3965,27 +3965,27 @@ if(genoFormat=="hapmap"){
             G=G[mySample,]
           }
         } #end of if(SNP.fraction<1)
-        
 
-        print("Call hapmap from fragment")      
+
+        print("Call hapmap from fragment")
         hm=GAPIT.HapMap(G,SNP.effect=SNP.effect,SNP.impute=SNP.impute,heading=heading, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)
 
         #print("Extracting snps for LD plot...")
         #Extract SNPs for LD plot
         if(!is.null(LD.chromosome) & !is.null(hm$GD)){
-          index=(G[,3]==LD.chromosome[1]) & abs((as.numeric(G[,4])-as.numeric(LD.location[1]))<(as.numeric(LD.range[1])/2))   
+          index=(G[,3]==LD.chromosome[1]) & abs((as.numeric(G[,4])-as.numeric(LD.location[1]))<(as.numeric(LD.range[1])/2))
           GLD=G[index,]
         }else{
           GLD=NULL
         }
-        
+
         #rm(G)
         #gc()
         print("hapmap called successfuly from fragment")
 
         return(list(GD=hm$GD,GI=hm$GI,GT=hm$GT,linesRead=linesRead,GLD=GLD,heading=heading,G=G))
 
-          print("ERROR: It should not get here!!!")        
+          print("ERROR: It should not get here!!!")
 } #end of "hapmap"
 
 
@@ -4008,7 +4008,7 @@ if(genoFormat=="EMMA"){
                   rep("NULL", skip.2))) ,silent=TRUE)
         GI <- try(read.table(paste(file.path,file.GM,file, ".",file.Ext.GM,sep=""), head = TRUE,
                   skip=skip.1, nrows=file.fragment) ,silent=TRUE)
-                  
+
         if(inherits(GD, "try-error"))  {
           GD=NULL
           print("File end reached for GD!!!")
@@ -4016,17 +4016,17 @@ if(genoFormat=="EMMA"){
         if(inherits(GI, "try-error"))  {
           GI=NULL
           print("File end reached for GI!!!")
-        }                          
-                  
+        }
+
         if(is.null(GD)) return(list(GD=NULL, GI=NULL,GT=NULL,linesRead=NULL,GLD=NULL))
-        
+
         GT=GD[,1]  #Extract infividual names
 
         GD=GD[,-1] #Remove individual names
-#print("Numerical file read sucesfuly from fragment") 
-        linesRead=ncol(GD)       
+#print("Numerical file read sucesfuly from fragment")
+        linesRead=ncol(GD)
         if(SNP.fraction==1) return(list(GD=GD, GI=GI,GT=GT,linesRead=linesRead,GLD=NULL))
-        
+
         if(SNP.fraction<1){
           n= ncol(GD)
           #set.seed(seed+file)
@@ -4043,7 +4043,7 @@ function(KW,KO,KWO,GAU,UW){
 #Object: to derive BLUP for the individuals without phenotype
 #UW:BLUP and PEV of ID with phenotyp
 #Output: BLUP
-#Authors: Zhiwu Zhang 
+#Authors: Zhiwu Zhang
 # Last update: Oct 22, 2015  by Jiabo Wang
 ##############################################################################################
 #print(dim(UW))
@@ -4091,8 +4091,8 @@ return(list(BLUP=all))
 function(gsBLUP = gsBLUP, BINS=BINS, name.of.trait = name.of.trait){
 #Object: To build heat map to show distribution of BLUP and PEV
 #Output: pdf
-#Authors: Zhiwu Zhang 
-# Last update: May 15, 2011 
+#Authors: Zhiwu Zhang
+# Last update: May 15, 2011
 ##############################################################################################
 nBin=BINS
 
@@ -4112,31 +4112,31 @@ if(inherits(BLUP.max, "try-error"))  return()
 
   range.BLUP=BLUP.max-BLUP.min
   range.PEV=max(PEV)-min(PEV)
-  
+
   interval.BLUP=range.BLUP/nBin
   interval.PEV=range.PEV/nBin
-  
-  
+
+
   bin.BLUP=floor(BLUP/max(BLUP)*nBin)*max(BLUP)/nBin
   bin.PEV=floor(PEV/max(PEV)*nBin)*max(PEV)/nBin
-  
-  
+
+
   distinct.BLUP=unique(bin.BLUP)
   distinct.PEV=unique(bin.PEV)
-  
+
   if((length(distinct.BLUP)<2)  | (length(distinct.PEV)<2) ) return() #nothing to plot
-  
+
   Position.BLUP=match(bin.BLUP,distinct.BLUP,nomatch = 0)
   Position.PEV=match(bin.PEV,distinct.PEV,nomatch = 0)
-  
+
   value=matrix(1,length(Position.BLUP))
   KG<- (tapply(as.numeric(value), list(Position.BLUP, Position.PEV), sum))
-  
+
   rownames(KG)=round(distinct.BLUP, digits = 4)
   colnames(KG)=round(distinct.PEV, digits = 4)
-  
+
   #Sort the rows and columns in order from smallest to largest
-  
+
   rownames(KG) <- rownames(KG)[order(as.numeric(rownames(KG)))]
   colnames(KG) <- colnames(KG)[order(as.numeric(colnames(KG)))]
   rownames(KG) <- round(as.numeric(rownames(KG)))
@@ -4146,15 +4146,15 @@ if(inherits(BLUP.max, "try-error"))  return()
   pdf(paste("GAPIT.", name.of.trait,".GPS.BLUPvsPEV", ".pdf", sep = ""),width = 9)
   #par(mfrow = c(1,1), mar = c(1,1,5,5), lab = c(5,5,7))
   par(mar = c(5,5,6,5))
-  
-  nba_heatmap <- heatmap.2(KG, Rowv=NA, Colv=NA,  col =  rev(heat.colors(256)), #  scale="column", 
+
+  nba_heatmap <- heatmap.2(KG, Rowv=NA, Colv=NA,  col =  rev(heat.colors(256)), #  scale="column",
   xlab = "PEV", ylab = "BLUP", main = " ", scale="none", symkey=FALSE, trace="none")
 
   #nba_heatmap <- heatmap.2(KG,  cexRow =.2, cexCol = 0.2, scale="none", symkey=FALSE, trace="none" )
- 
-  
+
+
   #cexRow =0.9, cexCol = 0.9)
-  dev.off() 
+  dev.off()
 }
 #print("GAPIT.GS.Visualization accomplished successfully!")
 
@@ -4171,14 +4171,14 @@ function(G=NULL,GD=NULL,GM=NULL,KI=NULL,
   SNP.MAF=0.05,FDR.Rate = 0.05,SNP.FDR=1,
   Timmer=NULL,Memory=NULL,
   LD.chromosome=NULL,LD.location=NULL,LD.range=NULL, SNP.CV=NULL,
-  GP = NULL,GK = NULL,GTindex=NULL,  
+  GP = NULL,GK = NULL,GTindex=NULL,
   bin.size = 1000,inclosure.size = 100,
   sangwich.top=NULL,sangwich.bottom=NULL,
   file.output=TRUE,kinship.cluster="average",NJtree.group=NULL,NJtree.type=c("fan","unrooted"),
   Create.indicator = FALSE, Major.allele.zero = FALSE,Geno.View.output=TRUE){
 #Object: To unify genotype and calculate kinship and PC if required:
 #       1.For G data, convert it to GD and GI
-#       2.For GD and GM data, nothing change 
+#       2.For GD and GM data, nothing change
 #       3.Samling GD and create KI and PC
 #       4.Go through multiple files
 #       5.In any case, GD must be returned (for QC)
@@ -4295,7 +4295,7 @@ if(is.null(GD) & !is.null(GM) & (is.null(GP)&is.null(GK)) &kinship.algorithm!="S
 #print("Pass compatibility of input")
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Genotype loaded")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Genotype loaded")
-  
+
 #Inital GLD
 GLD=NULL
 SNP.QTN=NULL #Intitial
@@ -4433,7 +4433,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Before Fragment")
           G=as.data.frame(rbind(as.matrix(G),as.matrix(myFRG$G[-1,])))
         }
       }
-      
+
       if(is.null(GLD)){
         GLD= myFRG$GLD
       }else{
@@ -4477,7 +4477,7 @@ GM=GI
 #print(unique(GM[,2]))
 #print("@@@@@@@@@@")
 #Set the number of chromosome
-# if(1%in%as.character(unique(GM[,2]))) 
+# if(1%in%as.character(unique(GM[,2])))
 # { chor_taxa=mixedsort(as.character((unique(GM[,2]))))
 
 # }else{
@@ -4487,22 +4487,22 @@ GM=GI
 # for(i in 1:(length(chor_taxa)))
 # {
 #     index=GM[,2]==chor_taxa[i]
-#     GI[index,2]=i    
+#     GI[index,2]=i
 # }
 # }
 # modified by Jiabo in 20190927. sorted number of chrom by numeric and charicter
 chor_taxa=as.character(unique(GM[,2]))
-chor_taxa[order(gsub("([A-Z]+)([0-9]+)", "\\1", chor_taxa), 
+chor_taxa[order(gsub("([A-Z]+)([0-9]+)", "\\1", chor_taxa),
 
              as.numeric(gsub("([A-Z]+)([0-9]+)", "\\2", chor_taxa)))]
 chr_letter=grep("[A-Z]|[a-z]",chor_taxa)
 if(!setequal(integer(0),chr_letter))
-{     
+{
   GI=as.matrix(GI)
       for(i in 1:(length(chor_taxa)))
         {
          index=GM[,2]==chor_taxa[i]
-         GI[index,2]=i    
+         GI[index,2]=i
         }
 }
 #print(head(GI))
@@ -4512,7 +4512,7 @@ if(!setequal(integer(0),chr_letter))
 #print(dim(GI))
 #Follow the MAF to filter markers
 if(!is.null(GD))
-{ 
+{
   #maf=apply(as.matrix(GD),2,function(one) abs(1-sum(one)/(2*nrow(GD))))
   #maf[maf>0.5]=1-maf[maf>0.5]
   ss=apply(GD,2,sum)
@@ -4569,11 +4569,11 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="set kinship")
     par(mar = c(25,25,25,25))
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="prepare heatmap")
 Memory=GAPIT.Memory(Memory=Memory,Infor="prepare heatmap")
-    
+
     heatmap.2(theKin,  cexRow =.2, cexCol = 0.2, col=rev(heat.colors(256)), scale="none", symkey=FALSE, trace="none")
     dev.off()
     print("Kinship heat map PDF created!")
-    
+
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="plot heatmap")
 Memory=GAPIT.Memory(Memory=Memory,Infor="plot heatmap")
 ## Jiabo Wang add NJ Tree of kinship at 4.5.2017
@@ -4591,17 +4591,17 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="prepare NJ TREE")
 #legend("topright",legend=c(paste("Tatal numerber of individuals is ",),lty=0,cex=1.3,bty="n",bg=par("bg"))
     legend("topright",legend=paste(c("Tatal individuals is: ","Cluster method: ","Group number: "), Optimum[c(1:3)], sep=""),lty=0,cex=1.3,bty="n",bg=par("bg"))
     dev.off()
-    
+
     }
-    
+
     write.table(compress_z,paste("GAPIT.Kin.NJtree.compress_z.txt",sep=""),quote=F)
 
     print("Kinship NJ TREE PDF created!")
- 
+
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="plot NJ TREE")
 Memory=GAPIT.Memory(Memory=Memory,Infor="plot NJ TREE")
     #rm(hc,clusMember)
-}#end 
+}#end
 ## NJ Tree end
   } #end of if(nrow(KI)<1000)
 } #end of if(KI!=1)
@@ -4614,25 +4614,25 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Before SUPER")
 if(!is.null(GP) & kinship.algorithm=="SUPER" & !is.null(bin.size) & !is.null(inclosure.size)){
   mySpecify=GAPIT.Specify(GI=GI,GP=GP,bin.size=bin.size,inclosure.size=inclosure.size)
   SNP.QTN=mySpecify$index
-  
+
   if(!is.null(GD)){
 	#comment out to keep all taxa for GS, Zhiwu (Dec7, 2012)
-    #GK=GD[GTindex,SNP.QTN] 
+    #GK=GD[GTindex,SNP.QTN]
     #SNPVar=apply(as.matrix(GK),2,var)
     #GK=GK[,SNPVar>0]
-    #GK=cbind(as.data.frame(GT[GTindex]),as.data.frame(GK)) #add taxa  
+    #GK=cbind(as.data.frame(GT[GTindex]),as.data.frame(GK)) #add taxa
 
 	  GK=GD[,SNP.QTN]
     SNPVar=apply(as.matrix(GK),2,var)
     GK=GK[,SNPVar>0]
-    GK=cbind(as.data.frame(GT),as.data.frame(GK)) #add taxa  
+    GK=cbind(as.data.frame(GT),as.data.frame(GK)) #add taxa
 
-    	
-		
-		#print("QTN extracted")  
+
+
+		#print("QTN extracted")
   }
 
-  
+
 }
 
 
@@ -4644,7 +4644,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Before creating kinship")
 if(is.null(KI) & (!is.null(GD) |!is.null(GK)) & !kinship.algorithm%in%c("FarmCPU","Blink","MLMM"))
 {
   print("Calculating kinship...")
-  
+
   if(!is.null(GK)){
     thisGD=GK[,-1]
     myGT=as.matrix(GK[,1])
@@ -4655,11 +4655,11 @@ if(is.null(KI) & (!is.null(GD) |!is.null(GK)) & !kinship.algorithm%in%c("FarmCPU
 
 	#comment out to keep all taxa for GS, Zhiwu (Dec7, 2012)
     #if(!is.null(GTindex)){
-    #  thisGD=thisGD[GTindex,]    
-    #  myGT=myGT[GTindex]    
+    #  thisGD=thisGD[GTindex,]
+    #  myGT=myGT[GTindex]
     #}
   }
-  
+
  print(paste("Number of individuals and SNPs are ",nrow(thisGD)," and ",ncol(thisGD)))
  theKin=NULL
 
@@ -4670,10 +4670,10 @@ if(is.null(KI) & (!is.null(GD) |!is.null(GK)) & !kinship.algorithm%in%c("FarmCPU
       half.thisGD[which(is.na(half.thisGD))] = 1
     }
     theKin= emma.kinship(snps=t(as.matrix(.5*thisGD)), method="additive", use="all")
-  }  
+  }
   if(kinship.algorithm=="Loiselle")theKin= GAPIT.kinship.loiselle(snps=t(as.matrix(.5*thisGD)), method="additive", use="all")
-  if(kinship.algorithm=="VanRaden")theKin= GAPIT.kinship.VanRaden(snps=as.matrix(thisGD)) 
-  if(kinship.algorithm=="Zhang")theKin= GAPIT.kinship.ZHANG(snps=as.matrix(thisGD)) 
+  if(kinship.algorithm=="VanRaden")theKin= GAPIT.kinship.VanRaden(snps=as.matrix(thisGD))
+  if(kinship.algorithm=="Zhang")theKin= GAPIT.kinship.ZHANG(snps=as.matrix(thisGD))
   if(kinship.algorithm=="Separation")theKin= GAPIT.kinship.separation(PCs=thePCA$PCs,EV=thePCA$EV,nPCs=PCA.total)
 if(!is.null(theKin)){
   colnames(theKin)=myGT
@@ -4711,29 +4711,29 @@ if(!is.null(theKin)){
     par(mar = c(0,0,0,0))
     Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="prepare NJ TREE")
     Memory=GAPIT.Memory(Memory=Memory,Infor="prepare NJ TREE")
-    
+
     plot(as.phylo(hc), type = NJtree.type[tr], tip.color =type_col[clusMember],  use.edge.length = TRUE, col = "gray80",cex=0.6)
     #legend("topright",legend=c(paste("Tatal numerber of individuals is ",),lty=0,cex=1.3,bty="n",bg=par("bg"))
     legend("topright",legend=paste(c("Tatal individuals is: ","Group method: ","Group number: "), Optimum[c(1:3)], sep=""),lty=0,cex=1.3,bty="n",bg=par("bg"))
     dev.off()
     }
     # print(Optimum)
-    
+
     write.table(compress_z,paste("GAPIT.Kin.NJtree.compress_z.txt",sep=""),quote=F)
 
     print("Kinship NJ TREE PDF created!")
-    
+
     Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="plot NJ TREE")
     Memory=GAPIT.Memory(Memory=Memory,Infor="plot NJ TREE")
     rm(hc)
   }#end NJtree
-    
+
   }
 
   print("Adding IDs to kinship...")
   #Write the kinship into a text file
   KI=cbind(myGT,as.data.frame(theKin)) #This require big memory. Need a way to solve it.
-  
+
 
   print("Writing kinship to file...")
   if(file.output) write.table(KI, paste("GAPIT.Kin.",kinship.algorithm,".csv",sep=""), quote = FALSE, sep = ",", row.names = FALSE,col.names = FALSE)
@@ -4860,11 +4860,11 @@ return (list(G=G,GD=GD,GI=GI,GT=GT,hasGenotype=hasGenotype, genoFormat=genoForma
 # w1_end:Moving Average windows End Position
 # mav1:Moving Average set value length
 # Authors: You Tang and Zhiwu Zhang
-# Last update: March 11, 2016 
+# Last update: March 11, 2016
 ##############################################################################################
 
 #if(nrow(myGI)<1000) return() #Markers are not enough for this analysis
-  
+
 if(is.null(myGI)){stop("Validation Invalid. Please select read valid Genotype flies  !")}
 
 if(is.null(myGD)){stop("Validation Invalid. Please select read valid Genotype flies  !")}
@@ -5004,7 +5004,7 @@ myFig23<-myFig3[kk3,]
 
 myGD3<-X[,kk3]
 
-##set windows long 
+##set windows long
 ##w1_start<-30
 ##w1_end<-230
 ###get windows numeric snp at the same chr
@@ -5095,12 +5095,12 @@ print(paste("GAPIT.Genotype.View ", ".Two pdf generate.","successfully!" ,sep = 
 #=============================================================================================
 `GAPIT.HMP2Num` <-
 function(nLines=n,fileHMP="hmp.txt",fileNum="num.txt",bit=1,SNP.effect="Add",SNP.impute="Middle",heading=TRUE, Create.indicator = FALSE, Major.allele.zero = FALSE){
-    
+
 #Object: To convert hmp file to numerical file
 #Input: hmp genotype file
 #Output: Numerical genotype file
 #Authors: Zhiwu Zhang
-# Last update: May 23, 2013 
+# Last update: May 23, 2013
 ##############################################################################################
 #print("GAPIT.HMP2Num start")
 
@@ -5120,8 +5120,8 @@ fileHMPCon<-file(fileHMP, open="r")
 tt<-readLines(fileHMPCon, n=1) #header
 for(i in 1:n){
   if(i %% 100 == 0)print(i)
-  tt<-readLines(fileHMPCon, n=1) 
-  #tt2<-na.omit(as.numeric(unlist(strsplit(tt, "\t")))) 
+  tt<-readLines(fileHMPCon, n=1)
+  #tt2<-na.omit(as.numeric(unlist(strsplit(tt, "\t"))))
   tt2<-unlist(strsplit(tt, "\t"))
   #GM
   rs=tt2[1]
@@ -5129,13 +5129,13 @@ for(i in 1:n){
   pos=tt2[4]
   #GD
   GD= GAPIT.Numericalization(x=tt2[-c(1:11)],bit=bit,effect=SNP.effect,impute=SNP.impute, Major.allele.zero=Major.allele.zero)
-  
+
   #Output
   #print(i)
-  #print(tt2[12:52]) 
-  #print(GD[1:41]) 
+  #print(tt2[12:52])
+  #print(GD[1:41])
   #writeLines(tt2, fileNumCon,append=TRUE)
- 
+
 }
 close.connection(fileHMPCon)
 })
@@ -5154,7 +5154,7 @@ function(G,SNP.effect="Add",SNP.impute="Middle",heading=TRUE, Create.indicator =
     print(paste("Converting HapMap format to numerical under model of ", SNP.impute,sep=""))
     #gc()
     #GAPIT.Memory.Object(name.of.trait="HapMap.Start")
-    
+
     #GT=data.frame(G[1,-(1:11)])
     if(heading){
         GT= t(G[1,-(1:11)])
@@ -5163,19 +5163,19 @@ function(G,SNP.effect="Add",SNP.impute="Middle",heading=TRUE, Create.indicator =
         GT=NULL
         GI= G[,c(1,3,4)]
     }
-    
-    
+
+
     #Set column names
     if(heading)colnames(GT)="taxa"
     colnames(GI)=c("SNP","Chromosome","Position")
-    
+
     #Initial GD
     GD=NULL
     bit=nchar(as.character(G[2,12])) #to determine number of bits of genotype
     #print(paste("Number of bits for genotype: ", bit))
-    
+
     print("Perform numericalization")
-    
+
     if(heading){
         if(!Create.indicator) GD= apply(G[-1,-(1:11)],1,function(one) GAPIT.Numericalization(one,bit=bit,effect=SNP.effect,impute=SNP.impute, Major.allele.zero=Major.allele.zero))
         if(Create.indicator) GD= t(G[-1,-(1:11)])
@@ -5183,24 +5183,24 @@ function(G,SNP.effect="Add",SNP.impute="Middle",heading=TRUE, Create.indicator =
         if(!Create.indicator) GD= apply(G[  ,-(1:11)],1,function(one) GAPIT.Numericalization(one,bit=bit,effect=SNP.effect,impute=SNP.impute, Major.allele.zero=Major.allele.zero))
         if(Create.indicator) GD= t(G[ ,-(1:11)])
     }
-    
+
     #set GT and GI to NULL in case of null GD
     if(is.null(GD)){
         GT=NULL
         GI=NULL
     }
-    
+
     #print("The dimension of GD is:")
     #print(dim(GD))
-    
-    
+
+
     if(!Create.indicator) {print(paste("Succesfuly finished converting HapMap which has bits of ", bit,sep="")) }
     return(list(GT=GT,GD=GD,GI=GI))
 }#end of GAPIT.HapMap function
 #=============================================================================================
 `GAPIT.IC` <-
 function(DP=NULL){
-#Object: To Intermediate Components 
+#Object: To Intermediate Components
 #Designed by Zhiwu Zhang
 #Writen by Jiabo Wang
 #Last update: Novenber 3, 2016
@@ -5245,7 +5245,7 @@ print("GAPIT.IC in process...")
      print(dim(comCV))
 
      print("GAPIT.IC accomplished successfully for multiple traits. Results are saved")
-     if(DP$kinship.algorithm%in%c("FarmCPU","Blink","MLMM")){ 
+     if(DP$kinship.algorithm%in%c("FarmCPU","Blink","MLMM")){
         return (list(Y=comY,GT=GT,PCA=comCV,K=DP$KI,GD=comGD,GM=DP$GM,myallCV=CV,myallGD=GD))
      }else{
         return (list(Y=comY,GT=GT,PCA=comCV,K=DP$KI,GD=comGD,GM=DP$GM,myallCV=CV,myallGD=GD,myallY=Y))
@@ -5258,7 +5258,7 @@ function(DP=NULL,IC=NULL,SS=NULL,RS=NULL,cutOff=0.01,
 DPP=100000,Create.indicator=FALSE,
 FDR.Rate = 1,QTN.position=NULL,plot.style="Oceanic",
 file.output=TRUE,SNP.MAF=0,CG=NULL,plot.bin=10^9 ){
-#Object: To Interpretation and Diagnoses 
+#Object: To Interpretation and Diagnoses
 #Designed by Zhiwu Zhang
 #Writen by Jiabo Wang
 #Last update: Novenber 3, 2016
@@ -5293,7 +5293,7 @@ GWAS=RS
 
   if(is.na(maf[1]))  maf=matrix(.5,nrow(GWAS),1)
   print("Filtering SNPs with MAF..." )
-	index=maf>=SNP.MAF	     
+	index=maf>=SNP.MAF
 	PWI.Filtered=cbind(GI,ps,maf,nobs,rsquare_base,rsquare)#[index,]
 	colnames(PWI.Filtered)=c("SNP","Chromosome","Position ","P.value", "maf", "nobs", "Rsquare.of.Model.without.SNP","Rsquare.of.Model.with.SNP")
   if(!is.null(PWI.Filtered))
@@ -5316,9 +5316,9 @@ GWAS=RS
  # GWAS=PWIP$PWIP[PWIP$PWIP[,9]<=DP$SNP.FDR,]
  # print(head(GWAS))
   print("Joining tvalue and stderr" )
-  
+
         DTS=cbind(GI,df,tvalue,stderr,effect.est)
-        colnames(DTS)=c("SNP","Chromosome","Position","DF","t Value","std Error","effect")	
+        colnames(DTS)=c("SNP","Chromosome","Position","DF","t Value","std Error","effect")
 
   print("Creating ROC table and plot" )
 if(file.output) myROC=GAPIT.ROC(t=tvalue,se=stderr,Vp=var(ys),trait=name.of.trait)
@@ -5334,18 +5334,18 @@ if(file.output&maf_pass) myMAF1=GAPIT.MAF(MAF=maf,P=ps,E=NULL,trait=name.of.trai
 
 }else{ #inputdata is GAPIT3 result
   name.of.trait=DP$memo
-	
+
 GWAS=SS$GWAS
 #print(head(GWAS))
 Pred=SS$Pred
   GI=GWAS
-  
+
   GI=GI[order(GI[,3]),]
   GI=GI[order(GI[,2]),]
-  
+
   byPass=TRUE
   if(DP$kinship.algorithm%in%c("FarmCPU","MLMM","Blink"))byPass=FALSE
-  if(byPass) 
+  if(byPass)
 {
  # print(head(SS$GWAS))
       ps=SS$TV$ps
@@ -5360,9 +5360,9 @@ Pred=SS$Pred
       effect.est=SS$mc
       effect=SS$mc
       #GI=cbind(GI,effect)
-     
+
    if(DP$file.output&!is.null(SS$Compression)&!is.na(SS$Compression[1,6])) GAPIT.Compression.Visualization(Compression = SS$Compression, name.of.trait = DP$name.of.trait)
-  
+
 }else{
   maf=GI$maf
   ps=GI$P.value
@@ -5373,26 +5373,26 @@ Pred=SS$Pred
   tvalue=rep(NA,length(nobs))
   stderr=rep(NA,length(nobs))
   effect.est=GI$effect
-  
+
 
   }
   if(is.na(maf[1]))  maf=matrix(.5,nrow(GI),1)
 if(!is.null(IC$GD)&DP$SNP.test)
-{ 
-  
+{
+
   print("Filtering SNPs with MAF..." )
-	#index=maf>=DP$SNP.MAF	
+	#index=maf>=DP$SNP.MAF
 	#PWI.Filtered=cbind(GI[,-5],rsquare_base,rsquare)
   PWI.Filtered=cbind(GWAS[,1:6],rsquare_base,rsquare)
 	colnames(PWI.Filtered)=c("SNP","Chromosome","Position ","P.value", "maf", "nobs", "Rsquare.of.Model.without.SNP","Rsquare.of.Model.with.SNP")
-  
+
   if(!is.null(PWI.Filtered))
   {
   #Run the BH multiple correction procedure of the results
   #Create PWIP, which is a table of SNP Names, Chromosome, bp Position, Raw P-values, FDR Adjusted P-values
   print("Calculating FDR..." )
   PWIP <- GAPIT.Perform.BH.FDR.Multiple.Correction.Procedure(PWI = PWI.Filtered, FDR.Rate = FDR.Rate, FDR.Procedure = "BH")
-  #print(str(PWIP))  
+  #print(str(PWIP))
   print("QQ plot..." )
    if(DP$file.output) GAPIT.QQ(P.values = GI$P.value, name.of.trait = DP$name.of.trait,DPP=DP$DPP)
    print("Manhattan plot (Genomewise)..." )
@@ -5404,7 +5404,7 @@ if(!is.null(IC$GD)&DP$SNP.test)
 
   #Association Table
   print("Association table..." )
-  
+
   print("Joining tvalue and stderr" )
   # print(head(GWAS))
   # print(length(df))
@@ -5412,7 +5412,7 @@ if(!is.null(IC$GD)&DP$SNP.test)
   # print(length(stderr))
   # print(length(effect.est))
         DTS=cbind(GWAS[,1:3],df,tvalue,stderr,effect.est)
-        colnames(DTS)=c("SNP","Chromosome","Position","DF","t Value","std Error","effect")	
+        colnames(DTS)=c("SNP","Chromosome","Position","DF","t Value","std Error","effect")
 
   print("Creating ROC table and plot" )
 if(DP$file.output) myROC=GAPIT.ROC(t=tvalue,se=stderr,Vp=var(as.matrix(DP$Y[,2])),trait=DP$name.of.trait)
@@ -5456,7 +5456,7 @@ function(x,GI=NULL,impute="Middle",byRow=TRUE){
 #Output: Coresponding numerical value
 #Authors: Zhiwu Zhang
 #Writer:  Jiabo Wang
-# Last update: April 13, 2016 
+# Last update: April 13, 2016
 ##############################################################################################
 n=length(x)
 lev=levels(as.factor(x))
@@ -5483,7 +5483,7 @@ if(len==3){
 if(byRow) {
   result=matrix(x,n,1)
 }else{
-  result=matrix(x,1,n)  
+  result=matrix(x,1,n)
 }
 
 
@@ -5503,7 +5503,7 @@ function(model_store=NULL,Y=NULL,myGD=NULL,myGM=NULL,myKI=NULL,myY=NULL,myCV=NUL
 #model_store is the store of all model names
 #Y is the real phenotype
 #
-{ 
+{
 
 # e=20
 # #NQTN=100
@@ -5591,9 +5591,9 @@ if(!require(plotly)) install.packages("plotly")
 `GAPIT.Interactive.Manhattan`<-
 function(GWAS=NULL,MAF.threshold=seq(0,0.5,.1),cutOff=0.01,DPP=50000,X_fre=NULL,plot.type=c("m","q"),name.of.trait = "Trait"
   )
-{   
+{
     if(is.null(GWAS)) stop("Please add GWAS result in here!!!")
- 
+
     MP=GWAS[,2:4]
     #print(head(GWAS))
     GWAS=GWAS[order(GWAS[,3]),]
@@ -5608,7 +5608,7 @@ function(GWAS=NULL,MAF.threshold=seq(0,0.5,.1),cutOff=0.01,DPP=50000,X_fre=NULL,
     Ps=as.numeric(as.vector(GWAS[,4]))
     logPs <-  -log10(Ps)
     logPs[is.na(logPs)]=0
-    
+
     y.lim <- ceiling(max(GWAS[,4]))
     chrom_total=as.numeric(as.character((GWAS[,2])))
     #print(GWAS[GWAS[,4]==min(GWAS[,4]),])
@@ -5625,7 +5625,7 @@ function(GWAS=NULL,MAF.threshold=seq(0,0.5,.1),cutOff=0.01,DPP=50000,X_fre=NULL,
 
     ticks=NULL
     lastbase=0
-    
+
         #change base position to accumulatives (ticks)
         for (i in chm.to.analyze)
         {
@@ -5653,9 +5653,9 @@ function(GWAS=NULL,MAF.threshold=seq(0,0.5,.1),cutOff=0.01,DPP=50000,X_fre=NULL,
         posi=posi0[index]
         maf=maf0[index]
         effect=effect0[index]
-    
+
         plot.color=rep(c(  '#EC5f67',    '#FAC863',  '#99C794',    '#6699CC',  '#C594C5'),ceiling(numCHR/5))
-    
+
 
 if(c("m")%in%plot.type)
 {
@@ -5698,7 +5698,7 @@ if(c("q")%in%plot.type)
         p_value_quantiles <- (1:length(P.values))/(length(P.values)+1)
         log.P.values <- P.values
         log.Quantiles <- -log10(p_value_quantiles)
-        
+
         index=GAPIT.Pruning(log.P.values,DPP=DPP)
         log.P.values=log.P.values[index ]
         log.Quantiles=log.Quantiles[index]
@@ -5714,7 +5714,7 @@ if(c("q")%in%plot.type)
             c05[j] <- qbeta(0.05,i,N-i+1)
             #print(c(j,i,c95[j],c05[j]))
         }
-        
+
         #CI shade
         #plot3d(NULL, xlim = c(0,max(log.Quantiles)), zlim = c(0,max(log.P.values)), type="l",lty=5, lwd = 2, axes=FALSE, xlab="", ylab="",col="gray")
         index=length(c95):1
@@ -5730,7 +5730,7 @@ if(c("q")%in%plot.type)
     #size=2*y/max(y),
     name = "SNP",
     opacity=0.5,
-    )%>%add_lines(x=log.Quantiles,y=log.Quantiles,color=I("red"), 
+    )%>%add_lines(x=log.Quantiles,y=log.Quantiles,color=I("red"),
     mode = 'lines',name="Diag",text="")%>%
     layout(title = "Interactive.QQ.Plot",
         xaxis = list(title = "Expected -Log10(p)"),
@@ -5740,7 +5740,7 @@ if(c("q")%in%plot.type)
         htmltools::save_html(qp, paste("Interactive.QQ ",name.of.trait,".html",sep=""))
 
 
-}   
+}
 print("GAPIT.Interactive.Plot has done !!!")
 
 }#end of GAPIT.Interactive.Manhattan
@@ -5772,7 +5772,7 @@ if (!is.null(Y)) ntrait=ncol(Y)-1
 print(paste("There are ",ntrait," traits in phenotype data."))
 print(paste("There are ",nY," individuals in phenotype data."))
 if (!is.null(G)) nG=nrow(G)-11
-if (!is.null(GD)) 
+if (!is.null(GD))
 {nG=ncol(GD)-1
 print(paste("There are ",nG," markers in genotype data."))}
 print("Phenotype and Genotype are test OK !!")
@@ -5805,7 +5805,7 @@ function(Y,GD,CV){
     #Object: To have Y, GD and CV the same size and order
     #Input: Y,GDP,GM,CV
     #Input: GD - n by m +1 dataframe or n by m big.matrix
-    #Input: GDP - n by m matrix. This is Genotype Data Pure (GDP). THERE IS NOT COLUMN FOR TAXA. 
+    #Input: GDP - n by m matrix. This is Genotype Data Pure (GDP). THERE IS NOT COLUMN FOR TAXA.
     #Input: orientation-Marker in GDP go colmun or row wise
     #Requirement: Y, GDP and CV have same taxa order. GDP and GM have the same order on SNP
     #Output: GWAS,GPS,Pred
@@ -5820,13 +5820,13 @@ function(Y,GD,CV){
     #print(dim(Y))
     #print(dim(GD))
     #print(dim(CV))
-    
+
     if(!is.null(CV))taxa=intersect(intersect(GD[,1],Y[,1]),CV[,1])
     if(is.null(CV))taxa=intersect(GD[,1],Y[,1])
 
     Y=Y[match(taxa, Y[,1], nomatch = 0),]
     GD=GD[match(taxa, GD[,1], nomatch = 0),]
-    
+
     if(!is.null(CV)) CV=CV[match(taxa, CV[,1], nomatch = 0),]
     Y = Y[order(Y[,1]),]
     GD = GD[order(GD[,1]),]
@@ -5836,7 +5836,7 @@ function(Y,GD,CV){
     #print(dim(Y))
     #print(dim(GD))
     #print(dim(CV))
-    
+
   print("GAPIT.Liner accomplished successfully")
   return (list(Y=Y,GD=GD,CV=CV))
 }#The function GAPIT.Liner ends here
@@ -5849,7 +5849,7 @@ function(Y=Y,KI=KI,Z=Z,CV=CV,SNP.P3D=SNP.P3D,
 #Object: To report model factors
 #Output: Text file (GAPIT.Log.txt)
 #Authors: Zhiwu Zhang
-# Last update: may 16, 2011 
+# Last update: may 16, 2011
 ##############################################################################################
 
 #Creat storage
@@ -5862,7 +5862,7 @@ facto[[1]]="Trait"
 value[[1]]=paste(dim(Y))
 
 facto[[2]]="group.by "
-value[[2]]=group.by 
+value[[2]]=group.by
 
 facto[[3]]="Trait name "
 value[[3]]=name.of.trait
@@ -5886,10 +5886,10 @@ facto[[9]]="Group kinship"
 value[[9]]=kinship.group
 
 facto[[10]]="group.from "
-value[[10]]=group.from 
+value[[10]]=group.from
 
 facto[[11]]="group.to "
-value[[11]]=group.to 
+value[[11]]=group.to
 
 
 
@@ -5921,11 +5921,11 @@ function(MAF=NULL,P=NULL,E=NULL,trait="",threshold.output=.1,plot.style="rainbow
     MAF=MAF[index]
     #E=E[index]
     P=P[index]
-LP=-log10(P) 
+LP=-log10(P)
 LPC=round(LP*10,digits = 0)+20
 ncolors=max(LPC,na.rm=T)
 if(ncolors > 1024) {ncolors=1024}
-if(ncolors==-Inf) 
+if(ncolors==-Inf)
 {
 print("There are no significant gene by this method(<0.1)")
 }else{
@@ -5935,7 +5935,7 @@ print("There are no significant gene by this method(<0.1)")
 #palette(rainbow(ncolors))
 #palette(gray(seq(.9,0,len = ncolors)))
 #print("MAF plot started 0001b")
-pdf(paste("GAPIT.", trait,".MAF.pdf" ,sep = ""), width = 5,height=5) 
+pdf(paste("GAPIT.", trait,".MAF.pdf" ,sep = ""), width = 5,height=5)
 par(mar = c(5,6,5,3))
 theColor=heat.colors(ncolors, alpha = 1)
 palette(rev(theColor))
@@ -5999,8 +5999,8 @@ function(Y,G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,CV.Inheritance=NULL,SNP
     effect.snp=NULL,
     effect.cv=NULL
   )
-  
-  
+
+
 if (SUPER_GS)
 {
 Compression=NULL
@@ -6016,16 +6016,16 @@ Memory=GAPIT.Memory(Infor="GAPIT.SUPER.GS")
 SUPER_GS_GAPIT=GAPIT.SUPER.GS(Y=Y,G=G,GD=GD,GM=GM,KI=KI,Z=Z,CV=CV,GK=GK,kinship.algorithm=kinship.algorithm,
                       bin.from=bin.from,bin.to=bin.to,bin.by=bin.by,inclosure.from=inclosure.from,inclosure.to=inclosure.to,inclosure.by=inclosure.by,
 				        group.from=group.from,group.to=group.to,group.by=group.by,kinship.cluster=kinship.cluster,kinship.group=kinship.group,name.of.trait=traitname,
-                        file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM, 
+                        file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                         SNP.MAF= SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,PCA.total=PCA.total,GAPIT.Version=GAPIT.Version,
                         GT=GT, SNP.fraction = SNP.fraction, seed = seed, BINS = BINS,SNP.test=SNP.test,DPP=DPP, SNP.permutation=SNP.permutation,
                         LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,SNP.CV=SNP.CV,SNP.robust=SNP.robust,model=model,
                         genoFormat=genoFormat,hasGenotype=hasGenotype,byFile=byFile,fullGD=fullGD,PC=PC,GI=GI,Timmer = Timmer, Memory = Memory,
                         sangwich.top=sangwich.top,sangwich.bottom=sangwich.bottom,QC=QC,GTindex=GTindex,LD=LD,file.output=file.output,cutOff=cutOff
                         )
-	print("SUPER_GS_GAPIT FUNCTION DONE")	
+	print("SUPER_GS_GAPIT FUNCTION DONE")
 	return (list(Compression=SUPER_GS_GAPIT$Compression,kinship.optimum=SUPER_GS_GAPIT$SUPER_kinship,kinship=SUPER_GS_GAPIT$kinship, PC=SUPER_GS_GAPIT$PC,GWAS=GWAS, GPS=SUPER_GS_GAPIT$GPS,Pred=SUPER_GS_GAPIT$Pred,Timmer=Timmer,Memory=Memory,SUPER_GD=SUPER_GS_GAPIT$SUPER_GD,GWAS=NULL,QTN=NULL))
-					
+
 }else{
 #print("@@@@@@@")
 #print(group.from)
@@ -6034,12 +6034,12 @@ SUPER_GS_GAPIT=GAPIT.SUPER.GS(Y=Y,G=G,GD=GD,GM=GM,KI=KI,Z=Z,CV=CV,GK=GK,kinship.
 #Iniciate with two by seven NA matrix
 #The seventh is for p values of SNP
 DTS=rbind(rep(NA,7),rep(NA,7) )
-  
-  
+
+
 #End imediatly in one of these situtiona
 shortcut=FALSE
 LL.save=1e10
-#In case of null Y and null GP, sent back genotype only  
+#In case of null Y and null GP, sent back genotype only
 thisY=Y[,2]
 thisY=thisY[!is.na(thisY)]
 if(length(thisY) <3){
@@ -6047,7 +6047,7 @@ if(length(thisY) <3){
  }else{
   if(var(thisY) ==0) shortcut=TRUE
 }
-        
+
 if(shortcut){
 print(paste("Y is empty. No GWAS/GS performed for ",name.of.trait,sep=""))
 return (list(compression=NULL,kinship.optimum=NULL, kinship=KI,PC=PC,GWAS=NULL, GPS=NULL,Pred=NULL, REMLs=NULL,Timmer=Timmer,Memory=Memory,h2=NULL))
@@ -6061,7 +6061,7 @@ if(is.null(KI)&missing(GD) & kinship.algorithm!="SUPER") stop ("GAPIT says: Kins
 #When GT and GD are missing, force to have fake ones (creating them from Y),GI is not required in this case
 if(is.null(GD) & is.null(GT)) {
 	GT=as.matrix(Y[,1])
-	GD=matrix(1,nrow(Y),1)	
+	GD=matrix(1,nrow(Y),1)
   GI=as.data.frame(matrix(0,1,3) )
   colnames(GI)=c("SNP","Chromosome","Position")
 }
@@ -6078,9 +6078,9 @@ if(PCA.total>0&is.null(CV))CV=PC
 if (is.null(CV))
     {my_allCV=CV
     }else{
-    
+
     taxa_GD=rownames(GD)
-    
+
     my_allCV=CV[order(CV[,1]),]
     my_allCV=my_allCV[my_allCV[,1]%in%taxa_GD,]
     #print(dim(my_allCV))
@@ -6091,7 +6091,7 @@ if(is.null(CV) & !is.null(CV.Inheritance)){
   stop ("GAPIT says: CV.Inheritance is more than avaiable.")
 }
 
-if(!is.null(CV)& !is.null(CV.Inheritance)){  
+if(!is.null(CV)& !is.null(CV.Inheritance)){
   if(CV.Inheritance>(ncol(CV)-1)) stop ("GAPIT says: CV.Inheritance is more than avaiable.")
 }
 
@@ -6152,13 +6152,13 @@ if(file.output)
 if(kinship.algorithm=="None" )
 {
 	if(min(CV[,2])==max(CV[,2])) CV=NULL
-	
+
 	theTDP=GAPIT.TDP(Y=Y,CV=CV,SNP=as.data.frame(cbind(GT[GTindex],as.matrix(as.data.frame(GD[GTindex,])))),
 			QTN=QTN, Round=QTN.round,QTN.limit=QTN.limit, QTN.update=QTN.update, Method=QTN.method)
 #print(dim(GM))
 #print(length(theTDP$p))
 
-theGWAS=cbind(GM,theTDP$p,NA,NA,NA)	
+theGWAS=cbind(GM,theTDP$p,NA,NA,NA)
 
 return (list(Compression=NULL,kinship.optimum=NULL, kinship=NULL,PC=NULL,GWAS=theGWAS, GPS=NULL,Pred=NULL,REMLs=NULL,QTN=theTDP$QTN,Timmer=Timmer,Memory=Memory,h2= NULL))
 }
@@ -6205,23 +6205,23 @@ print("-------------------Sandwich top bun-----------------------------------")
     SNPVar=apply(as.matrix(GK),2,var)
     GK=GK[,SNPVar>0]
     GK=cbind(as.data.frame(GT[GTindex]),as.data.frame(GK)) #add taxa
-    
+
   }
-  
-  #myGD=cbind(as.data.frame(GT),as.data.frame(GD)) 
+
+  #myGD=cbind(as.data.frame(GT),as.data.frame(GD))
   file.output.temp=file.output
   file.output=FALSE
   #print(sangwich.top)
   GP=GAPIT.Bread(Y=Y,CV=CV,Z=Z,KI=KI,GK=GK,GD=cbind(as.data.frame(GT),as.data.frame(GD)),GM=GI,method=sangwich.top,GTindex=GTindex,LD=LD,file.output=file.output)$GWAS
   file.output=file.output.temp
-  
-  
-  
-  GK=NULL
-  
-print("-------------------Sagnwich top bun: done-----------------------------")  
 
-} 
+
+
+  GK=NULL
+
+print("-------------------Sagnwich top bun: done-----------------------------")
+
+}
 
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="SagnwichTop")
 Memory=GAPIT.Memory(Memory=Memory,Infor="SagnwichTop")
@@ -6243,7 +6243,7 @@ if(!is.null(CV)& group.from<1) {
   group.from=1 #minimum of group is number of columns in CV
   warning("The lower bound of groups should be 1 at least. It was set to 1!")
 }
- 
+
 nk=1000000000
 if(!is.null(KI)) nk=min(nk,nrow(KI))
 if(!is.null(GK)) nk=min(nk,nrow(GK))
@@ -6253,12 +6253,12 @@ if(!is.null(KI))
   if(group.to>nk) {
     #group.to=min(nrow(KI),length(GTindex)) #maximum of group is number of rows in KI
     group.to=nk #maximum of group is number of rows in KI
-    warning("The upper bound of groups is too high. It was set to the size of kinship!") 
+    warning("The upper bound of groups is too high. It was set to the size of kinship!")
   }
-	if(group.from>nk){ 
+	if(group.from>nk){
     group.from=nk
-    warning("The lower bound of groups is too high. It was set to the size of kinship!") 
-  } 
+    warning("The lower bound of groups is too high. It was set to the size of kinship!")
+  }
 }
 
 if(!is.null(CV)){
@@ -6313,18 +6313,18 @@ for (inc in inclosure){
 
 #Grill: update KI if GK or GP is provided
 if(!byPass & (!is.null(GK) | !is.null(GP)))
-{  
+{
   print("Grilling KI...")
 
     myGenotype<-GAPIT.Genotype(G=NULL,GD=cbind(as.data.frame(GT),as.data.frame(GD)),GM=GI,KI=NULL,kinship.algorithm=kinship.algorithm,PCA.total=0,SNP.fraction=SNP.fraction,SNP.test=SNP.test,
-                  file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G, 
+                  file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,
                   file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                   SNP.MAF=SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,kinship.cluster=kinship.cluster,NJtree.group=NJtree.group,NJtree.type=NJtree.type,
                   LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,
                   GP=GP,GK=GK,bin.size=bin,inclosure.size=inc,SNP.CV=SNP.CV,
                   Timmer = Timmer, Memory = Memory,GTindex=GTindex,sangwich.top=NULL,sangwich.bottom=sangwich.bottom,
                   file.output=file.output, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)
-   
+
   Timmer=myGenotype$Timmer
   Memory=myGenotype$Memory
 
@@ -6457,38 +6457,38 @@ if(count==1)print("-------The burger is SNP-----------------------------------")
   #bin.size=bin
   #inclosure.size=inc
 
- 
+
 #@@@This section is not useful
 if(!is.null(GP))
 {
   #print("Being specific...")
 
   myGenotype<-GAPIT.Genotype(G=NULL,GD=NULL,GM=GI,KI=NULL,kinship.algorithm="SUPER",PCA.total=0,SNP.fraction=SNP.fraction,SNP.test=SNP.test,
-                    file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G, 
+                    file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,
                     file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                     SNP.MAF=SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,
                     LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,kinship.cluster=kinship.cluster,#NJtree.group=NJtree.group,NJtree.type=NJtree.type,
                     GP=GP,GK=NULL,bin.size=bin,inclosure.size=inc,SNP.CV=SNP.CV,GTindex=GTindex,sangwich.top=NULL,sangwich.bottom=sangwich.bottom,
                     Timmer = Timmer, Memory = Memory,file.output=file.output, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)
-    
+
   Timmer=myGenotype$Timmer
   Memory=myGenotype$Memory
-  
+
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Genotype for burger")
   Memory=GAPIT.Memory(Memory=Memory,Infor="Genotype for burger")
-  
+
 print(paste("bin---",bin,"---inc---",inc,sep=""))
   GK=GD[GTindex,myGenotype$SNP.QTN]
   SUPER_GD=GD[,myGenotype$SNP.QTN]
   SNPVar=apply(as.matrix(GK),2,var)
-  
+
   GK=GK[,SNPVar>0]
   SUPER_GD=SUPER_GD[,SNPVar>0]
   GK=cbind(as.data.frame(GT[GTindex]),as.data.frame(GK)) #add taxa
   SUPER_GD=cbind(as.data.frame(GT),as.data.frame(SUPER_GD)) #add taxa
 
   #GP=NULL
-}# end of if(is.null(GK)) 
+}# end of if(is.null(GK))
 
 
 if(!is.null(GK) & numSetting>1)
@@ -6519,7 +6519,7 @@ if(count==1){
 	SUPER_optimum_GD=SUPER_GD     ########### get SUPER GD
   }
 }
-  
+
 #Put to storage
 Compression[count,1]=1
 Compression[count,2]=bin
@@ -6527,7 +6527,7 @@ Compression[count,3]=inc
 Compression[count,4]=myREML
 Compression[count,5]=myVG
 Compression[count,6]=myVG
-print(Compression[count,]) 
+print(Compression[count,])
 
 #print("---------------SUPER 2nd stage: calculating LL ------------------------")
 
@@ -6542,12 +6542,12 @@ if(group==1) break #To skip the rest group interations
 }#end of for (group in GROUP)
 }#end of for (kt in kinship.group)
 
-  
+
 }#end of for (inc in inclosure)
 }#end of for (bin in bin.level)
 
 
-if(Model.selection == TRUE){ 
+if(Model.selection == TRUE){
 
   print("------------------------Model selection for optimal number of PCs and Covariates-------------------------------------------------")
   #update KI with the best likelihood
@@ -6565,7 +6565,7 @@ if(Model.selection == TRUE){
 
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="PreP3D 2_cp")
   Memory=GAPIT.Memory(Memory=Memory,Infor="PreP3D 2_cp")
-  
+
   bk <- GAPIT.Block(Z=Z,GA=cp$GA,KG=cp$KG)
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="PreP3D 2_bk")
   Memory=GAPIT.Memory(Memory=Memory,Infor="PreP3D 2 bk")
@@ -6579,13 +6579,13 @@ if(Model.selection == TRUE){
   Z1=matrix(as.numeric(z0),nrow=nrow(z0),ncol=ncol(z0))
 
 
-  
+
   BIC <- rep(NA,ncol(X0))
   LogLike <- rep(NA, ncol(X0))
   for(i in 1:ncol(X0)){#1 because the first column of X0 is the intercept
 
-    X0.test <- as.matrix(X0[,1:i]) 
-    
+    X0.test <- as.matrix(X0[,1:i])
+
     #print("The dim of bk$KW is ")
     #print(dim(bk$KW))
     #print(dim(X0.test))
@@ -6596,61 +6596,61 @@ if(Model.selection == TRUE){
 			      file.path=file.path,file.from=file.from,file.to=file.to,file.total=file.total, file.fragment = file.fragment, byFile=byFile, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
             GTindex=GTindex,genoFormat=genoFormat,optOnly=TRUE,SNP.effect=SNP.effect,SNP.impute=SNP.impute,name.of.trait=name.of.trait, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)
 
-    
-    
+
+
     k.num.param <- 2+i
     #k is (i-1) because we have the following parameters in the likelihood function:
     #  intercept
     #  (i-1) covariates
     #  sigma_g
     #  delta
-    
+
     #print(paste("The value of round(p3d$REMLs,5) is ", round(p3d$REMLs,5), sep = ""))
     #print(paste("The value of log(GTindex) is ", log(GTindex), sep = ""))
     #print(paste("The value of 0.5*k.num.param*log(GTindex) is ", 0.5*k.num.param*log(nrow(Z1)), sep = ""))
-    
+
     LogLike[i] <- p3d$logLM
     BIC[i] <- p3d$logLM -(0.5*k.num.param*log(nrow(Z1)))
-    
+
     #print("The value of k.num.param  is: ")
     #print(k.num.param)
-    
-    #print(paste("The value of nrow(Z1) is ", nrow(Z1), sep = ""))  
-    
-    }   
+
+    #print(paste("The value of nrow(Z1) is ", nrow(Z1), sep = ""))
+
+    }
     Optimum.from.BIC <- which(BIC == max(BIC))
-    
+
     print(paste("-----------------------The optimal number of PCs/covariates is ", (Optimum.from.BIC-1)," -------------------------", sep = ""))
-    
+
     BIC.Vector <- cbind(as.matrix(rep(0:(ncol(X0)-1))), as.matrix(BIC), as.matrix(LogLike))
 
-           
+
     #print(seq(0:ncol(X0)))
-    
+
        #print(BIC.Vector)
- 
+
     colnames(BIC.Vector) <- c("Number of PCs/Covariates", "BIC (larger is better) - Schwarz 1978", "log Likelihood Function Value")
-    
+
     write.table(BIC.Vector, paste("GAPIT.", name.of.trait, ".BIC.Model.Selection.Results.csv", sep = ""), quote = FALSE, sep = ",", row.names = FALSE,col.names = TRUE)
-    
+
     #print(BIC.Vector)
-    
+
     X0 <- X0[,1:(Optimum.from.BIC)]
-    
+
     if(Optimum.from.BIC == 1){
     X0 <- as.matrix(X0)
     }
     print("The dimension of X0 after model selection is:")
     print(dim(X0))
-    
+
     print("The head of X0 after model selection is")
     print(head(X0))
-    
+
 
 } # where does it start: 522
 
 print("---------------------Sandwich bottom bun-------------------------------")
-print("Compression") 
+print("Compression")
 print(Compression)
 
 #Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Compression")
@@ -6661,12 +6661,12 @@ if(numSetting==1)
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="GWAS")
   Memory=GAPIT.Memory(Memory=Memory,Infor="GWAS")
 }
-  
+
 #Perform GWAS with the optimum setting
 #This section is omited if there is only one setting
 if((numSetting>1)| (!is.null(sangwich.bottom)&!byPass) | Model.selection) {
   print("Genomic screening..." )
-  
+
 optOnly=FALSE  #set default to false and change it to TRUE in these situations:
 if(!hasGenotype) optOnly=TRUE
 if(!SNP.test) optOnly=TRUE
@@ -6686,7 +6686,7 @@ nocompress_value=as.numeric(Compression[1,4])
 REML_storage=as.numeric(Compression[,4])
 
 adjust_mean=mean(as.numeric(Compression[,4]),rm.na=TRUE)
-threshold=adjust_mean*0.1       
+threshold=adjust_mean*0.1
 
 if(adjust_value<3|nocompress_value<0)     ###added by Jiabo Wang 2015.7.20
 {
@@ -6705,11 +6705,11 @@ print(paste("Optimum: ",Compression[1,2],Compression[1,1],Compression[1,3],Compr
 }
 }#end  if(numSetting>1)
 
-print("--------------  Sandwich bottom ------------------------") 
+print("--------------  Sandwich bottom ------------------------")
 
-if(!byPass) 
-{ 
-print("--------------  Sandwich bottom with raw burger------------------------") 
+if(!byPass)
+{
+print("--------------  Sandwich bottom with raw burger------------------------")
 
  if(Model.selection == FALSE){
   #update KI with the best likelihood
@@ -6718,57 +6718,57 @@ print("--------------  Sandwich bottom with raw burger------------------------")
   cp <- GAPIT.Compress(KI=KI,kinship.cluster=ca,kinship.group=kt,GN=group,Timmer=Timmer,Memory=Memory)
   Timmer=cp$Timmer
   Memory=cp$Memory
-  
+
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="PreP3D 2_cp")
   Memory=GAPIT.Memory(Memory=Memory,Infor="PreP3D 2_cp")
-  
+
   bk <- GAPIT.Block(Z=Z,GA=cp$GA,KG=cp$KG)
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="PreP3D 2_bk")
   Memory=GAPIT.Memory(Memory=Memory,Infor="PreP3D 2 bk")
-  
+
   zc <- GAPIT.ZmatrixCompress(Z=Z,GAU =bk$GA)
-  
+
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="PreP3D 2_zc")
   Memory=GAPIT.Memory(Memory=Memory,Infor="PreP3D 2 zc")
-  
+
   #Reform KW and Z into EMMA format
-  
-  z0=as.matrix(zc$Z[,-1])   
+
+  z0=as.matrix(zc$Z[,-1])
   Z1=matrix(as.numeric(z0),nrow=nrow(z0),ncol=ncol(z0))
  }
- 
- print("--------------EMMAxP3D with the optimum setting-----------------------") 
+
+ print("--------------EMMAxP3D with the optimum setting-----------------------")
  #print(dim(ys))
  #print(dim(as.matrix(as.data.frame(GD[GTindex,colInclude]))))
   p3d <- GAPIT.EMMAxP3D(ys=ys,xs=as.matrix(as.data.frame(GD[GTindex,colInclude]))   ,K = as.matrix(bk$KW) ,Z=Z1,X0=as.matrix(X0),CVI=CVI, CV.Inheritance=CV.Inheritance,GI=GI,SNP.P3D=SNP.P3D,Timmer=Timmer,Memory=Memory,fullGD=fullGD,
           SNP.permutation=SNP.permutation, GP=GP,
     			 file.path=file.path,file.from=file.from,file.to=file.to,file.total=file.total, file.fragment = file.fragment, byFile=byFile, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
-           GTindex=GTindex,genoFormat=genoFormat,optOnly=optOnly,SNP.effect=SNP.effect,SNP.impute=SNP.impute,name.of.trait=name.of.trait, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)  
-    
-  Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="GWAS")
-  Memory=GAPIT.Memory(Memory=Memory,Infor="GWAS")  
- print("--------------EMMAxP3D with the optimum setting done------------------") 
-  
-}#end of if(!byPass) 
-}#end of if(numSetting>1 & hasGenotype & !SNP.test)  
+           GTindex=GTindex,genoFormat=genoFormat,optOnly=optOnly,SNP.effect=SNP.effect,SNP.impute=SNP.impute,name.of.trait=name.of.trait, Create.indicator = Create.indicator, Major.allele.zero = Major.allele.zero)
 
-#print("Screening wiht the optimum setting done") 
+  Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="GWAS")
+  Memory=GAPIT.Memory(Memory=Memory,Infor="GWAS")
+ print("--------------EMMAxP3D with the optimum setting done------------------")
+
+}#end of if(!byPass)
+}#end of if(numSetting>1 & hasGenotype & !SNP.test)
+
+#print("Screening wiht the optimum setting done")
 
 if(byPass)
 {
-print("---------------Sandwich bottom with grilled burger---------------------") 
+print("---------------Sandwich bottom with grilled burger---------------------")
 print("---------------Sandwich bottom: reload bins ---------------------------")
 
 #SUPER: Final screening
   GK=GK.save
   myBread=GAPIT.Bread(Y=Y,CV=CV,Z=Z,GK=GK,GD=cbind(as.data.frame(GT),as.data.frame(GD)),GM=GI,method=sangwich.bottom,GTindex=GTindex,LD=LD,file.output=file.output)
-  
+
   print("SUPER saving results...")
 
   Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="GWAS")
-  Memory=GAPIT.Memory(Memory=Memory,Infor="GWAS")  
+  Memory=GAPIT.Memory(Memory=Memory,Infor="GWAS")
 
-   
+
 }   #end of if(byPass)
 
 print("--------------------Final results presentations------------------------")
@@ -6776,8 +6776,8 @@ print("--------------------Final results presentations------------------------")
 
 
 #Plotting optimum group kinship
-if(!byPass) 
-{ 
+if(!byPass)
+{
 if(length(bk$KW)>1 &length(bk$KW)<length(KI) & length(bk$KW)<1000 &GAPIT3.output){
 pdf(paste("GAPIT.",name.of.trait,".Kin.Optimum.pdf",sep=""), width = 12, height = 12)
 par(mar = c(25,25,25,25))
@@ -6798,7 +6798,7 @@ for (file in file.from:file.to)
 frag=1
 numSNP=file.fragment
 
-while(numSNP==file.fragment) {     #this is problematic if the read end at the last line  
+while(numSNP==file.fragment) {     #this is problematic if the read end at the last line
 
 #Initicalization GI to detect reading empty line
 #theGI=NULL
@@ -6806,7 +6806,7 @@ while(numSNP==file.fragment) {     #this is problematic if the read end at the l
 #theMAF=NULL
 #thenobs=NULL
 
- 
+
 #reload results from files
 print(paste("Current file ",file,"Fragment: ",frag))
 
@@ -6830,25 +6830,25 @@ if(inherits(theGI, "try-error"))  {
 
 
 #print("Records loaded for this fragment.")
-  numSNP=nrow(theGI)  
+  numSNP=nrow(theGI)
   colnames(theP)="P"
   colnames(theMAF )="MAF"
   colnames(thenobs )="nobs"
-  colnames(thersquare_base) = "Base.Model.R.square"  
+  colnames(thersquare_base) = "Base.Model.R.square"
   colnames(thersquare) = "Model.R.square"
             colnames(thedf) = "Model.DF"
             colnames(thetvalue) = "Model.tvalue"
             colnames(thestderr) = "Model.stderr"
-  colnames(theeffect.est) = "Effect.Est"    
+  colnames(theeffect.est) = "Effect.Est"
   colnames(theGI) = colnames(GI)
- 
 
 
 
-#Merge results  
+
+#Merge results
   if(file==file.from & frag==1){
 
-    GI=theGI  
+    GI=theGI
     #print(dim(GI))
     allP=theP
     #print(head(theP))
@@ -6880,7 +6880,7 @@ if(inherits(theGI, "try-error"))  {
 }#end of  if(inherits(theGI, "try-error")) (else section)
 
 #setup for next fragment
-frag=frag+1   #Progress to next fragment 
+frag=frag+1   #Progress to next fragment
 
 }#end of loop on fragment: while(numSNP==file.fragment)
 }#end of loop on file
@@ -6896,16 +6896,16 @@ frag=frag+1   #Progress to next fragment
       p3d$tvalue=alltvalue
       p3d$stderr=allstderr
   p3d$effect.est=alleffect.est
-  
+
 #Delete all the GAPIT.TMP files
 theFile=paste("GAPIT.TMP.",name.of.trait,".*")
-  system('cmd /c del "GAPIT.TMP*.*"') 
-  system('cmd /c del "GAPIT.TMP*.*"') 
+  system('cmd /c del "GAPIT.TMP*.*"')
+  system('cmd /c del "GAPIT.TMP*.*"')
   print("GWAS results loaded from all files succesfully!")
 } #end of if(byFile)
 
 #--------------------------------------------------------------------------------------------------------------------#
-#Final report   
+#Final report
 print("Generating summary" )
 GWAS=NULL
 GPS=NULL
@@ -6919,7 +6919,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Final")
 print("Genomic Breeding Values (GBV) ..." )
 #print(p3d$BLUP)
 gs=NULL
-if(!byPass) 
+if(!byPass)
 {
 
 if(length(bk$KW)>ncol(X0)) {
@@ -6949,9 +6949,9 @@ if(length(Compression)<1){
   h2.opt= NULL
 }else{
 if(length(Compression)<=6) Compression=t(as.matrix(Compression[which(Compression[,4]!="NULL" | Compression[,4]!="NaN"),]))
-if(length(Compression)==6) Compression=matrix(Compression,1,6) 
+if(length(Compression)==6) Compression=matrix(Compression,1,6)
 if(length(Compression)>6) Compression=Compression[which(Compression[,4]!="NULL" | Compression[,4]!="NaN"),]
-Compression.best=Compression[1,] 
+Compression.best=Compression[1,]
 variance=as.numeric(Compression.best[5:6])
 varp=variance/sum(variance)
 h2.opt= varp[1]
@@ -6973,7 +6973,7 @@ rsquare=p3d$rsquare
 effect.est=p3d$effect.est
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Extract p3d results")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Extract p3d results")
-print("p3d objects transfered")  
+print("p3d objects transfered")
 
 #where does it start: 936
 }else{  #byPass
@@ -6996,10 +6996,10 @@ print("p3d objects transfered")
   tvalue=rep(NA,length(nobs))
   stderr=rep(NA,length(nobs))
   effect.est=rep(NA,length(nobs))
-  
+
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Extract bread results")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Extract bread results")
- 
+
 }
 print("Merge BLUP and BLUE")
 #print(head(ps))
@@ -7010,10 +7010,10 @@ if((!byPass)&(!Model.selection)){
  #print(dim(p3d$BLUE))
  BLUE=data.frame(cbind(data.frame(CV.taxa),data.frame(p3d$BLUE)))
  colnames(BLUE)=c("Taxa","BLUE")
- 
+
  #Initial BLUP as BLUe and add additional columns
  gs.blup=cbind(BLUE,NA,NA,0,NA)
- 
+
  if(!is.null(gs))gs.blup=gs$BLUP
  BB= merge(gs.blup, BLUE, by.x = "Taxa", by.y = "Taxa")
  if (is.null(my_allCV)){my_allX=matrix(1,length(my_taxa),1)
@@ -7021,13 +7021,13 @@ if((!byPass)&(!Model.selection)){
      # my_allX=as.matrix(my_allCV[,-1])
      my_allX=cbind(1,as.matrix(my_allCV[,-1]))
 	}
-	
+
     #print(dim(my_allX))
     #print(head(my_allX))
     #print(dim(BB))
     #print(CV.Inheritance)
  if(is.null(CV.Inheritance))
- 
+
    {
    Prediction=BB[,5]+BB[,7]
    Pred_Heritable=Prediction
@@ -7040,7 +7040,7 @@ if((!byPass)&(!Model.selection)){
     #if(length(beta)==1)CV=X
     all_BLUE=try(my_allX%*%p3d$effect.cv,silent=T)
     if(inherits(BLUE, "try-error")) all_BLUE = NA
-    
+
 
     Pred_Heritable=BB[,5]+BB[,7]
     Prediction=BB[,5]+all_BLUE
@@ -7066,71 +7066,71 @@ if((!byPass)&(!Model.selection)){
 }
 
 #Export BLUP and PEV
-if(!byPass &GAPIT3.output) 
+if(!byPass &GAPIT3.output)
 {
 print("Exporting BLUP and Pred")
   #try(write.table(gs$BLUP, paste("GAPIT.", name.of.trait,".BLUP.csv" ,sep = ""), quote = FALSE, sep = ",", row.names = FALSE,col.names = TRUE))
   try(write.table(Pred, paste("GAPIT.", name.of.trait,".PRED.csv" ,sep = ""), quote = FALSE, sep = ",", row.names = FALSE,col.names = TRUE))
 }
 
-if(byPass) 
+if(byPass)
 {
   theK.back=NULL
 }else{
   theK.back=cp$KG
 }
-if(byPass)Compression[1,4]=0 #create a fake value to aloow output of SUPER 
+if(byPass)Compression[1,4]=0 #create a fake value to aloow output of SUPER
 
 #Export GWAS results
 PWI.Filtered=NULL
-if(hasGenotype &SNP.test &!is.na(Compression[1,4]))     #require not NA REML 
+if(hasGenotype &SNP.test &!is.na(Compression[1,4]))     #require not NA REML
 {
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Extract GWAS start")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Extract GWAS start")
 
 
   #print("Filtering SNPs with MAF..." )
-	#index=maf>=SNP.MAF	   
-  
+	#index=maf>=SNP.MAF
+
 	PWI.Filtered=cbind(GI,ps,maf,nobs,rsquare_base,rsquare,effect.est)#[index,]
 	#print(dim(PWI.Filtered))
 	colnames(PWI.Filtered)=c("SNP","Chromosome","Position ","P.value", "maf", "nobs", "Rsquare.of.Model.without.SNP","Rsquare.of.Model.with.SNP","effect")
 
-if(!byPass){  
+if(!byPass){
    if(Create.indicator){
     #Add a counter column for GI
-    GI.counter <- cbind(GI, seq(1:nrow(GI))) 
-    
+    GI.counter <- cbind(GI, seq(1:nrow(GI)))
+
     #Turn GI and effect.est into data frames
     GI.counter.data.frame <- data.frame(GI.counter)
     colnames(GI.counter.data.frame) <- c("X1", "X2", "X3", "X4")
-    
+
     effect.est.data.frame <- data.frame(effect.est)
     colnames(effect.est.data.frame) <- c("X1", "X2", "X3")
     print(head(GI.counter.data.frame))
     print(head(effect.est.data.frame))
     #Do a merge statement
     GWAS.2 <- merge(GI.counter.data.frame, effect.est.data.frame, by.x = "X4", by.y = "X1")
-    
+
     #Remove the counter column
     GWAS.2 <- GWAS.2[,-1]
-    
+
     #Add column names
     colnames(GWAS.2) <- c("SNP","Chromosome","Position ", "Genotype", "Allelic Effect Estimate")
-    
-    
+
+
    }
-   if(!Create.indicator){ 
+   if(!Create.indicator){
     GWAS.2 <- PWI.Filtered[,c(1:3,9)]
     colnames(GWAS.2) <- c("SNP","Chromosome","Position ", "Allelic Effect Estimate")
-   } 
+   }
 }
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="MAF filtered")
 Memory=GAPIT.Memory(Memory=Memory,Infor="MAF filtered")
-		     
+
   #print("SNPs filtered with MAF")
-   
-  
+
+
   if(!is.null(PWI.Filtered))
   {
 
@@ -7139,7 +7139,7 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="MAF filtered")
   #print("Calculating FDR..." )
 
   PWIP <- GAPIT.Perform.BH.FDR.Multiple.Correction.Procedure(PWI = PWI.Filtered, FDR.Rate = FDR.Rate, FDR.Procedure = "BH")
-  
+
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Multiple Correction")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Multiple Correction")
 
@@ -7154,15 +7154,15 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="QQ plot")
 
 
   #Manhattan Plots
-  
-  
+
+
    #print("Manhattan plot (Genomewise)..." )
 #  if(file.output) GAPIT.Manhattan(GI.MP = PWIP$PWIP[,2:4], name.of.trait = name.of.trait, DPP=DPP, plot.type = "Genomewise",cutOff=cutOff)
 #  if(file.output) GAPIT.Manhattan(GI.MP = PWIP$PWIP[,2:4], name.of.trait = name.of.trait, DPP=DPP, plot.type = "Genomewise",cutOff=cutOff,seqQTN=QTN.position)  #QTN does not work with sorted P
  if(file.output) GAPIT.Manhattan(GI.MP = PWI.Filtered[,2:4], name.of.trait = name.of.trait, DPP=DPP, plot.type = "Genomewise",cutOff=cutOff,seqQTN=QTN.position,plot.style=plot.style,plot.bin=plot.bin,chor_taxa=chor_taxa)
 
  #print("Manhattan plot (Chromosomewise)..." )
- 
+
   #if(file.output) GAPIT.Manhattan(GI.MP = PWIP$PWIP[,2:4], name.of.trait = name.of.trait, DPP=DPP, plot.type = "Chromosomewise",cutOff=cutOff)
  if(file.output&SNP.fraction==1) GAPIT.Manhattan(GI.MP = PWI.Filtered[,2:4],GD=GD,CG=CG, name.of.trait = name.of.trait, DPP=DPP, plot.type = "Chromosomewise",cutOff=cutOff,plot.bin=plot.bin,chor_taxa=chor_taxa)
 
@@ -7177,9 +7177,9 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Manhattan plot")
   #print(head(PWIP$PWIP))
   GWAS=PWIP$PWIP[PWIP$PWIP[,9]<=SNP.FDR,]
   #print("Joining tvalue and stderr" )
-  
+
         DTS=cbind(GI,df,tvalue,stderr,effect.est)
-        colnames(DTS)=c("SNP","Chromosome","Position","DF","t Value","std Error","effect")	
+        colnames(DTS)=c("SNP","Chromosome","Position","DF","t Value","std Error","effect")
 
   #print("Creating ROC table and plot" )
 	if(file.output) myROC=GAPIT.ROC(t=tvalue,se=stderr,Vp=var(ys),trait=name.of.trait)
@@ -7199,12 +7199,12 @@ Memory=GAPIT.Memory(Memory=Memory,Infor="Manhattan plot")
   }
 
 
-  
+
   } #end of if(!is.null(PWI.Filtered))
 Timmer=GAPIT.Timmer(Timmer=Timmer,Infor="Extract GWAS end")
 Memory=GAPIT.Memory(Memory=Memory,Infor="Extract GWAS end")
 
-  
+
 } #end of if(hasGenotype )
 
 #Log
@@ -7264,7 +7264,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
 	#Add r2 between candidata SNP and other markers in on choromosome
     ##############################################################################################
     #print("Manhattan ploting...")
-    
+
     #print(cutOff)
     #do nothing if null input
     if(is.null(GI.MP)) return
@@ -7274,7 +7274,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
     #print(head(GI.MP))
     #print(tail(GI.MP))
     #print(CG)
-    
+
     #seqQTN=c(300,1000,2500)
   #Handler of lable paosition only indicated by negatie position
   position.only=F
@@ -7283,12 +7283,12 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
         seqQTN=-seqQTN
         position.only=T
       }
-      
+
     }
-    
+
     #if(is.null(GD)) print ("GD is not same dim as GM")
     borrowSlot=4
-    GI.MP[,borrowSlot]=0 
+    GI.MP[,borrowSlot]=0
     GI.MP[,5]=1:(nrow(GI.MP))
     GI.MP=matrix(as.numeric(as.matrix(GI.MP) ) ,nrow(GI.MP),ncol(GI.MP))
     GI.MP=GI.MP[order(GI.MP[,2]),]
@@ -7296,9 +7296,9 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
     # print("@@@@@")
     # print(head(GI.MP))
     #Inicial as 0
-    
+
     if(!is.null(seqQTN))GI.MP[seqQTN,borrowSlot]=1
-    
+
     if(!is.null(GD))
     {  if(ncol(GD)!=nrow(GI.MP))print("GD does not mach GM in Manhattan !!!")
     }
@@ -7313,13 +7313,13 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
     GI.MP <- GI.MP[!is.na(GI.MP[,2]),]
     if(!is.null(GD)) GD=GD[,!is.na(GI.MP[,3])]
     GI.MP <- GI.MP[!is.na(GI.MP[,3]),]
-    
+
     #Retain SNPs that have P values between 0 and 1 (not na etc)
     if(!is.null(GD)) GD=GD[,GI.MP[,3]>0]
     GI.MP <- GI.MP[GI.MP[,3]>0,]
     if(!is.null(GD)) GD=GD[,GI.MP[,3]<=1]
     GI.MP <- GI.MP[GI.MP[,3]<=1,]
-    
+
     #Remove chr 0 and 99
     GI.MP <- GI.MP[GI.MP[,1]!=0,]
     #GI.MP <- GI.MP[GI.MP[,1]!=99,]
@@ -7330,7 +7330,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
     numMarker=nrow(GI.MP)
     #print(numMarker)
     bonferroniCutOff=-log10(cutOff/numMarker)
-    
+
     #Replace P the -log10 of the P-values
     if(!is.null(GD))
     {  if(ncol(GD)!=nrow(GI.MP))
@@ -7343,7 +7343,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
     index_GI=GI.MP[,3]>0
     GI.MP <- GI.MP[index_GI,]
     if(!is.null(GD)) GD=GD[,index_GI]
-    
+
     GI.MP[,5]=1:(nrow(GI.MP))
     y.lim <- ceiling(max(GI.MP[,3]))
     chm.to.analyze <- unique(GI.MP[,1])
@@ -7351,15 +7351,15 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
     #print(dim(GD))
     #print("name of chromosomes:")
     #print(chm.to.analyze)
-    
+
     chm.to.analyze=chm.to.analyze[order(chm.to.analyze)]
     numCHR= length(chm.to.analyze)
     #GI.MP[,5]=1:(nrow(GI.MP))
      bin.mp=GI.MP[,1:3]
      bin.mp[,3]=0 # for r2
      bin.mp[,1]=as.numeric(as.vector(GI.MP[,2]))+as.numeric(as.vector(GI.MP[,1]))*(10^(max(GI.MP[,1])+1))
-     
-     
+
+
      #as.numeric(as.vector(GP[,3]))+as.numeric(as.vector(GP[,2]))*MaxBP
      #print(head(bin.mp))
      bin.mp[,2]=floor(bin.mp[,1]/plot.bin)
@@ -7385,8 +7385,8 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
             #subset=cbind(subset,sub.bin.mp)
             sig.mp=subset[subset[,3]>bonferroniCutOff,,drop=FALSE]
             sig.index=subset[,3]>bonferroniCutOff ### index of significont SNP
-            
-            
+
+
             num.row=nrow(sig.mp)
             if(!is.null(dim(sig.mp)))sig.mp=sig.mp[!duplicated(sig.mp[,7]),]
             num.row=nrow(sig.mp)
@@ -7400,7 +7400,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
             {
                 for(j in 1:num.row)
                 {   sig.mp=matrix(sig.mp,num.row,8)
-                    
+
                     #print(sig.mp[j,7])
                     #print(unique(subset[,7]))
                     bin.store=subset[which(subset[,7]==sig.mp[j,7]),]
@@ -7413,13 +7413,13 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
                     #print(dim(bin.store))
                     if(is.null(CG))candidata=bin.store[bin.store[,3]==max(bin.store[,3]),5]
                     if(length(candidata)!=1)candidata=candidata[1]
-                    
+
                     for (k in 1:ncol(subGD))
                     {
                         r2=cor(X[,candidata],subGD[,k])^2
                         #print(r2)
                         bin.store[k,8]=r2
-                        
+
                     }
                     #print(bin.store)
                     #r2_storage[is.na(r2_storage)]=0
@@ -7429,7 +7429,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
                 }###end for each sig.mp
                 #sub.bin.mp=bin.mp[subset[,3]>bonferroniCutOff,]
                 #print(head(bin.set))
-            
+
             }###end if empty of sig.mp
             #print("@@@@@@@@@@@@@@@@")
             rm(sig.mp,num.row)
@@ -7444,7 +7444,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
                 x <- as.numeric(subset[2])/10^(6)
                 y <- as.numeric(subset[3])
             }
-            
+
             ##print(paste("befor prune: chr: ",i, "length: ",length(x),"max p",max(y), "min p",min(y), "max x",max(x), "Min x",min(x)))
             n_col=10
             r2_color[,2]=subset[,8]
@@ -7463,12 +7463,12 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
             r2_color[which(r2_color[,2]<=0.6&r2_color[,2]>0.4),2]=do_color[n_col*0.6]
             r2_color[which(r2_color[,2]<=0.8&r2_color[,2]>0.6),2]=do_color[n_col*0.4]
             r2_color[which(r2_color[,2]<=1&r2_color[,2]>0.8),2]=do_color[n_col/n_col]
-            
-            
+
+
             #print(unique(r2_color[,2]))
-            
+
             ##print(paste("after prune: chr: ",i, "length: ",length(x),"max p",max(y), "min p",min(y), "max x",max(x), "Min x",min(x)))
-			
+
             par(mar=c(0,0,0,0))
             par(mar=c(5,5,2,1),cex=0.8)
 
@@ -7476,26 +7476,26 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
 			col = r2_color[,2], xlab = expression(Base~Pairs~(x10^-6)),
 			ylab = "-Log Base 10 p-value", main = 			paste("Chromosome",chm.to.analyze[i],sep=" "),
 			cex.lab=1.6,pch=21,bg=r2_color[,2])
-            
+
             abline(h=bonferroniCutOff,col="forestgreen")
             ##print("manhattan plot (chr) finished")
-            #layout.show(nf)	
+            #layout.show(nf)
             #provcol <-c("darkblue","cyan","green3","brown1","brown1")
             #provcol <-heat.colors(50)
             #par(mar=c(0,0,0,0))
             par(mar=c(15,5,6,5),cex=0.5)
-            
+
             barplot(matrix(rep(1,times=n_col),n_col,1),beside=T,col=do_color,border=do_color,axes=FALSE,)
         #legend(x=10,y=2,legend=expression(R^"2"),,lty=0,cex=1.3,bty="n",bg=par("bg"))
             axis(3,seq(11,1,by=-2),seq(0,1,by=0.2))
 
         }# end plot.type == "Chromosomewise"&!is.null(GD)
         dev.off()
-		
+
         print("manhattan plot on chromosome finished")
     } #Chromosomewise plot
-    
-    
+
+
     #Genomewise plot
     if(plot.type == "Genomewise")
     {
@@ -7504,25 +7504,25 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
         #nchr=max(chm.to.analyze)
         nchr=length(chm.to.analyze)
 
-    #Set color schem            
+    #Set color schem
         ncycle=ceiling(nchr/band)
         ncolor=band*ncycle
         #palette(rainbow(ncolor+1))
         cycle1=seq(1,nchr,by= ncycle)
         thecolor=cycle1
         for(i in 2:ncycle){thecolor=c(thecolor,cycle1+(i-1))}
-      	col.Rainbow=rainbow(ncolor+1)[thecolor]     	
+      	col.Rainbow=rainbow(ncolor+1)[thecolor]
      	  col.FarmCPU=rep(c("#CC6600","deepskyblue","orange","forestgreen","indianred3"),ceiling(numCHR/5))
-    	  col.Rushville=rep(c("orangered","navyblue"),ceiling(numCHR/2))   	
+    	  col.Rushville=rep(c("orangered","navyblue"),ceiling(numCHR/2))
 		    col.Congress=rep(c("deepskyblue3","firebrick"),ceiling(numCHR/2))
- 		    col.Ocean=rep(c("steelblue4","cyan3"),ceiling(numCHR/2)) 		
- 		    col.PLINK=rep(c("gray10","gray70"),ceiling(numCHR/2)) 		
+ 		    col.Ocean=rep(c("steelblue4","cyan3"),ceiling(numCHR/2))
+ 		    col.PLINK=rep(c("gray10","gray70"),ceiling(numCHR/2))
  		    col.Beach=rep(c("turquoise4","indianred3","darkolivegreen3","red","aquamarine3","darkgoldenrod"),ceiling(numCHR/5))
  		    #col.Oceanic=rep(c(	'#EC5f67',	'#F99157',	'#FAC863',	'#99C794',	'#5FB3B3',	'#6699CC',	'#C594C5',	'#AB7967'),ceiling(numCHR/8))
  		    #col.Oceanic=rep(c(	'#EC5f67',		'#FAC863',	'#99C794',		'#6699CC',	'#C594C5',	'#AB7967'),ceiling(numCHR/6))
  		    col.Oceanic=rep(c(	'#EC5f67',		'#FAC863',	'#99C794',		'#6699CC',	'#C594C5'),ceiling(numCHR/5))
  		    col.cougars=rep(c(	'#990000',		'dimgray'),ceiling(numCHR/2))
- 		
+
         if(plot.style=="Rainbow")plot.color= col.Rainbow
         if(plot.style =="FarmCPU")plot.color= col.Rainbow
         if(plot.style =="Rushville")plot.color= col.Rushville
@@ -7532,20 +7532,20 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
  		    if(plot.style =="Beach")plot.color= col.Beach
  		    if(plot.style =="Oceanic")plot.color= col.Oceanic
  		    if(plot.style =="cougars")plot.color= col.cougars
- 		
+
 		#FarmCPU uses filled dots
     	mypch=1
     	if(plot.style =="FarmCPU")mypch=20
-    	        
+
         GI.MP <- GI.MP[order(GI.MP[,2]),]
         GI.MP <- GI.MP[order(GI.MP[,1]),]
 
         ticks=NULL
         lastbase=0
-        
+
         #print("Manhattan data sorted")
         #print(chm.to.analyze)
-        
+
         #change base position to accumulatives (ticks)
         for (i in chm.to.analyze)
         {
@@ -7554,20 +7554,20 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
             GI.MP[index,2]=GI.MP[index,2]+lastbase
             lastbase=max(GI.MP[index,2])
         }
-        
+
         #print("Manhattan chr processed")
         #print(length(index))
         #print(length(ticks))
         #print((ticks))
         #print((lastbase))
-        
+
         x0 <- as.numeric(GI.MP[,2])
         y0 <- as.numeric(GI.MP[,3])
         z0 <- as.numeric(GI.MP[,1])
         position=order(y0,decreasing = TRUE)
         index0=GAPIT.Pruning(y0[position],DPP=DPP)
         index=position[index0]
-        
+
         x=x0[index]
         y=y0[index]
         z=z0[index]
@@ -7583,9 +7583,9 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
         themin=floor(min(y))
         wd=((y-themin+base)/(themax-themin+base))*size*ratio
         s=size-wd/ratio/2
-        
+
         #print("Manhattan XY created")
-       ####xiaolei update on 2016/01/09 
+       ####xiaolei update on 2016/01/09
         if(plot.style =="FarmCPU"){
 	    pdf(paste("FarmCPU.", name.of.trait,".Manhattan.Plot.Genomewise.pdf" ,sep = ""), width = 13,height=5.75)
         }else{
@@ -7594,7 +7594,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
             par(mar = c(3,6,5,1))
         	plot(y~x,xlab="",ylab=expression(-log[10](italic(p))) ,
         	cex.axis=1.5, cex.lab=2, ,col=plot.color[z],axes=FALSE,type = "p",pch=mypch,lwd=wd,cex=s+.3,main = paste(name.of.trait,sep=" 			"),cex.main=2.5)
-        
+
         #Label QTN positions
         if(is.vector(QTN)){
           if(position.only){abline(v=QTN[2], lty = 2, lwd=1.5, col = "grey")}else{
@@ -7607,7 +7607,7 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
           points(QTN[,2], QTN[,3], type="p",pch=20, cex=1,lwd=1.5,col="dimgrey")
           }
         }
-        
+
         #Add a horizontal line for bonferroniCutOff
         abline(h=bonferroniCutOff,col="forestgreen")
         #print(bonferroniCutOff)
@@ -7625,9 +7625,9 @@ DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,plot.style="Oceanic",CG=NULL,plot.bin=1
         palette("default")
         dev.off()
         #print("Manhattan done Genomewise")
-        
+
     } #Genomewise plot
-    
+
     print("GAPIT.Manhattan accomplished successfully!zw")
 } #end of GAPIT.Manhattan
 #=============================================================================================
@@ -7637,44 +7637,44 @@ function(name.of.trait="Trait"){
 # Authors: Heuristic Andrew
 # http://heuristically.wordpress.com/2010/01/04/r-memory-usage-statistics-variable/
 # Modified by Zhiwu Zhang
-# Last update: may 29, 2011 
-############################################################################################## 
-# print aggregate memory usage statistics 
-print(paste('R is using', memory.size(), 'MB out of limit', memory.limit(), 'MB')) 
-  
-# create function to return matrix of memory consumption 
-object.sizes <- function() 
-{ 
-    return(rev(sort(sapply(ls(envir=.GlobalEnv), function (object.name) 
-        object.size(get(object.name)))))) 
-} 
+# Last update: may 29, 2011
+##############################################################################################
+# print aggregate memory usage statistics
+print(paste('R is using', memory.size(), 'MB out of limit', memory.limit(), 'MB'))
 
-# export file in table format 
-memory=object.sizes() 
+# create function to return matrix of memory consumption
+object.sizes <- function()
+{
+    return(rev(sort(sapply(ls(envir=.GlobalEnv), function (object.name)
+        object.size(get(object.name))))))
+}
+
+# export file in table format
+memory=object.sizes()
 file=paste("GAPIT.", name.of.trait,".Memory.Object.csv" ,sep = "")
 write.table(memory, file, quote = FALSE, sep = ",", row.names = TRUE,col.names = TRUE)
 
 
-# export file in PDF format 
+# export file in PDF format
 pdf(paste("GAPIT.", name.of.trait,".Memory.Object.pdf" ,sep = ""))
-# draw bar plot 
-barplot(object.sizes(), 
-    main="Memory usage by object", ylab="Bytes", xlab="Variable name", 
-    col=heat.colors(length(object.sizes()))) 
-# draw dot chart 
-dotchart(object.sizes(), main="Memory usage by object", xlab="Bytes") 
-# draw pie chart 
+# draw bar plot
+barplot(object.sizes(),
+    main="Memory usage by object", ylab="Bytes", xlab="Variable name",
+    col=heat.colors(length(object.sizes())))
+# draw dot chart
+dotchart(object.sizes(), main="Memory usage by object", xlab="Bytes")
+# draw pie chart
 pie(object.sizes(), main="Memory usage by object")
-dev.off()  
+dev.off()
 }
 #=============================================================================================
 
 `GAPIT.Memory` <-
 function(Memory =NULL,Infor){
 #Object: To report memory usage
-#Output: Memory 
+#Output: Memory
 #Authors: Zhiwu Zhang
-# Last update: June 6, 2011 
+# Last update: June 6, 2011
 ##############################################################################################
 gc()
 size <- memory.size()
@@ -7714,9 +7714,9 @@ function(model_store,DPP=50000,cutOff=0.01,band=5,seqQTN=NULL,Y=NULL,GM=NULL,int
   }
 sig_pos=NULL
 simulation=FALSE
-    if(!is.null(seqQTN)){    
+    if(!is.null(seqQTN)){
         #seqQTN=-seqQTN
-        simulation=TRUE    
+        simulation=TRUE
     }
 for(i in 1:length(environ_name))
 {
@@ -7765,13 +7765,13 @@ for(i in 1:length(environ_name))
             lastbase=max(as.numeric(map_store[index,2]))
             #print(lastbase)
         }
-       
+
        colnames(x_matrix)=c("pos","times")
        #colnames(xz)=c("pos","col")
        new_xz=cbind(x_matrix,map_store[as.numeric(as.character(x_matrix[,1])),])
        #new_xz[,4]=0
        colnames(new_xz)=c("pos","times","chro","xlab")
-       
+
        new_xz=new_xz[!duplicated(new_xz),]
        new_xz[new_xz[,2]>=3,2]=3
        new_xz[,2]=4-new_xz[,2]
@@ -7795,7 +7795,7 @@ for(k in 1:Nenviron)
         }else{
             #par(mfrow=c(Nenviron,1))
         par(mar = c(0,8,1,8))
-        
+
         }
   environ_result=read.csv(paste("GAPIT.",environ_name[k],".GWAS.Results.csv",sep=""),head=T)
   #print(environ_result[as.numeric(new_xz[,1]),])
@@ -7807,12 +7807,12 @@ for(k in 1:Nenviron)
     GI.MP[,borrowSlot]=0 #Inicial as 0
     GI.MP[,5]=1:(nrow(GI.MP))
     GI.MP[,6]=1:(nrow(GI.MP))
-    
-    
+
+
     GI.MP <- GI.MP[!is.na(GI.MP[,1]),]
     GI.MP <- GI.MP[!is.na(GI.MP[,2]),]
     GI.MP[is.na(GI.MP[,3]),3]=1
-    
+
     #Retain SNPs that have P values between 0 and 1 (not na etc)
     GI.MP <- GI.MP[GI.MP[,3]>0,]
     GI.MP <- GI.MP[GI.MP[,3]<=1,]
@@ -7826,7 +7826,7 @@ for(k in 1:Nenviron)
     GI.MP[,3] <-  -log10(GI.MP[,3])
     GI.MP[,5]=1:numMarker
     y.lim <- ceiling(max(GI.MP[,3]))
-    
+
     chm.to.analyze <- unique(GI.MP[,1])
     chm.to.analyze=chm.to.analyze[order(chm.to.analyze)]
     nchr=length(chm.to.analyze)
@@ -7843,7 +7843,7 @@ for(k in 1:Nenviron)
             MP_store[index,2]=MP_store[index,2]+lastbase
             lastbase=max(MP_store[index,2])
         }
-        
+
         x0 <- as.numeric(MP_store[,2])
         y0 <- as.numeric(MP_store[,3])
         z0 <- as.numeric(MP_store[,1])
@@ -7855,7 +7855,7 @@ for(k in 1:Nenviron)
         {
          index=position[c(1:length(values))]
             }else{
-         
+
         values=sqrt(values)  #This shift the weight a little bit to the low building.
         #Handler of bias plot
         rv=runif(length(values))
@@ -7872,8 +7872,8 @@ for(k in 1:Nenviron)
         keep=ladder-ladder2
         index=position[which(keep>=0)]
         }
-        
-        
+
+
         x=x0[index]
         y=y0[index]
         z=z0[index]
@@ -7899,18 +7899,18 @@ for(k in 1:Nenviron)
         thecolor=seq(1,nchr,by= ncycle)
         mypch=1
         #plot.color= rainbow(ncolor+1)
-        col.Rainbow=rainbow(ncolor+1)     
+        col.Rainbow=rainbow(ncolor+1)
         col.FarmCPU=rep(c("#CC6600","deepskyblue","orange","forestgreen","indianred3"),ceiling(numCHR/5))
-        col.Rushville=rep(c("orangered","navyblue"),ceiling(numCHR/2))    
+        col.Rushville=rep(c("orangered","navyblue"),ceiling(numCHR/2))
         col.Congress=rep(c("deepskyblue3","firebrick"),ceiling(numCHR/2))
-        col.Ocean=rep(c("steelblue4","cyan3"),ceiling(numCHR/2))    
-        col.PLINK=rep(c("gray10","gray70"),ceiling(numCHR/2))     
+        col.Ocean=rep(c("steelblue4","cyan3"),ceiling(numCHR/2))
+        col.PLINK=rep(c("gray10","gray70"),ceiling(numCHR/2))
         col.Beach=rep(c("turquoise4","indianred3","darkolivegreen3","red","aquamarine3","darkgoldenrod"),ceiling(numCHR/5))
         #col.Oceanic=rep(c( '#EC5f67',  '#F99157',  '#FAC863',  '#99C794',  '#5FB3B3',  '#6699CC',  '#C594C5',  '#AB7967'),ceiling(numCHR/8))
         #col.Oceanic=rep(c( '#EC5f67',    '#FAC863',  '#99C794',    '#6699CC',  '#C594C5',  '#AB7967'),ceiling(numCHR/6))
         col.Oceanic=rep(c(  '#EC5f67',    '#FAC863',  '#99C794',    '#6699CC',  '#C594C5'),ceiling(numCHR/5))
         col.cougars=rep(c(  '#990000',    'dimgray'),ceiling(numCHR/2))
-    
+
         if(plot.style=="Rainbow")plot.color= col.Rainbow
         if(plot.style =="FarmCPU")plot.color= col.Rainbow
         if(plot.style =="Rushville")plot.color= col.Rushville
@@ -7920,7 +7920,7 @@ for(k in 1:Nenviron)
         if(plot.style =="Beach")plot.color= col.Beach
         if(plot.style =="Oceanic")plot.color= col.Oceanic
         if(plot.style =="cougars")plot.color= col.cougars
-    
+
         #plot.color=rep(c( '#EC5f67',    '#FAC863',  '#99C794',    '#6699CC',  '#C594C5'),ceiling(ncolor/5))
 
             plot(y~x,xlab="",ylab="" ,ylim=c(0,themax),
@@ -7934,7 +7934,7 @@ for(k in 1:Nenviron)
           points(QTN[,2], QTN[,3], pch=20, cex=2.5,lwd=2.5,col="black")
           #points(interQTN[,2], interQTN[,3], type="p",pch=8, cex=1,lwd=1.5,col="dimgrey")
           }
-        
+
         #}
         if(plot.line){
           #print(x)
@@ -7965,7 +7965,7 @@ function(x,bit=2,effect="Add",impute="None", Create.indicator = FALSE, Major.all
 #Object: To convert character SNP genotpe to numerical
 #Output: Coresponding numerical value
 #Authors: Feng Tian and Zhiwu Zhang
-# Last update: May 30, 2011 
+# Last update: May 30, 2011
 ##############################################################################################
 if(bit==1)  {
 x[x=="X"]="N"
@@ -8008,7 +8008,7 @@ if(length(inter)>1)
 if(len==2&bit==2)
 { #inter=intersect(lev,inter_store)
   if(!is.na(inter[1]))
-  { 
+  {
     lev=union(lev,"UU")
     len=len+1
 
@@ -8035,7 +8035,7 @@ for(i in 1:len){
 if(Major.allele.zero){
   if(len>1 & len<=3){
     #One bit: Make sure that the SNP with the major allele is on the top, and the SNP with the minor allele is on the second position
-    if(bit==1){ 
+    if(bit==1){
       count.temp = cbind(count, seq(1:len))
       if(len==3) count.temp = count.temp[-3,]
       count.temp <- count.temp[order(count.temp[,1], decreasing = TRUE),]
@@ -8043,7 +8043,7 @@ if(Major.allele.zero){
     }
 
     #Two bit: Make sure that the SNP with the major allele is on the top, and the SNP with the minor allele is on the third position
-    if(bit==2){ 
+    if(bit==2){
       count.temp = cbind(count, seq(1:len))
       if(len==3) count.temp = count.temp[-2,]
       count.temp <- count.temp[order(count.temp[,1], decreasing = TRUE),]
@@ -8072,7 +8072,7 @@ position=order(count)
 #Jiabo creat this code to convert AT TT to 1 and 2.2018.5.29
 
 lev1=lev
-if(bit==2&len==3) 
+if(bit==2&len==3)
 {
 lev1[1]=lev[count==sort(count)[1]]
 lev1[2]=lev[count==sort(count)[2]]
@@ -8122,7 +8122,7 @@ if(effect=="Right") x[x==1]=2
 if(byRow) {
   result=matrix(x,n,1)
 }else{
-  result=matrix(x,1,n)  
+  result=matrix(x,1,n)
 }
 
 return(result)
@@ -8134,9 +8134,9 @@ function(X,taxa, PC.number = min(ncol(X),nrow(X)),file.output=TRUE,PCA.total=0,P
 # Object: Conduct a principal component analysis, and output the prinicpal components into the workspace,
 #         a text file of the principal components, and a pdf of the scree plot
 # Authors: Alex Lipka and Hyun Min Kang
-# Last update: May 31, 2011  
-############################################################################################## 
-#Conduct the PCA 
+# Last update: May 31, 2011
+##############################################################################################
+#Conduct the PCA
 print("Calling prcomp...")
 PCA.X <- prcomp(X)
 eigenvalues <- PCA.X$sdev^2
@@ -8146,7 +8146,7 @@ xout=1:nout
 if(is.null(PCA.col)) PCA.col="red"
 
 print("Creating PCA graphs...")
-#Create a Scree plot 
+#Create a Scree plot
 if(file.output & PC.number>1) {
 pdf("GAPIT.PCA.eigenValue.pdf", width = 12, height = 12)
   par(mar=c(5,5,4,5)+.1,cex=2)
@@ -8172,12 +8172,12 @@ dev.off()
 
 #output 3D plot
 if(PCA.3d==TRUE)
-{   
+{
   if(1>2)
   {if(!require(lattice)) install.packages("lattice")
    library(lattice)
    pca=as.data.frame(PCA.X$x)
-   
+
    png(file="example%03d.png", width=500, heigh=500)
     for (i in seq(10, 80 , 1)){
         print(cloud(PC1~PC2*PC3,data=pca,screen=list(x=i,y=i-40),pch=20,color="red",
@@ -8185,7 +8185,7 @@ if(PCA.3d==TRUE)
         }
     dev.off()
     system("convert -delay 40 *.png GAPIT.PCA.3D.gif")
-    
+
     # cleaning up
     file.remove(list.files(pattern=".png"))
     }
@@ -8193,21 +8193,21 @@ if(PCA.3d==TRUE)
     if(!require(rgl)) install.packages("rgl")
     if(!require(rglwidget)) install.packages("rglwidget")
     library(rgl)
-    
+
     PCA1 <- PCA.X$x[,1]
     PCA2 <- PCA.X$x[,2]
     PCA3 <- PCA.X$x[,3]
     plot3d(PCA1, PCA2, PCA3, col = "white",radius=0.01)
     num_col=length(unique(PCA.col))
     if(num_col==1)
-    { 
+    {
       sids1 <- spheres3d(PCA1, PCA2, PCA3, col = PCA.col,radius=1)
       widgets<-rglwidget(width = 900, height = 900) %>%toggleWidget(ids = sids1, label = "PCA")
     }else if(num_col==2)
     {
       index1=PCA.col==unique(PCA.col)[1]
       index2=PCA.col==unique(PCA.col)[2]
-      
+
       sids1 <- spheres3d(PCA1[index1], PCA2[index1], PCA3[index1], col = PCA.col[index1],radius=1)
       sids2 <- spheres3d(PCA1[index2], PCA2[index2], PCA3[index2], col = PCA.col[index2],radius=1)
       widgets<-rglwidget(width = 900, height = 900) %>%toggleWidget(ids = sids1, label = "Population 1")%>%toggleWidget(ids = sids2, label = "Population 2")
@@ -8216,7 +8216,7 @@ if(PCA.3d==TRUE)
       index1=PCA.col==unique(PCA.col)[1]
       index2=PCA.col==unique(PCA.col)[2]
       index3=PCA.col==unique(PCA.col)[3]
-      
+
       sids1 <- spheres3d(PCA1[index1], PCA2[index1], PCA3[index1], col = PCA.col[index1],radius=1)
       sids2 <- spheres3d(PCA1[index2], PCA2[index2], PCA3[index2], col = PCA.col[index2],radius=1)
       sids3 <- spheres3d(PCA1[index3], PCA2[index3], PCA3[index3], col = PCA.col[index3],radius=1)
@@ -8227,7 +8227,7 @@ if(PCA.3d==TRUE)
       index2=PCA.col==unique(PCA.col)[2]
       index3=PCA.col==unique(PCA.col)[3]
       index4=PCA.col==unique(PCA.col)[4]
-      
+
       sids1 <- spheres3d(PCA1[index1], PCA2[index1], PCA3[index1], col = PCA.col[index1],radius=1)
       sids2 <- spheres3d(PCA1[index2], PCA2[index2], PCA3[index2], col = PCA.col[index2],radius=1)
       sids3 <- spheres3d(PCA1[index3], PCA2[index3], PCA3[index3], col = PCA.col[index3],radius=1)
@@ -8272,8 +8272,8 @@ return(list(PCs=PCs,EV=PCA.X$sdev^2,nPCs=NULL))
 function(PWI = PWI, FDR.Rate = 0.05, FDR.Procedure = "BH"){
 #Object: Conduct the Benjamini-Hochberg FDR-Controlling Procedure
 #Output: PWIP, number.of.significant.SNPs
-#Authors: Alex Lipka and Zhiwu Zhang 
-# Last update: May 5, 2011 
+#Authors: Alex Lipka and Zhiwu Zhang
+# Last update: May 5, 2011
 ##############################################################################################
 #Make sure that your compouter has the latest version of Bioconductor (the "Biobase" package) and multtest
 
@@ -8284,16 +8284,16 @@ number.of.significant.SNPs = 0
 }
 
 if(!is.null(PWI))
-{  
- 
+{
+
     #library(multtest)
-    
+
     if(dim(PWI)[1] == 1){
      PWIP <- cbind(PWI, PWI[4])
      colnames(PWIP)[9] <- "FDR_Adjusted_P-values"
     }
-   
-    if(dim(PWI)[1] > 1){ 
+
+    if(dim(PWI)[1] > 1){
     #mt.rawp2adjp Performs the Simes procedure.  The output should be two columns, Left column: originial p-value
     #Right column: Simes corrected p-value
     res <- mt.rawp2adjp(PWI[,4], FDR.Procedure)
@@ -8314,12 +8314,12 @@ if(!is.null(PWI))
 
     #Sort these data by lowest to highest FDR adjusted p-value
   PWIP <- PWIP[order(PWIP[,4]),]
-  
+
   colnames(PWIP)[9] <- "FDR_Adjusted_P-values"
 #  number.of.significant.SNPs = temp$r
   }
   #print("GAPIT.Perform.BH.FDR.Multiple.Correction.Procedure accomplished successfully!")
-}  
+}
   #return(list(PWIP=PWIP, number.of.significant.SNPs = number.of.significant.SNPs))
   return(list(PWIP=PWIP))
 }#GAPIT.Perform.BH.FDR.Multiple.Correction.Procedure ends here
@@ -8331,8 +8331,8 @@ if(!is.null(PWI))
 # myY:Phenotype data
 
 # Authors: You Tang
-# Last update: Sep 7, 2015 
-############################################################################################## 
+# Last update: Sep 7, 2015
+##############################################################################################
 print("GAPIT.Phenotype.PCA.View")
 if(is.null(PC)){stop("Validation Invalid. Please input four PC value  !")}
 if(is.null(myY)){stop("Validation Invalid. Please select read valid Phenotype flies  !")}
@@ -8387,12 +8387,12 @@ print(paste("GAPIT.Phenotype.PCA.View ", ".output pdf generate.","successfully!"
     #Straitegy: NA
     #Authors: Qishan Wang and Zhiwu Zhang
     #Start  date: April 4, 2013
-    #Last update: April 4, 2013    
+    #Last update: April 4, 2013
     #Set orientation
     #Strategy: the number of rows in GD and GM are the same if GD has SNP as row
-##############################################################################################   
+##############################################################################################
     #print("GAPIT.Phenotype.Simulation")
-    
+
     nm=ncol(GD)-1   #Initial by assume GD has snp in col
     if(!is.null(GM)) nm=nrow(GM)
     ngd1=nrow(GD)
@@ -8405,24 +8405,24 @@ print(paste("GAPIT.Phenotype.PCA.View ", ".output pdf generate.","successfully!"
       orientation="col"
       ns=nrow(GD)
     }
-    
-    
-    
+
+
+
     n= ns   #number of samples
     m=nm  #number of markers
-    
+
     #Set QTN effects
     if (QTNDist=="normal"){ addeffect<-rnorm(NQTN,0,1)
     }else
     {addeffect=effectunit^(1:NQTN)}
-    
-    
+
+
     #Simulating Genetic effect
     #r=sample(2:m,NQTN,replace=F)
     QTN.position=sample(1:m,NQTN,replace=F)
     if(orientation=="col") SNPQ=as.matrix(GD[,(QTN.position+1)])
     if(orientation=="row") SNPQ=t(as.matrix(GD[QTN.position,]))
-    
+
     #Replace non-variant QTNs  (does not work yet)
     #inComplete=TRUE
     #while(inComplete){
@@ -8437,8 +8437,8 @@ print(paste("GAPIT.Phenotype.PCA.View ", ".output pdf generate.","successfully!"
     #    if(orientation=="row") SNPQ[,index]=t(as.matrix(GD[New.position,]))
     #  }
     #}#end of while
-    
-    
+
+
     effect=SNPQ%*%addeffect
     effectvar=var(effect)
 
@@ -8452,7 +8452,7 @@ if(a2>0&NQTN>=nint){
   }
 
   cpvar=var(cp)
-  
+
   intvar=(effectvar-a2*effectvar)/a2
   if(is.na(cp[1]))stop("something wrong in simulating interaction")
   if(cpvar>0){
@@ -8462,21 +8462,21 @@ if(a2>0&NQTN>=nint){
     cp=cp*sqrt(intvar)
     effectvar=effectvar+intvar
   }else{cp=0*effect}
-}   
+}
 
-#Residual variance    
+#Residual variance
     if(h2 >0){
     	residualvar=(effectvar-h2*effectvar)/h2
     	}else{
       residualvar=1
       effect= effect*0
     }
-    
+
     #Variance explained by each SNP
     effectInd=SNPQ%*%diag(addeffect)
     varInd=apply(effectInd,2,var)
     effectSeq=order(varInd,decreasing = TRUE)
-    
+
     #Simulating Residual and phenotype
     residual=rnorm(n,0,sqrt(residualvar))
 
@@ -8486,21 +8486,21 @@ if(a2>0&NQTN>=nint){
     vy=effectvar+residualvar
     #print(vy)
     ev=cveff*vy/(1-cveff)
-    ec=sqrt(ev)/sqrt(diag(var(CV[,-1])))    
+    ec=sqrt(ev)/sqrt(diag(var(CV[,-1])))
     enveff=as.matrix(myCV[,-1])%*%ec
-    
+
     #print(cbind(effectvar,residualvar,ev,ec))
     #print(cbind(effect,enveff,residual))
-    
+
     residual=residual+enveff
     }
-    
+
     #Simulating  phenotype
     y=effect+residual+cp
-    
+
     if(orientation=="col") myY=cbind(as.data.frame(GD[,1]),as.data.frame(y))
     if(orientation=="row") myY=cbind(NA,as.data.frame(y))
-    
+
     #Convert to category phenotype
     if(category>1){
       myQuantile =(0:category)/category
@@ -8509,7 +8509,7 @@ if(a2>0&NQTN>=nint){
       y.cat= .bincode(y.num,cutoff,include.lowest = T)
       myY[,2]=y.cat
     }
-    
+
     #Binary phenotype
     if(category==0){
       #Standardization
@@ -8525,7 +8525,7 @@ if(a2>0&NQTN>=nint){
       myY[index,2]=1
       myY[!index,2]=0
     }
-    
+
     #print("Phenotype simulation accoplished")
     return(list(Y=myY,u=effect,i=cp,e=residual,QTN.position=QTN.position,effect=addeffect))
   } #enf of phenotype simulation function
@@ -8537,8 +8537,8 @@ if(a2>0&NQTN>=nint){
 # myY:Phenotype data
 
 # Authors: You Tang
-# Last update: Sep 7, 2015 
-############################################################################################## 
+# Last update: Sep 7, 2015
+##############################################################################################
 print("GAPIT.Phenotype.View in press...")
 if(is.null(myY)){stop("Validation Invalid. Please select read valid Phenotype flies  !")}
 
@@ -8569,7 +8569,7 @@ print(paste("GAPIT.Phenotype.View ", ".output pdf generate.","successfully!" ,se
 function(WS=c(1e0,1e3,1e4,1e5,1e6,1e7), GM=NULL,seqQTN=NULL,GWAS=NULL,maxOut=100,
 alpha=c(.01,.05,.1,.2,.3,.4,.5,.6,.7,.8,.9,1),MaxBP=1e10){
 #Object: To evaluate power and FDR for the top (maxOut) positive interval defined by WS
-#Input: WS- window size 
+#Input: WS- window size
 #Input: GM - m by 3  matrix for SNP name, chromosome and BP
 #Input: seqQTN - s by 1 vecter for index of QTN on GM (+1 for GDP column wise)
 #Input: GWAS- SNP,CHR,BP,P,MAF
@@ -8587,7 +8587,7 @@ if(is.null(seqQTN) | is.null(GM) | is.null(GWAS)) return(list(FDR=NULL,Power=NUL
 #Information needed: myGAPIT$GWAS,myGM and QTN(r)
 nWin=matrix(NA,length(WS),1)
 
-format_GWAS=cbind(GWAS[,1:4],NA,NA,NA) 
+format_GWAS=cbind(GWAS[,1:4],NA,NA,NA)
 
 names(format_GWAS)<-c("SNP","Chromosome","Position","P.value","maf","nobs","FDR_Adjusted_P-values")
 myGM=GM
@@ -8612,7 +8612,7 @@ QTNInterval=myGM2[QTNList,6]
 thePosition=myGM2[,6] %in% QTNInterval
 
 myGM2[thePosition,4]=1 #Label QTN as 1
-names(myGM2) <- c("SNP","Chromosome","Position", "QTN","Seq") 
+names(myGM2) <- c("SNP","Chromosome","Position", "QTN","Seq")
 
 #Merge to P vlaues
 #GWAS<- merge(myGAPIT$GWAS[,1:7],myGM2[,c(1,4,5)],by="SNP")
@@ -8636,19 +8636,19 @@ myPower.Alpha=apply(cutOff,1,function(x){
   Power=length(which(P.QTN<x))/length(P.QTN)
 })
 
-      
+
 #Sort on P
 #QTN=QTN[order(as.numeric(as.character(QTN[,3])),decreasing = FALSE),]
 #QTN=QTN[order(as.numeric(as.character(QTN[,2])),decreasing = FALSE),]
 QTN=QTN[order(as.numeric(as.character(QTN[,4])),decreasing = FALSE),]
-names(QTN) <- c("SNP","Chromosome","Position", "P","FDR","Power","Order","QTN","Seq") 
+names(QTN) <- c("SNP","Chromosome","Position", "P","FDR","Power","Order","QTN","Seq")
 
 #calculate power
 QTN[,7]=1:nrow(QTN)
 QTN[,5]=cumsum(1-QTN[,8])/QTN[,7]   #FDR
 QTN[,6]=cumsum(QTN[,8]) /sum(QTN[,8] ) #Power
 
-#Save results 
+#Save results
 if (theWS==1){
 nWin=matrix(NA,length(WS),1)
 FDR=array(NA,dim=c(nrow(QTN),length(WS)))
@@ -8661,7 +8661,7 @@ FDR[1:nWin[theWS],theWS]=QTN[,5]
 Power[1:nWin[theWS],theWS]=QTN[,6]
 Power.Alpha[,theWS]=myPower.Alpha
 
-}#end of window size loop 
+}#end of window size loop
 nOut=min(maxOut,max(nWin))
 index=1:nOut
 return(list(FDR=FDR[index,],Power=Power[index,],Power.Alpha=Power.Alpha,alpha=alpha))
@@ -8672,9 +8672,9 @@ return(list(FDR=FDR[index,],Power=Power[index,],Power.Alpha=Power.Alpha,alpha=al
 `GAPIT.Power.compare` <-function(myG=NUll,myGD=NULL,myGM=NULL,myKI=NULL,myY=NULL,myCV=NULL,rel=NULL,h2=NULL,NQTN=NULL){
 # Object: compare to Power against FDR for GLM,MLM,CMLM,ECMLM,SUPER
 # rel:repetition times
-# Authors: You Tang 
-# Last update: December 31, 2014 
-############################################################################################## 
+# Authors: You Tang
+# Last update: December 31, 2014
+##############################################################################################
 if(is.null(myG)||is.null(myGD)||is.null(myGM)||is.null(myKI)){stop("Read data Invalid. Please select read valid flies !")}
 
 if(is.null(rel))
@@ -8759,7 +8759,7 @@ memo="GLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 print(paste("*****************","GWAS by GAPIT...MLM model",i," totle:",rel,sep=""))
 #--------------------------------#
@@ -8775,7 +8775,7 @@ memo="MLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 print(paste("*****************","GWAS by GAPIT...SUPER model",i," totle:",rel,sep=""))
 ##--------------------------------#
@@ -8807,7 +8807,7 @@ memo="CMLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 print(paste("-------------------","GWAS by GAPIT...ECMLM model",i," totle:",rel,sep=""))
 #--------------------------------#
@@ -8828,7 +8828,7 @@ memo="ECMLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 power_ecmlm<-GAPIT.Power(WS=c(1e0,1e3,1e4,1e5,1e6,1e7), alpha=c(.01,.05,.1,.2,.3,.4,.5,.6,.7,.8,.9,1), maxOut=100,seqQTN=QTN.position,GM=myGM,GWAS=myGAPIT_ECMLM$GWAS)
 
 #power #FDR #Power.Alpha
@@ -8964,9 +8964,9 @@ print(paste("GAPIT.Power ", name.of.trait,".compare to GLM,MLM,CMLM,ECMLM,SUPER.
 `GAPIT.Power.compare.plink` <-function(myG=null,myGD=NULL,myGM=NULL,myKI=NULL,myY=NULL,myCV=NULL,rel=NULL,h2=NULL,NQTN=NULL){
 # Object: compare to Power against FDR for GLM,MLM,CMLM,ECMLM,SUPER,PLINK
 # rel:repetition times
-# Authors: You Tang 
+# Authors: You Tang
 # Last update: January 23, 2015
-############################################################################################## 
+##############################################################################################
 
 if(is.null(myG)||is.null(myGD)||is.null(myGM)||is.null(myKI)){stop("Read data Invalid. Please select read valid flies !")}
 if(is.null(rel))
@@ -9077,7 +9077,7 @@ myY<-as.data.frame(myY)
 ##-----output tfam for plink----##
 k3<-cbind(data.frame(k1),data.frame(taxa),data.frame(k2),data.frame(k1),data.frame(myY[,2]))
 write.table(k3,paste("mdp_numeric",i,".tfam",sep=""),row.names = FALSE,col.names = FALSE,sep="\t",quote=FALSE)
- 
+
 ##-----end step 2  for tfam---###
 
 max.groups=nrow(y)
@@ -9096,7 +9096,7 @@ memo="GLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 print(paste("*****************","GWAS by GAPIT...MLM model",i," totle:",rel,sep=""))
 #--------------------------------#
@@ -9115,7 +9115,7 @@ memo="MLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 print(paste("*****************","GWAS by GAPIT...SUPER model",i," totle:",rel,sep=""))
 ##--------------------------------#
@@ -9152,7 +9152,7 @@ memo="CMLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 print(paste("-------------------","GWAS by GAPIT...ECMLM model",i," totle:",rel,sep=""))
 #--------------------------------#
@@ -9175,21 +9175,21 @@ memo="ECMLM",
 QTN.position=QTN.position,
 threshold.output=0.001,
 iteration.output=TRUE,
-) 
+)
 
 ##ecmlm power
 power_ecmlm<-GAPIT.Power(WS=WS, alpha=alpha, maxOut=maxOut,seqQTN=QTN.position,GM=myGM,GWAS=myGAPIT_ECMLM$GWAS)
 
 ##-------------GAWS for plink-----##
-##---output gwas.mdp_numericx.qassoc by plink.exe,so must be copy it to work path!----## 
+##---output gwas.mdp_numericx.qassoc by plink.exe,so must be copy it to work path!----##
 system(paste('"plink.exe"', paste('--tped mdp_numeric.tped --tfam mdp_numeric',i,'.tfam --assoc --out gwas.mdp_numeric',i,sep='')), wait = TRUE)
 ##-------------GAWS for plink-----##
-##---output gwas.mdp_numericx.qassoc by plink.exe,so must be copy it to work path!----## 
+##---output gwas.mdp_numericx.qassoc by plink.exe,so must be copy it to work path!----##
 system(paste('"plink.exe"', paste('--tped mdp_numeric.tped --tfam mdp_numeric',i,'.tfam --covar pca.txt --linear --hide-covar  --out gwas.mdp_numeric',i,sep='')), wait = TRUE)
 
 plinkGWAS<-read.table(paste("gwas.mdp_numeric",i,".assoc.linear",sep=""),header=T)
 
-Format_GWAS=cbind(myGM,plinkGWAS[,9],rep(NA,nrow(myGM)),rep(NA,nrow(myGM)),rep(NA,nrow(myGM))) 
+Format_GWAS=cbind(myGM,plinkGWAS[,9],rep(NA,nrow(myGM)),rep(NA,nrow(myGM)),rep(NA,nrow(myGM)))
 names(Format_GWAS)<-c("SNP","Chromosome","Position","P.value","maf","nobs","FDR_Adjusted_P-values")
 power_plink<-GAPIT.Power(WS=WS, alpha=alpha, maxOut=maxOut,seqQTN=QTN.position,GM=myGM,GWAS=Format_GWAS)
 ##---end powe_plink-----###
@@ -9326,7 +9326,7 @@ myalpha1<-myalpha/10
 
 pdf(paste("GAPIT.Type I error_Power ", name.of.trait,".compare to GLM,MLM,CMLM,ECMLM,SUPER,plink", ".pdf", sep = ""), width = 6, height = 4.5,pointsize=9)
 par(mar = c(5,6,5,3))
-	
+
 	palette(c("green4","red","blue","brown4","orange","black",rainbow(6)))
 	plot(myalpha1,rep.Power.Alpha.SUPER[,1],log="x",bg="lightgray",xlab="Type I error",ylab="Power",main="Power against FDR",type="o",pch=20,col=1,cex=1.0,cex.lab=1.3, cex.axis=1, lwd=2,las=1,ylim=c(min(kkt),max(kkt)))
         lines(rep.Power.Alpha.ECMLM[,1]~myalpha1, lwd=2,type="o",pch=20,col=2)
@@ -9349,8 +9349,8 @@ print(paste("GAPIT.Power ", name.of.trait,".compare to GLM,MLM,CMLM,ECMLM,SUPER,
 # Y: phenotype with columns of taxa,Y1,Y2...
 # num:folders number
 # Authors: Jiabo Wang and You Tang
-# Last update: December 31, 2014 
-############################################################################################## 
+# Last update: December 31, 2014
+##############################################################################################
 if(is.null(myK)||is.null(y)){stop("Validation Invalid. Please select read valid flies !")}
 if(is.null(num))
   {
@@ -9398,9 +9398,9 @@ for(j in 2:num)
 	 	lines.vali<-valilast
 	 }
 	 #use only genotypes that were genotyped and phenotyped
-	 commonGeno_v <- lines.vali[lines.vali %in% myK[,1]]	               
+	 commonGeno_v <- lines.vali[lines.vali %in% myK[,1]]
 	 yvali<- y[match(commonGeno_v,y$Taxa),]
-    
+
 	 if(i!=num){
 		lines.cali<-cali[,i]
 	 }else{
@@ -9408,8 +9408,8 @@ for(j in 2:num)
 	  }
 	 #use only genotypes that were genotyped and phenotyped
 	 commonGeno_c <- lines.cali[lines.cali %in% myK[,1]]
-	 ycali<- y[match(commonGeno_c,y$Taxa),]                
-	
+	 ycali<- y[match(commonGeno_c,y$Taxa),]
+
 	Y.raw=ycali[,c(1,2)]#choos a trait
 
 	myY=Y.raw
@@ -9417,7 +9417,7 @@ for(j in 2:num)
 	max.groups=m
 #Run GAPIT
 #############################################
-	
+
 	blupGAPIT <- GAPIT(
 	Y=myY,
 	KI=myKI,
@@ -9431,7 +9431,7 @@ for(j in 2:num)
 	)
 
 	blup_prediction=blupGAPIT$GPS
- 
+
 	blue<-blupGAPIT$Pred$BLUE
 	mean_blue<-mean(blue)
 
@@ -9485,11 +9485,11 @@ function(values,DPP=5000){
 #Object: To get index of subset that evenly distribute
 #Output: Index
 #Authors: Zhiwu Zhang
-# Last update: May 28, 2011 
+# Last update: May 28, 2011
 ##############################################################################################
 #No change if below the requirement
 if(length(values)<=DPP)return(c(1:length(values)))
-  
+
 #values= log.P.values
 values=sqrt(values)  #This shift the weight a little bit to the low building.
 
@@ -9510,16 +9510,16 @@ index=which(keep>0)
 
 
 return(index)
-}#end of GAPIT.Pruning 
+}#end of GAPIT.Pruning
 #=============================================================================================
 `GAPIT.QC` <-
 function(Y=NULL,KI=NULL,GT=NULL,CV=NULL,Z=NULL,GK=NULL){
 #Object: to do data quality control
 #Output: Y, KI, GD, CV, Z, flag
-#Authors: Zhiwu Zhang and Alex Lipka 
-# Last update: April 14, 2011 
+#Authors: Zhiwu Zhang and Alex Lipka
+# Last update: April 14, 2011
 ##############################################################################################
-#Remove duplicates 
+#Remove duplicates
 print("Removing duplicates...")
 #print(dim(CV))
 Y=GAPIT.RemoveDuplicate(Y)
@@ -9531,12 +9531,12 @@ if(!is.null(Z))Z=GAPIT.RemoveDuplicate(Z)
 print("Removing NaN...")
 Y=Y[which(Y[,2]!="NaN"),]
 
-# Remove duplicates for GT 
+# Remove duplicates for GT
 # GT row wise, Z column wise, and KI both direction.
 print("Remove duplicates for GT...")
 #print(dim(GT))
 if(!is.null(GT))
-{ 
+{
   if(is.null(dim(GT)))taxa.kept=unique(GT)
   if(!is.null(dim(GT)))taxa.kept=unique(GT[,1])
 
@@ -9544,7 +9544,7 @@ if(!is.null(GT))
   taxa.kept=unique(Y[,1])
 }
 
-# Remove duplicates for KI 
+# Remove duplicates for KI
 print("Remove duplicates for KI...")
 # improve speed: remove t() and use cbind
 if(!is.null(KI))
@@ -9595,7 +9595,7 @@ if(!is.null(Z) & !is.null(KI))
   taxa.Z_K_common=intersect(taxa.kinship,taxa.Z)
   }
   Z <-cbind(Z[,1], Z[,match(taxa.Z_K_common, taxa.Z, nomatch = 0)])
-  
+
   #Remove the rows of Z if all the ellements sum to 0
   #@@@ improve speed: too many Zs
   print("Maching Z without origin...")
@@ -9607,7 +9607,7 @@ if(!is.null(Z) & !is.null(KI))
   RS=rowSums(Z5)>0
   #The above process could be simplified!
   Z <- Z[c(TRUE,RS),]
-  
+
   #make individuals the same in Z, Y, GT and CV
   print("Maching GT and CV...")
   if(length(Z)<=1)stop("GAPIT says: there is no place to match IDs!")
@@ -9628,7 +9628,7 @@ if(!is.null(Z))
   t=c(TRUE, Z[-1,1]%in%taxa)
   if(length(t)<=2)stop("GAPIT says: There is no individual ID matched among data. Please check!")
   Z <- Z[t,]
-  
+
   #Remove the columns of Z if all the ellements sum to 0
   print("QC final process...")
   #@@@ improve speed: too many Zs
@@ -9691,26 +9691,26 @@ function(P.values, plot.type = "log_P_values", name.of.trait = "Trait",DPP=50000
     P.values=P.values[!is.na(P.values)]
     P.values=P.values[P.values>0]
     P.values=P.values[P.values<=1]
-    
+
     if(length(P.values[P.values>0])<1) return(NULL)
     N=length(P.values)
     DPP=round(DPP/4) #Reduce to 1/4 for QQ plot
     P.values <- P.values[order(P.values)]
-    
+
     #Set up the p-value quantiles
     #print("Setting p_value_quantiles...")
     p_value_quantiles <- (1:length(P.values))/(length(P.values)+1)
-    
-    
+
+
     if(plot.type == "log_P_values")
     {
         log.P.values <- -log10(P.values)
         log.Quantiles <- -log10(p_value_quantiles)
-        
+
         index=GAPIT.Pruning(log.P.values,DPP=DPP)
         log.P.values=log.P.values[index ]
         log.Quantiles=log.Quantiles[index]
-        
+
         if(plot.style=="FarmCPU"){
         pdf(paste("FarmCPU.", name.of.trait,".QQ-Plot.pdf" ,sep = ""),width = 5,height=5)
         par(mar = c(5,6,5,3))
@@ -9731,20 +9731,20 @@ function(P.values, plot.type = "log_P_values", name.of.trait = "Trait",DPP=50000
             c05[j] <- qbeta(0.05,i,N-i+1)
             #print(c(j,i,c95[j],c05[j]))
         }
-        
+
         #CI Lines
         #plot(log.Quantiles, -log10(c05), xlim = c(0,max(log.Quantiles)), ylim = c(0,max(log.P.values)), type="l",lty=5, axes=FALSE, xlab="", ylab="",col="black")
         #par(new=T)
         #plot(log.Quantiles, -log10(c95), xlim = c(0,max(log.Quantiles)), ylim = c(0,max(log.P.values)), type="l",lty=5, axes=FALSE, xlab="", ylab="",col="black")
-        
+
         #CI shade
         plot(NULL, xlim = c(0,max(log.Quantiles)), ylim = c(0,max(log.P.values)), type="l",lty=5, lwd = 2, axes=FALSE, xlab="", ylab="",col="gray")
         index=length(c95):1
         polygon(c(log.Quantiles[index],log.Quantiles),c(-log10(c05)[index],-log10(c95)),col='gray',border=NA)
-        
+
         #Diagonal line
         abline(a = 0, b = 1, col = "red",lwd=2)
-        
+
         #data
         par(new=T)
         if(plot.style=="FarmCPU"){
@@ -9753,21 +9753,21 @@ function(P.values, plot.type = "log_P_values", name.of.trait = "Trait",DPP=50000
         if(plot.style=="rainbow"){
             plot(log.Quantiles, log.P.values, xlim = c(0,max(log.Quantiles)), ylim = c(0,max(log.P.values)), cex.axis=1.1, cex.lab=1.3, lty = 1,  lwd = 2, col = "Blue" ,xlab =expression(Expected~~-log[10](italic(p))),ylab = expression(Observed~~-log[10](italic(p))), main = paste(name.of.trait,sep=""))
         }
-        
+
         dev.off()
     }
-    
-    
+
+
     if(plot.type == "P_values")
     {
         pdf(paste("QQ-Plot_", name.of.trait,".pdf" ,sep = ""))
         par(mar = c(5,5,5,5))
         qqplot(p_value_quantiles, P.values, xlim = c(0,1),
-        ylim = c(0,1), type = "l" , xlab = "Uniform[0,1] Theoretical Quantiles", 
+        ylim = c(0,1), type = "l" , xlab = "Uniform[0,1] Theoretical Quantiles",
         lty = 1, lwd = 1, ylab = "Quantiles of P-values from GWAS", col = "Blue",
         main = paste(name.of.trait,sep=" "))
         abline(a = 0, b = 1, col = "red")
-        dev.off()   
+        dev.off()
     }
     #print("GAPIT.QQ  accomplished successfully!")
 }
@@ -9775,13 +9775,13 @@ function(P.values, plot.type = "log_P_values", name.of.trait = "Trait",DPP=50000
 
 `GAPIT` <-
 function(Y=NULL,G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,CV.Inheritance=NULL,GP=NULL,GK=NULL,
- group.from=1000000 ,group.to=1000000,group.by=20,DPP=100000, 
- kinship.cluster="average", kinship.group='Mean',kinship.algorithm="VanRaden", 
+ group.from=1000000 ,group.to=1000000,group.by=20,DPP=100000,
+ kinship.cluster="average", kinship.group='Mean',kinship.algorithm="VanRaden",
  bin.from=10000,bin.to=10000,bin.by=10000,inclosure.from=10,inclosure.to=10,inclosure.by=10,
  SNP.P3D=TRUE,SNP.effect="Add",SNP.impute="Middle",PCA.total=0, SNP.fraction = 1, seed = NULL, BINS = 20,SNP.test=TRUE,
  SNP.MAF=0,FDR.Rate = 1, SNP.FDR=1,SNP.permutation=FALSE,SNP.CV=NULL,SNP.robust="GLM",
- file.from=1, file.to=1, file.total=NULL, file.fragment = 99999,file.path=NULL, 
- file.G=NULL, file.Ext.G=NULL,file.GD=NULL, file.GM=NULL, file.Ext.GD=NULL,file.Ext.GM=NULL, 
+ file.from=1, file.to=1, file.total=NULL, file.fragment = 99999,file.path=NULL,
+ file.G=NULL, file.Ext.G=NULL,file.GD=NULL, file.GM=NULL, file.Ext.GD=NULL,file.Ext.GM=NULL,
  ngrid = 100, llim = -10, ulim = 10, esp = 1e-10,LD.chromosome=NULL,LD.location=NULL,LD.range=NULL,PCA.col=NULL,PCA.3d=FALSE,NJtree.group=NULL,NJtree.type=c("fan","unrooted"),
  sangwich.top=NULL,sangwich.bottom=NULL,QC=TRUE,GTindex=NULL,LD=0.1,plot.bin=10^5,
  file.output=TRUE,cutOff=0.01, Model.selection = FALSE,output.numerical = FALSE,
@@ -9820,7 +9820,7 @@ model=model_store[m]
 if(!is.null(Y))
   {
 if(group.from<nrow(Y)) model="CMLM"
-  }  
+  }
 
 if(group.to!=group.from)model="CMLM"
 if(group.to==1&group.from==1)model="GLM"
@@ -9828,7 +9828,7 @@ if(group.to==1&group.from==1)model="GLM"
 if(!is.null(sangwich.bottom)&!is.null(sangwich.bottom))model="SUPER"
 if(model=="gBLUP") model="MLM"
 if(model=="cBLUP") model="CMLM"
-if(model=="sBLUP") 
+if(model=="sBLUP")
   { model="MLM"
 if(!is.null(inclosure.from)&is.null(Para$inclosure.from))Para$inclosure.from=inclosure.from
 if(is.null(Para$inclosure.from))Para$inclosure.from=10
@@ -9836,15 +9836,15 @@ if(!is.null(inclosure.to)&is.null(Para$inclosure.to))Para$inclosure.to=inclosure
 if(is.null(Para$inclosure.to))Para$inclosure.to=100
 if(!is.null(inclosure.by)&is.null(Para$inclosure.by))Para$inclosure.by=inclosure.by
 if(is.null(Para$inclosure.by))Para$inclosure.by=10
-if(!is.null(bin.from)&is.null(Para$bin.from))Para$bin.from=bin.from  
+if(!is.null(bin.from)&is.null(Para$bin.from))Para$bin.from=bin.from
 if(is.null(Para$bin.from))Para$bin.from=10000
-if(!is.null(bin.to)&is.null(Para$bin.to))Para$bin.to=bin.to  
+if(!is.null(bin.to)&is.null(Para$bin.to))Para$bin.to=bin.to
 if(is.null(Para$bin.to))Para$bin.to=10000
-if(!is.null(bin.by)&is.null(Para$bin.by))Para$bin.by=bin.by  
+if(!is.null(bin.by)&is.null(Para$bin.by))Para$bin.by=bin.by
 if(is.null(Para$bin.by))Para$bin.by=10000
-if(!is.null(sangwich.top)&is.null(Para$sangwich.top))Para$sangwich.top=sangwich.top  
+if(!is.null(sangwich.top)&is.null(Para$sangwich.top))Para$sangwich.top=sangwich.top
 if(is.null(Para$sangwich.top))Para$sangwich.top="MLM"
-if(!is.null(sangwich.bottom)&is.null(Para$sangwich.bottom))Para$sangwich.bottom=sangwich.bottom  
+if(!is.null(sangwich.bottom)&is.null(Para$sangwich.bottom))Para$sangwich.bottom=sangwich.bottom
 if(is.null(Para$sangwich.bottom))Para$sangwich.bottom="SUPER"
 }
 
@@ -9878,15 +9878,15 @@ if(!is.null(inclosure.to)&is.null(Para$inclosure.to))Para$inclosure.to=inclosure
 if(is.null(Para$inclosure.to))Para$inclosure.to=100
 if(!is.null(inclosure.by)&is.null(Para$inclosure.by))Para$inclosure.by=inclosure.by
 if(is.null(Para$inclosure.by))Para$inclosure.by=10
-if(!is.null(bin.from)&is.null(Para$bin.from))Para$bin.from=bin.from  
+if(!is.null(bin.from)&is.null(Para$bin.from))Para$bin.from=bin.from
 if(is.null(Para$bin.from))Para$bin.from=10000
-if(!is.null(bin.to)&is.null(Para$bin.to))Para$bin.to=bin.to  
+if(!is.null(bin.to)&is.null(Para$bin.to))Para$bin.to=bin.to
 if(is.null(Para$bin.to))Para$bin.to=10000
-if(!is.null(bin.by)&is.null(Para$bin.by))Para$bin.by=bin.by  
+if(!is.null(bin.by)&is.null(Para$bin.by))Para$bin.by=bin.by
 if(is.null(Para$bin.by))Para$bin.by=10000
-if(!is.null(sangwich.top)&is.null(Para$sangwich.top))Para$sangwich.top=sangwich.top  
+if(!is.null(sangwich.top)&is.null(Para$sangwich.top))Para$sangwich.top=sangwich.top
 if(is.null(Para$sangwich.top))Para$sangwich.top="MLM"
-if(!is.null(sangwich.bottom)&is.null(Para$sangwich.bottom))Para$sangwich.bottom=sangwich.bottom  
+if(!is.null(sangwich.bottom)&is.null(Para$sangwich.bottom))Para$sangwich.bottom=sangwich.bottom
 if(is.null(Para$sangwich.bottom))Para$sangwich.bottom="SUPER"
 }
 if(model=="FarmCPU")Para$kinship.algorithm="FarmCPU"
@@ -9895,9 +9895,9 @@ if(model=="Blink")Para$kinship.algorithm="Blink"
 if(is.null(Para$memo)|m>1)Para$memo=model
 print(Para$memo)
 
-GAPIT_list=list(group.from=group.from ,group.to=group.to,group.by=group.by,DPP=DPP,kinship.cluster=kinship.cluster, kinship.group=kinship.group,kinship.algorithm=kinship.algorithm, 
+GAPIT_list=list(group.from=group.from ,group.to=group.to,group.by=group.by,DPP=DPP,kinship.cluster=kinship.cluster, kinship.group=kinship.group,kinship.algorithm=kinship.algorithm,
  bin.from=bin.from,bin.to=bin.to,bin.by=bin.by,inclosure.from=inclosure.from,inclosure.to=inclosure.to,inclosure.by=inclosure.by,SNP.P3D=SNP.P3D,SNP.effect=SNP.effect,SNP.impute=SNP.impute,PCA.total=PCA.total, SNP.fraction = SNP.fraction, seed = seed, BINS = 20,SNP.test=SNP.test,
- SNP.MAF=SNP.MAF,FDR.Rate = FDR.Rate, SNP.FDR=SNP.FDR,SNP.permutation=SNP.permutation,SNP.CV=NULL,SNP.robust="GLM",file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment,file.path=file.path, 
+ SNP.MAF=SNP.MAF,FDR.Rate = FDR.Rate, SNP.FDR=SNP.FDR,SNP.permutation=SNP.permutation,SNP.CV=NULL,SNP.robust="GLM",file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment,file.path=file.path,
  file.G=file.G, file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,ngrid = 100, llim = -10, ulim = 10, esp = 1e-10,Inter.Plot=Inter.Plot,Inter.type=Inter.type,
  LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,PCA.col=PCA.col,PCA.3d=PCA.3d,NJtree.group=NJtree.group,NJtree.type=NJtree.type,
  sangwich.top=sangwich.top,sangwich.bottom=sangwich.bottom,QC=QC,GTindex=GTindex,LD=LD,plot.bin=plot.bin,file.output=file.output,cutOff=cutOff, Model.selection = Model.selection,output.numerical = output.numerical,
@@ -9924,14 +9924,14 @@ if(ncol(Y)<2)  stop ("Phenotype should have taxa name and one trait at least. Pl
 if(m==1)
  {
  DP=GAPIT.DP(G=G,GD=GD,GM=GM,KI=KI,Z=Z,CV=CV,CV.Inheritance=Para$CV.Inheritance,GP=GP,GK=GK,
- group.from=Para$group.from ,group.to= Para$group.to,group.by=Para$group.by,DPP= Para$DPP, 
+ group.from=Para$group.from ,group.to= Para$group.to,group.by=Para$group.by,DPP= Para$DPP,
  kinship.cluster=Para$kinship.cluster, kinship.group=Para$kinship.group,kinship.algorithm=Para$ kinship.algorithm, NJtree.group=Para$NJtree.group,NJtree.type=Para$NJtree.type,plot.bin=Para$plot.bin,PCA.col=Para$PCA.col,PCA.3d=Para$PCA.3d,
  sangwich.top=Para$sangwich.top,sangwich.bottom=Para$sangwich.bottom,LD=Para$LD,bin.from= Para$bin.from,bin.to= Para$bin.to,bin.by= Para$bin.by,inclosure.from= Para$inclosure.from,inclosure.to= Para$inclosure.to,inclosure.by= Para$inclosure.by,
- SNP.P3D= Para$SNP.P3D,SNP.effect= Para$SNP.effect,SNP.impute= Para$SNP.impute,PCA.total= Para$PCA.total, SNP.fraction = Para$SNP.fraction, seed = Para$seed, 
+ SNP.P3D= Para$SNP.P3D,SNP.effect= Para$SNP.effect,SNP.impute= Para$SNP.impute,PCA.total= Para$PCA.total, SNP.fraction = Para$SNP.fraction, seed = Para$seed,
  BINS = Para$BINS,SNP.test=Para$SNP.test, SNP.MAF= Para$SNP.MAF,FDR.Rate = Para$FDR.Rate, SNP.FDR= Para$SNP.FDR,SNP.permutation= Para$SNP.permutation,
- SNP.CV= Para$SNP.CV,SNP.robust= Para$SNP.robust,   Inter.Plot=Para$Inter.Plot,  Inter.type=Para$Inter.type,   
- file.from= Para$file.from, file.to=Para$file.to, file.total= Para$file.total, file.fragment = Para$file.fragment,file.path= Para$file.path, 
- file.G= Para$file.G, file.Ext.G= Para$file.Ext.G,file.GD= Para$file.GD, file.GM= Para$file.GM, file.Ext.GD= Para$file.Ext.GD,file.Ext.GM= Para$file.Ext.GM, 
+ SNP.CV= Para$SNP.CV,SNP.robust= Para$SNP.robust,   Inter.Plot=Para$Inter.Plot,  Inter.type=Para$Inter.type,
+ file.from= Para$file.from, file.to=Para$file.to, file.total= Para$file.total, file.fragment = Para$file.fragment,file.path= Para$file.path,
+ file.G= Para$file.G, file.Ext.G= Para$file.Ext.G,file.GD= Para$file.GD, file.GM= Para$file.GM, file.Ext.GD= Para$file.Ext.GD,file.Ext.GM= Para$file.Ext.GM,
  ngrid = Para$ngrid, llim = Para$llim, ulim = Para$ulim, esp = Para$esp,Multi_iter=Para$Multi_iter,windowsize=Para$windowsize,
  LD.chromosome= Para$LD.chromosome,LD.location= Para$LD.location,LD.range= Para$LD.range,
  QC= Para$QC,GTindex= Para$GTindex,cutOff=Para$cutOff, Model.selection = Para$Model.selection,output.numerical = Para$output.numerical,
@@ -9940,9 +9940,9 @@ if(m==1)
  method.bin= Para$method.bin,bin.size= Para$bin.size,bin.selection= Para$bin.selection,
  memo= Para$memo,Prior= Para$Prior,ncpus=Para$ncpus,maxLoop= Para$maxLoop,threshold.output= Para$threshold.output,
  WS= Para$WS,alpha= Para$alpha,maxOut= Para$maxOut,QTN.position= Para$QTN.position, converge=Para$converge,iteration.output= Para$iteration.output,acceleration=Para$acceleration,
- iteration.method= Para$iteration.method,PCA.View.output=Para$PCA.View.output, 
+ iteration.method= Para$iteration.method,PCA.View.output=Para$PCA.View.output,
  output.hapmap = Para$output.hapmap, file.output= Para$file.output,Geno.View.output=Para$Geno.View.output,plot.style=Para$plot.style,SUPER_GD= Para$SUPER_GD,SUPER_GS= Para$SUPER_GS,CG=Para$CG,model=model)
-}else{ 
+}else{
  DP$kinship.algorithm=Para$ kinship.algorithm
  DP$group.from=Para$group.from
  DP$group.to=Para$group.to
@@ -9956,7 +9956,7 @@ if(m==1)
  DP$inclosure.to= Para$inclosure.toDP$inclosure.by= Para$inclosure.by
 }
 
-for (trait in 2: ncol(Y))  
+for (trait in 2: ncol(Y))
 {
 traitname=colnames(Y)[trait]
 ###Statistical distributions of phenotype
@@ -10005,7 +10005,7 @@ if(kinship.algorithm=="FarmCPU")names(out$Pred)=c("Taxa",traitname,"Prediction")
   #print(Para$SNP.MAF)
 out <- list()
 # if(is.null(Para$NQTN)&is.null(Para$h2))
-# { 
+# {
 # Para$kinship.algorithm="SUPER"
 # Para$PCA.total=0
 # }
@@ -10013,10 +10013,10 @@ out <- list()
 #print(Para$kinship.algorithm)
 #print(Para$PCA.total)
 myGenotype<-GAPIT.Genotype(G=G,GD=GD,GM=GM,KI=KI,kinship.algorithm=Para$kinship.algorithm,PCA.total=Para$PCA.total,SNP.fraction=Para$SNP.fraction,SNP.test=Para$SNP.test,
- file.path=Para$file.path,file.from=Para$file.from, file.to=Para$file.to, file.total=Para$file.total, file.fragment = Para$file.fragment, file.G=Para$file.G, 
+ file.path=Para$file.path,file.from=Para$file.from, file.to=Para$file.to, file.total=Para$file.total, file.fragment = Para$file.fragment, file.G=Para$file.G,
  file.Ext.G=Para$file.Ext.G,file.GD=Para$file.GD, file.GM=Para$file.GM, file.Ext.GD=Para$file.Ext.GD,file.Ext.GM=Para$file.Ext.GM,
  SNP.MAF=Para$SNP.MAF,FDR.Rate = Para$FDR.Rate,SNP.FDR=Para$SNP.FDR,SNP.effect=Para$SNP.effect,SNP.impute=Para$SNP.impute,NJtree.group=Para$NJtree.group,NJtree.type=Para$NJtree.type,
- LD.chromosome=Para$LD.chromosome,LD.location=Para$LD.location,LD.range=Para$LD.range,GP=Para$GP,GK=Para$GK,bin.size=NULL,inclosure.size=NULL, 
+ LD.chromosome=Para$LD.chromosome,LD.location=Para$LD.location,LD.range=Para$LD.range,GP=Para$GP,GK=Para$GK,bin.size=NULL,inclosure.size=NULL,
  sangwich.top=NULL,sangwich.bottom=Para$sangwich.bottom,GTindex=NULL,file.output=Para$file.output, Create.indicator = Para$Create.indicator, Major.allele.zero = Para$Major.allele.zero,Geno.View.output=Para$Geno.View.output,PCA.col=Para$PCA.col,PCA.3d=Para$PCA.3d)
 GD=myGenotype$GD
 GI=myGenotype$GI
@@ -10027,7 +10027,7 @@ rownames(GD)=GT
 colnames(GD)=GI[,1]
 taxa=GT
 #print(GD[1:5,1:5])
-if(Para$output.numerical) 
+if(Para$output.numerical)
 {
 write.table(cbind(taxa,GD),  "GAPIT.Genotype.Numerical.txt", quote = FALSE, sep = "\t", row.names = F,col.names = T)
 write.table(GI,  "GAPIT.Genotype.map.txt", quote = FALSE, sep = "\t", row.names = F,col.names = T)
@@ -10050,14 +10050,14 @@ out$PCA=myGenotype$PC
 }#end of model loop
 #print(tail(IC$GM))
 if(!is.null(Y)&SNP.test)if(Multiple_analysis&Para$file.output&length(model_store)*(ncol(Y)-1)>1&length(model_store)*(ncol(Y)-1)<9)
-{ 
+{
   #print(DP$QTN.position)
 GMM=GAPIT.Multiple.Manhattan(model_store=model_store,Y=Y,GM=IC$GM,seqQTN=DP$QTN.position)
 #print(str(GMM$multip_mapP))
 GAPIT.Circle.Manhatton.Plot(band=1,r=3,GMM$multip_mapP,plot.type=c("c","q"),signal.line=1,xz=GMM$xz)
 }# end of mutiple manhantton plot
 # if(!is.null(Y)&!SNP.test&Multiple_analysis&Para$file.output&length(model_store)*(ncol(Y)-1)>1)
-# { 
+# {
 # GAPIT.Interactive.GS(model_store=model_store,Y=Y)
 # }
 return (out)
@@ -10081,14 +10081,14 @@ if(length(t)==length(t[is.na(t)]) ){
 #print("NA t, No ROC plot")
 return(NULL)
 }
-    
+
     #test
     #n=1000
     #trait="test"
     #t=rnorm(n)
     #se=sqrt(abs(rnorm(n))  )
     #Vp=10
-    
+
     #Remove NAs
     index=is.na(t)
     t=t[!index]
@@ -10097,18 +10097,18 @@ return(NULL)
     #Configration
     FDR=c(0,.01,.05,.1,.2,.3,.4,.5,.6,.7,.8,.9,1)
     coefficient=c(0,0.01,.02,.05,.1,.2,.3)
-    
+
     #Power holder
     nf=length(FDR)
     nc=length(coefficient)
     power=matrix(NA,nf,nc)
-    
+
     #Handler of matrix format
     if(!is.null(dim(t))) t=t[,1]
     if(!is.null(dim(se))) se=se[,1]
-    
+
     n=length(t)
-    
+
     #Discard negative
     t=abs(t)
     #print("@@@@@@@@@@@@@@")
@@ -10119,22 +10119,22 @@ return(NULL)
     EFFECT=coefficient*sqrt(Vp)
     newbit=matrix(1/se,n,1)%*%EFFECT   #n by nc matrix
     tnew=newbit+t  #n by nc matrix
-    
+
     for (i in 1:nf){
         fdr=FDR[i]
         cutpoint=floor(n*fdr)
         cutoff=t[cutpoint]
-        
-        
+
+
         for (j in 1:nc){
             effect= EFFECT[j]
             singnificant=tnew[,j]>cutoff
             count=length(t[singnificant])
             power[i,j]=count/n
-            
+
         } #end of for on fdr
     } #end of for on effect
-    
+
     #output
     rownames(power)=FDR
     tkk<-c(.3,.2,.1,.05,.02,0.01,0)
@@ -10158,7 +10158,7 @@ return(NULL)
         pdf(paste("GAPIT.", trait,".ROC.pdf" ,sep = ""), width = 7,height=7)
         par(mar = c(5,5,5,3))
     }
-  
+
  palette(c("black","red","blue","brown", "orange","cyan", "green",rainbow(nc)))
     plot(FDR_log,power[,1],log="x",type="o",yaxt="n",lwd=3,col=1,xlab="Type I error",ylab="Power",main = trait,cex.axis=1.3, cex.lab=1.3)
     axis(side=2,at=tc1,labels=tc1,cex.lab=1.3,cex.axis=1.3)
@@ -10172,7 +10172,7 @@ return(NULL)
     #print(power)
     dev.off()
 print("ROC completed!")
-    
+
 }   #GAPIT.ROC ends here
 #=============================================================================================
 
@@ -10196,7 +10196,7 @@ function(GWAS,Y,CV=NULL,X,cutOff=0.01,GT=NULL,n_ran=30){
     P.value[is.na(P.value)]=1
     index=P.value<cutoff
     #index[c(1:2)]=TRUE
-    
+
     geneGD=X[,index]
     geneGWAS=GWAS[index,]
     # print(dim(Y))
@@ -10212,7 +10212,7 @@ function(GWAS,Y,CV=NULL,X,cutOff=0.01,GT=NULL,n_ran=30){
     in_True=index_T[rownames(index_T)=="TRUE"]
     if(in_True!=1)
     {
-    
+
     	colnames(geneGD)=paste("gene_",1:in_True,sep="")
 
     }
@@ -10255,7 +10255,7 @@ function(GWAS,Y,CV=NULL,X,cutOff=0.01,GT=NULL,n_ran=30){
     {
     	print("The candidate markers are more than threshold value !")
     	return(list(GVs=NULL))
-    	} 
+    	}
 if(!is.null(CV))
 {
 #ff <- paste("trait~1+PC1+PC2+PC3+(1|gene_1)+(1|gene_2)+(1|gene_3)+(1|gene_4)+(1|gene_5)+(1|gene_6)"
@@ -10264,7 +10264,7 @@ if(!is.null(CV))
     {
     command0=paste("trait~1",sep="")
     command1=command0
-    
+
     command2=command1
     for(j in 1:n_gd)
 {
@@ -10275,7 +10275,7 @@ if(!is.null(CV))
     command0=paste("trait~1",sep="")
     command1=command0
     for(i in 1:n_cv)
-{	
+{
 	command1=paste(command1,"+CV",i,sep="")
 }
     command2=command1
@@ -10288,7 +10288,7 @@ if(!is.null(CV))
 
     command0=paste("trait~1",sep="")
     command1=command0
-    
+
     command2=command1
     for(j in 1:n_gd)
 {
@@ -10334,7 +10334,7 @@ if(!is.na(sum(gene_list[1,c(4:8)])))
     if(n_gd>=10)
         {
         pdf(paste("GAPIT.", name.of.trait,".MAF_Effect_VP.pdf" ,sep = ""), width = 9,height=5.75)
-        
+
         n=10
         layout(matrix(c(1,1,2,1,1,1,1,1,1),3,3,byrow=TRUE), c(2,1), c(1,1), TRUE)
         do_color=colorRampPalette(c("green", "red"))(n)
@@ -10357,7 +10357,7 @@ if(!is.na(sum(gene_list[1,c(4:8)])))
 
 
             par(mar=c(2,13,5,4),cex=0.5)
-            
+
             barplot(matrix(rep(0.4,times=n),n,1),beside=T,col=do_color,border=do_color,axes=FALSE,horiz =T)
         #legend(x=10,y=2,legend=expression(R^"2"),,lty=0,cex=1.3,bty="n",bg=par("bg"))
             step=length(seq(0,round(max(z),3),by=0.01))
@@ -10366,7 +10366,7 @@ if(!is.na(sum(gene_list[1,c(4:8)])))
             mtext("Variance Explained",side=2,line=0.4,col="black",cex=0.5)
 
             axis(4,c(1,6,11),c(min(small_bar),median(small_bar),max(small_bar)),las=2,cex.axis = 0.9,tick=F,line=0)
-        
+
         dev.off()
         }
 }
@@ -10380,7 +10380,7 @@ return(list(GVs=var_gene/sum(var_gene+var_res)))
 
 }#end of GAPIT.RandomModel function
 #=============================================================================================
-          
+
 
 
 
@@ -10388,8 +10388,8 @@ return(list(GVs=var_gene/sum(var_gene+var_res)))
 function(Y){
 #Object: NA
 #Output: NA
-#Authors: Zhiwu Zhang 
-# Last update: Augus 30, 2011 
+#Authors: Zhiwu Zhang
+# Last update: Augus 30, 2011
 ##############################################################################################
 return (Y[match(unique(Y[,1]), Y[,1], nomatch = 0), ] )
 }
@@ -10399,7 +10399,7 @@ return (Y[match(unique(Y[,1]), Y[,1], nomatch = 0), ] )
 function(name.of.trait=NULL,GWAS=NULL,pred=pred,ypred=NULL,tvalue=NULL,stderr=NULL,Vp=1,
 DPP=100000,cutOff=.01,threshold.output=.01,MAF=NULL,seqQTN=NULL,MAF.calculate=FALSE,plot.style="rainbow"){
 #Object: Out put plots and tables
-#Input: GWAS,name.of.trait, DPP 
+#Input: GWAS,name.of.trait, DPP
 #Requirement: None
 #Output: Graphs and tables
 #Output: return ycor if ypred is not null
@@ -10542,15 +10542,15 @@ if(!DP$kinship.algorithm%in%c("FarmCPU","MLMM","Blink"))
  gapitMain <- GAPIT.Main(Y=ic_Y,GD=DP$GD[,-1],GM=DP$GM,KI=ic_KI,Z=Z,CV=DP$CV,CV.Inheritance=DP$CV.Inheritance,GP=DP$GP,GK=DP$GK,SNP.P3D=DP$SNP.P3D,kinship.algorithm=DP$kinship.algorithm,
 						bin.from=DP$bin.from,bin.to=DP$bin.to,bin.by=DP$bin.by,inclosure.from=DP$inclosure.from,inclosure.to=DP$inclosure.to,inclosure.by=DP$inclosure.by,
 				        group.from=DP$group.from,group.to=DP$group.to,group.by=DP$group.by,kinship.cluster=DP$kinship.cluster,kinship.group=DP$kinship.group,name.of.trait=DP$name.of.trait,
-                        file.path=DP$file.path,file.from=DP$file.from, file.to=DP$file.to, file.total=DP$file.total, file.fragment = DP$file.fragment, file.G=DP$file.G,file.Ext.G=DP$file.Ext.G,file.GD=DP$file.GD, file.GM=DP$file.GM, file.Ext.GD=DP$file.Ext.GD,file.Ext.GM=DP$file.Ext.GM, 
+                        file.path=DP$file.path,file.from=DP$file.from, file.to=DP$file.to, file.total=DP$file.total, file.fragment = DP$file.fragment, file.G=DP$file.G,file.Ext.G=DP$file.Ext.G,file.GD=DP$file.GD, file.GM=DP$file.GM, file.Ext.GD=DP$file.Ext.GD,file.Ext.GM=DP$file.Ext.GM,
                         SNP.MAF= DP$SNP.MAF,FDR.Rate = DP$FDR.Rate,SNP.FDR=DP$SNP.FDR,SNP.effect=DP$SNP.effect,SNP.impute=DP$SNP.impute,PCA.total=DP$PCA.total,GAPIT.Version=GAPIT.Version,
                         GT=GT, SNP.fraction = DP$SNP.fraction, seed =DP$ seed, BINS = DP$BINS,SNP.test=DP$SNP.test,DPP=DP$DPP, SNP.permutation=DP$SNP.permutation,
                         LD.chromosome=DP$LD.chromosome,LD.location=LD.location,LD.range=LD.range,SNP.CV=SNP.CV,SNP.robust=DP$SNP.robust,model=DP$model,
                         genoFormat="EMMA",hasGenotype=TRUE,byFile=FALSE,fullGD=TRUE,PC=DP$PC,GI=ic_GM,Timmer = DP$Timmer, Memory = DP$Memory,
                         sangwich.top=DP$sangwich.top,sangwich.bottom=DP$sangwich.bottom,QC=DP$QC,GTindex=DP$GTindex,LD=DP$LD,file.output=FALSE,cutOff=DP$cutOff, GAPIT3.output=DP$file.output,
                         Model.selection = DP$Model.selection, Create.indicator = DP$Create.indicator,
-						QTN=DP$QTN, QTN.round=DP$QTN.round,QTN.limit=DP$QTN.limit, QTN.update=QTN.update, QTN.method=DP$QTN.method, Major.allele.zero=DP$Major.allele.zero,NJtree.group=DP$NJtree.group,NJtree.type=DP$NJtree.type,plot.bin=DP$plot.bin, 
-                        QTN.position=DP$QTN.position,plot.style=DP$plot.style,SUPER_GS=DP$SUPER_GS)  
+						QTN=DP$QTN, QTN.round=DP$QTN.round,QTN.limit=DP$QTN.limit, QTN.update=QTN.update, QTN.method=DP$QTN.method, Major.allele.zero=DP$Major.allele.zero,NJtree.group=DP$NJtree.group,NJtree.type=DP$NJtree.type,plot.bin=DP$plot.bin,
+                        QTN.position=DP$QTN.position,plot.style=DP$plot.style,SUPER_GS=DP$SUPER_GS)
 #print(str(gapitMain))
  GWAS=gapitMain$GWAS
  GR=GAPIT.RandomModel(Y=ic_Y,X=DP$GD[,-1],GWAS=GWAS,CV=gapitMain$PC,cutOff=DP$cutOff,GT=IC$GT)
@@ -10588,15 +10588,15 @@ if(!is.null(GWAS))myPower=GAPIT.Power(WS=DP$WS, alpha=DP$alpha, maxOut=DP$maxOut
 gapitMain <- GAPIT.Main(Y=DP$Y,GD=DP$GD[,-1],GM=DP$GM,KI=DP$KI,Z=DP$Z,CV=DP$CV,CV.Inheritance=DP$CV.Inheritance,GP=DP$GP,GK=DP$GK,SNP.P3D=DP$SNP.P3D,kinship.algorithm=DP$kinship.algorithm,
             bin.from=DP$bin.from,bin.to=DP$bin.to,bin.by=DP$bin.by,inclosure.from=DP$inclosure.from,inclosure.to=DP$inclosure.to,inclosure.by=DP$inclosure.by,
                 group.from=DP$group.from,group.to=DP$group.to,group.by=DP$group.by,kinship.cluster=DP$kinship.cluster,kinship.group=DP$kinship.group,name.of.trait=DP$name.of.trait,
-                        file.path=DP$file.path,file.from=DP$file.from, file.to=DP$file.to, file.total=DP$file.total, file.fragment = DP$file.fragment, file.G=DP$file.G,file.Ext.G=DP$file.Ext.G,file.GD=DP$file.GD, file.GM=DP$file.GM, file.Ext.GD=DP$file.Ext.GD,file.Ext.GM=DP$file.Ext.GM, 
+                        file.path=DP$file.path,file.from=DP$file.from, file.to=DP$file.to, file.total=DP$file.total, file.fragment = DP$file.fragment, file.G=DP$file.G,file.Ext.G=DP$file.Ext.G,file.GD=DP$file.GD, file.GM=DP$file.GM, file.Ext.GD=DP$file.Ext.GD,file.Ext.GM=DP$file.Ext.GM,
                         SNP.MAF= DP$SNP.MAF,FDR.Rate = DP$FDR.Rate,SNP.FDR=DP$SNP.FDR,SNP.effect=DP$SNP.effect,SNP.impute=DP$SNP.impute,PCA.total=DP$PCA.total,GAPIT.Version=GAPIT.Version,
                         GT=DP$GT, SNP.fraction = DP$SNP.fraction, seed =DP$ seed, BINS = DP$BINS,SNP.test=DP$SNP.test,DPP=DP$DPP, SNP.permutation=DP$SNP.permutation,
                         LD.chromosome=DP$LD.chromosome,LD.location=LD.location,LD.range=LD.range,SNP.CV=SNP.CV,SNP.robust=DP$SNP.robust,model=DP$model,
                         genoFormat="EMMA",hasGenotype=TRUE,byFile=FALSE,fullGD=TRUE,PC=DP$PC,GI=DP$GI,Timmer = DP$Timmer, Memory = DP$Memory,GAPIT3.output=DP$file.output,
-                        sangwich.top=DP$sangwich.top,sangwich.bottom=DP$sangwich.bottom,QC=DP$QC,GTindex=DP$GTindex,LD=DP$LD,file.output=FALSE,cutOff=DP$cutOff, 
+                        sangwich.top=DP$sangwich.top,sangwich.bottom=DP$sangwich.bottom,QC=DP$QC,GTindex=DP$GTindex,LD=DP$LD,file.output=FALSE,cutOff=DP$cutOff,
                         Model.selection = DP$Model.selection, Create.indicator = DP$Create.indicator,
-            QTN=DP$QTN, QTN.round=DP$QTN.round,QTN.limit=DP$QTN.limit, QTN.update=QTN.update, QTN.method=DP$QTN.method, Major.allele.zero=DP$Major.allele.zero,NJtree.group=DP$NJtree.group,NJtree.type=DP$NJtree.type,plot.bin=DP$plot.bin, 
-                        QTN.position=DP$QTN.position,plot.style=DP$plot.style,SUPER_GS=DP$SUPER_GS)  
+            QTN=DP$QTN, QTN.round=DP$QTN.round,QTN.limit=DP$QTN.limit, QTN.update=QTN.update, QTN.method=DP$QTN.method, Major.allele.zero=DP$Major.allele.zero,NJtree.group=DP$NJtree.group,NJtree.type=DP$NJtree.type,plot.bin=DP$plot.bin,
+                        QTN.position=DP$QTN.position,plot.style=DP$plot.style,SUPER_GS=DP$SUPER_GS)
 #print(str(gapitMain))
 GWAS=gapitMain$GWAS
 #print(head(GWAS))
@@ -10656,13 +10656,13 @@ ps <- matrix(nrow = m, ncol = g)
 betavalue <- matrix(nrow = m, ncol = g)
 ####################
 if(method=="SUPER"){
- LDsqr=sqrt(LD)  
-##################  
- 
+ LDsqr=sqrt(LD)
+##################
+
 #Iteration on trait (j) and SNP (i)
 for(j in 1:g)
 {
- 
+
 for (i in 1:m)
 {
   if((i >0)&(floor(i/500)==i/500))  print(paste("SNP: ",i," ",sep=""))
@@ -10685,31 +10685,31 @@ for (i in 1:m)
       if(length(index.k)<2){
        index.k=1:length(snp.corr) #keep going to have them all
        #print("warning: there is a snp correlated with all QTNs")
-      }   
+      }
       K.X= snp.pool[,index.k]
       ####################
       K.X.svd= svd(K.X) ###start 2012.4.16 by qishan
-  
+
        d=K.X.svd$d
        d=d[d>1e-8]
        d=d^2
 
-       U1=K.X.svd$u   
+       U1=K.X.svd$u
        U1=U1[,1:length(d)]  ### end 2012.4.16 by qishan
- 
+
        n<-nrow(U1)
 
-      
+
        I= diag(1,nrow(U1))
-      
+
       ################ get iXX
          X <- cbind(X0, xs[,i]) ####marker by column
-         U <- U1*matrix(sqrt(1/(d + delta)), nrow(U1), length(d), byrow = TRUE) 
-         Xt <- crossprod(U, X) 
+         U <- U1*matrix(sqrt(1/(d + delta)), nrow(U1), length(d), byrow = TRUE)
+         Xt <- crossprod(U, X)
          XX1<- crossprod(Xt, Xt)
          XX2<- crossprod((I-tcrossprod(U1,U1))%*%X,(I-tcrossprod(U1,U1))%*%X)/delta
-         #iXX<-solve(XX1+XX2) 
-         
+         #iXX<-solve(XX1+XX2)
+
            iXX <- try(solve(XX1+XX2),silent=T)
      if(inherits(iXX, "try-error")){
      iXX <- ginv(XX1+XX2)
@@ -10767,7 +10767,7 @@ beta4<-beta4/delta
 
 #######get final beta
 beta=ginv(beta1+beta2)%*%(beta3+beta4)
-   
+
       ##############
       ################    end get beta
 
@@ -10787,23 +10787,23 @@ return(list(beta=betavalue, ps = ps, stats = stats, dfs = dfs,effect=betavalue))
 #######################
 if(method=="FaST"){
  K.X.svd= svd(snp.pool) ###start 2012.4.16 by qishan
-  
+
        d=K.X.svd$d
        d=d[d>1e-8]
        d=d^2
 
-       U1=K.X.svd$u   
+       U1=K.X.svd$u
        U1=U1[,1:length(d)]  ### end 2012.4.16 by qishan
- 
+
        n<-nrow(U1)
        I= diag(1,nrow(U1))
-   U <- U1*matrix(sqrt(1/(d + delta)), nrow(U1), length(d), byrow = TRUE) 
-################## 
- 
+   U <- U1*matrix(sqrt(1/(d + delta)), nrow(U1), length(d), byrow = TRUE)
+##################
+
 #Iteration on trait (j) and SNP (i)
 for(j in 1:g)
 {
- 
+
 for (i in 1:m)
 {
   if((i >0)&(floor(i/500)==i/500))  print(paste("SNP: ",i," ",sep=""))
@@ -10820,24 +10820,24 @@ for (i in 1:m)
   if(min(xs[,i])!=max(xs[,i]))
   {
       #SUPER
-      
+
       ####################
       K.X.svd= svd(snp.pool) ###start 2012.4.16 by qishan
-  
+
        d=K.X.svd$d
        d=d[d>1e-8]
        d=d^2
 
-       U1=K.X.svd$u   
+       U1=K.X.svd$u
        U1=U1[,1:length(d)]  ### end 2012.4.16 by qishan
- 
+
        n<-nrow(U1)
        I= diag(1,nrow(U1))
-      
+
       ################ get iXX
          X <- cbind(X0, xs[,i]) ####marker by column
-         U <- U1*matrix(sqrt(1/(d + delta)), nrow(U1), length(d), byrow = TRUE) 
-         Xt <- crossprod(U, X) 
+         U <- U1*matrix(sqrt(1/(d + delta)), nrow(U1), length(d), byrow = TRUE)
+         Xt <- crossprod(U, X)
          XX1<- crossprod(Xt, Xt)
          XX2<- crossprod((I-tcrossprod(U1,U1))%*%X,(I-tcrossprod(U1,U1))%*%X)/delta
                 iXX <- try(solve(XX1+XX2),silent=T)
@@ -10895,7 +10895,7 @@ beta4<-beta4/delta
 
 #######get final beta
 beta=ginv(beta1+beta2)%*%(beta3+beta4)
-   
+
       ##############
       ################    end get beta
 
@@ -10919,7 +10919,7 @@ return(list(beta=betavalue, ps = ps, stats = stats, dfs = dfs,effect=betavalue))
 function(Y=Y[,c(1,trait)],G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,GK=GK,kinship.algorithm=kinship.algorithm,
                       bin.from=bin.from,bin.to=bin.to,bin.by=bin.by,inclosure.from=inclosure.from,inclosure.to=inclosure.to,inclosure.by=inclosure.by,
 				        group.from=group.from,group.to=group.to,group.by=group.by,kinship.cluster=kinship.cluster,kinship.group=kinship.group,name.of.trait=traitname,
-                        file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM, 
+                        file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                         SNP.MAF= SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,PCA.total=PCA.total,GAPIT.Version=GAPIT.Version,
                         GT=GT, SNP.fraction = SNP.fraction, seed = seed, BINS = BINS,SNP.test=SNP.test,DPP=DPP, SNP.permutation=SNP.permutation,
                         LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,SNP.CV=SNP.CV,SNP.robust=SNP.robust,model=model,
@@ -10929,7 +10929,7 @@ function(Y=Y[,c(1,trait)],G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,GK=GK,ki
 #Object: To perform GPS with SUPER and Compress method
 #Designed by Zhiwu Zhang
 #Writen by Jiabo Wang
-#Last update: Novber 6, 2015 		
+#Last update: Novber 6, 2015
 ######################################################
 print("--------------------- Welcome to GAPIT SUPER GS----------------------------")
 Timmer=GAPIT.Timmer(Infor="GAPIT.SUPER.GS")
@@ -10939,7 +10939,7 @@ Memory=GAPIT.Memory(Infor="GAPIT.SUPER.GS")
 
 shortcut=FALSE
 LL.save=1e10
-#In case of null Y and null GP, return genotype only  
+#In case of null Y and null GP, return genotype only
 thisY=Y[,2]
 thisY=thisY[!is.na(thisY)]
 if(length(thisY) <3){
@@ -10956,7 +10956,7 @@ if(is.null(Y)) stop ("GAPIT says: Phenotypes must exist.")
 if(is.null(KI)&missing(GD) & kinship.algorithm!="SUPER") stop ("GAPIT says: Kinship is required. As genotype is not provided, kinship can not be created.")
 if(is.null(GD) & is.null(GT)) {
 	GT=as.matrix(Y[,1])
-	GD=matrix(1,nrow(Y),1)	
+	GD=matrix(1,nrow(Y),1)
   GI=as.data.frame(matrix(0,1,3) )
   colnames(GI)=c("SNP","Chromosome","Position")
 }
@@ -10972,9 +10972,9 @@ if(is.null(GD) & is.null(GT)) {
 # if (is.null(CV))
 # {my_allCV=CV
 # }else{
-    
+
 #     taxa_GD=GT
-    
+
 #     my_allCV=CV[order(CV[,1]),]
 #     my_allCV=my_allCV[my_allCV[,1]%in%taxa_GD,]
 #     #print(dim(my_allCV))
@@ -11043,10 +11043,10 @@ print("-------------------start SUPER BREAD-----------------------------------")
 if (snpsam==1)stop ("GAPIT says: SUPER_GS must putin GD and GM.")
     GK=GK[,SNPVar>0]
     GK=cbind(as.data.frame(GT[GTindex]),as.data.frame(GK)) #add taxa
-    
+
   }
   #print(head(CV))
-  #myGD=cbind(as.data.frame(GT),as.data.frame(GD)) 
+  #myGD=cbind(as.data.frame(GT),as.data.frame(GD))
 
   file.output.temp=file.output
   file.output=FALSE
@@ -11132,9 +11132,9 @@ colnames(SUPER_optimum_GD)=c("taxa",colnames(SUPER_optimum_GD)[-1])
 SUPER_taxa=as.character(SUPER_optimum_GD[,1])
 SUPER_X=SUPER_optimum_GD[,-1]
   if(kinship.algorithm=="Loiselle")SUPER_myKI_test= GAPIT.kinship.loiselle(snps=t(as.matrix(.5*(SUPER_optimum_GD[,-1]))), method="additive", use="all")
- # if(kinship.algorithm=="VanRaden")SUPER_myKI_test= GAPIT.kinship.VanRaden(snps=as.matrix(SUPER_optimum_GD[,-1])) 
-  if(kinship.algorithm=="Zhang")SUPER_myKI_test= GAPIT.kinship.ZHANG(snps=as.matrix(SUPER_optimum_GD[,-1])) 
-  if(!kinship.algorithm=="Loiselle"|!kinship.algorithm=="Zhang")SUPER_myKI_test= GAPIT.kinship.VanRaden(snps=as.matrix(SUPER_optimum_GD[,-1])) 
+ # if(kinship.algorithm=="VanRaden")SUPER_myKI_test= GAPIT.kinship.VanRaden(snps=as.matrix(SUPER_optimum_GD[,-1]))
+  if(kinship.algorithm=="Zhang")SUPER_myKI_test= GAPIT.kinship.ZHANG(snps=as.matrix(SUPER_optimum_GD[,-1]))
+  if(!kinship.algorithm=="Loiselle"|!kinship.algorithm=="Zhang")SUPER_myKI_test= GAPIT.kinship.VanRaden(snps=as.matrix(SUPER_optimum_GD[,-1]))
 
 SUPER_myKI_test=GAPIT.kinship.VanRaden(snps=as.matrix(SUPER_optimum_GD[,-1]))     #  build kinship
 colnames(SUPER_myKI_test)=SUPER_taxa
@@ -11180,12 +11180,12 @@ if(!is.null(KI))
   if(group.to>nk) {
     #group.to=min(nrow(KI),length(GTindex)) #maximum of group is number of rows in KI
     group.to=nk #maximum of group is number of rows in KI
-    warning("The upper bound of groups is too high. It was set to the size of kinship!") 
+    warning("The upper bound of groups is too high. It was set to the size of kinship!")
   }
-	if(group.from>nk){ 
+	if(group.from>nk){
     group.from=nk
-    warning("The lower bound of groups is too high. It was set to the size of kinship!") 
-  } 
+    warning("The lower bound of groups is too high. It was set to the size of kinship!")
+  }
 }
 
 if(!is.null(CV)){
@@ -11242,7 +11242,7 @@ j=1
   if (is.null(Z)) Z=diag(x=1,nrow(K),ncol(K))
   if (group==1)   K=1
   #print(head(X))
-   emma_test <- emmreml(as.numeric(ys), X=as.matrix(X), K=as.matrix(K), Z=Z,varbetahat=FALSE,varuhat=FALSE, PEVuhat=FALSE, test=FALSE)  
+   emma_test <- emmreml(as.numeric(ys), X=as.matrix(X), K=as.matrix(K), Z=Z,varbetahat=FALSE,varuhat=FALSE, PEVuhat=FALSE, test=FALSE)
 
    print(paste(order_count, "of",numSetting,"--","Vg=",round(emma_test$Vu,4), "VE=",round(emma_test$Ve,4),"-2LL=",round(-2*emma_test$loglik,2), "  Clustering=",ca,"  Group number=", group ,"  Group kinship=",kt,sep = " "))
   emma_test_reml=-2*emma_test$loglik
@@ -11271,7 +11271,7 @@ Compression[order_count,6]=emma_test$Ve
   } # ka end
   } # group end
   print(Compression)
- if(optimum_group==1)  
+ if(optimum_group==1)
 {
 optimum_group=2
 }
@@ -11289,17 +11289,17 @@ if(is.null(dim(ys)) || ncol(ys) == 1)  ys <- matrix(ys, 1, length(ys))
 if(is.null(X0)) X0 <- matrix(1, ncol(ys), 1)
   X <-  X0 #covariate variables such as population structure
   if (is.null(Z)) Z=diag(x=1,nrow(K),ncol(K))
-  
+
   # print(my_allCV)
   if (is.null(my_allCV)){my_allX=matrix(1,length(my_taxa),1)
   }else{
    # my_allX=as.matrix(my_allCV[,-1])
        my_allX=cbind(1,as.matrix(my_allCV[,-1]))
 	}
-   emma_REMLE <- emmreml(y=as.numeric(ys), X=as.matrix(X), K=as.matrix(K), Z=Z,varbetahat=TRUE,varuhat=TRUE, PEVuhat=TRUE, test=TRUE)  
+   emma_REMLE <- emmreml(y=as.numeric(ys), X=as.matrix(X), K=as.matrix(K), Z=Z,varbetahat=TRUE,varuhat=TRUE, PEVuhat=TRUE, test=TRUE)
    #print(head(emma_REMLE$uhat))
    #print(emma_REMLE$uhat[53:62])
-   
+
    emma_BLUE=as.matrix(my_allX)%*%as.matrix(emma_REMLE$betahat)
    emma_BLUE=as.data.frame(cbind(my_taxa,emma_BLUE))
    colnames(emma_BLUE)=c("Taxa","emma_BLUE")
@@ -11336,45 +11336,45 @@ function(GI=NULL,GP=NULL,bin.size=10000000,inclosure.size=NULL,MaxBP=1e10){
     #Authors: Zhiwu Zhang
     #Last update: September 24, 2011
     ##############################################################################################
-    
+
     #print("Specification in process...")
     if(is.null(GP))return (list(index=NULL,BP=NULL))
-    
+
     #set inclosure bin in GP
-    
+
     #Create SNP ID: position+CHR*MaxBP
     ID.GP=as.numeric(as.vector(GP[,3]))+as.numeric(as.vector(GP[,2]))*MaxBP
-    
+
     #Creat bin ID
     bin.GP=floor(ID.GP/bin.size )
-    
+
     #Create a table with bin ID, SNP ID and p value (set 2nd and 3rd NA temporately)
     binP=as.matrix(cbind(bin.GP,NA,NA,ID.GP,as.numeric(as.vector(GP[,4])))  )
     n=nrow(binP)
-    
+
     #Sort the table by p value and then bin ID (e.g. sort p within bin ID)
     binP=binP[order(as.numeric(as.vector(binP[,5]))),]  #sort on P alue
     binP=binP[order(as.numeric(as.vector(binP[,1]))),]  #sort on bin
-    
+
     #set indicator (use 2nd 3rd columns)
     binP[2:n,2]=binP[1:(n-1),1]
     binP[1,2]=0 #set the first
     binP[,3]= binP[,1]-binP[,2]
-    
+
     #Se representives of bins
     ID.GP=binP[binP[,3]>0,]
-    
-    
+
+
     #Choose the most influencial bins as estimated QTNs
-    
+
     #Handler of single row
     if(is.null(dim(ID.GP))) ID.GP=matrix(ID.GP,1,length(ID.GP))
-    
+
     ID.GP=ID.GP[order(as.numeric(as.vector(ID.GP[,5]))),]  #sort on P alue
-    
+
     #Handler of single row (again after reshape)
     if(is.null(dim(ID.GP))) ID.GP=matrix(ID.GP,1,length(ID.GP))
-    
+
     index=!is.na(ID.GP[,4])
     ID.GP=ID.GP[index,4] #must have chr and bp information, keep SNP ID only
     num_bins=NULL
@@ -11396,7 +11396,7 @@ function(GI=NULL,GP=NULL,bin.size=10000000,inclosure.size=NULL,MaxBP=1e10){
             #problem here ID.GP[1:0]==ID.GP[1:1]
         }
     }
-    
+
     #create index in GI
     theIndex=NULL
     if(!is.null(GI)){
@@ -11418,7 +11418,7 @@ function(final.table = final.table, name.of.trait = name.of.trait,SNP.FDR=1){
 #Object: Make and export a table of summary information from GWAS
 #Output: A table summarizing GWAS results
 #Authors: Alex Lipka and Zhiwu Zhang
-# Last update: May 10, 2011 
+# Last update: May 10, 2011
 ##############################################################################################
 
 #Filter SNPs by FDR
@@ -11430,7 +11430,7 @@ write.table(final.table, paste("GAPIT.", name.of.trait, ".GWAS.Results.csv", sep
 
 
 #print("GAPIT.Table accomplished successfully!")
-  
+
 
 }   #GAPIT.Table ends here
 #=============================================================================================
@@ -11440,7 +11440,7 @@ function(Timmer=NULL,Infor){
 #Object: To report current time
 #Output: Timmer
 #Authors: Zhiwu Zhang
-# Last update: may 8, 2011 
+# Last update: may 8, 2011
 ##############################################################################################
 Time<- Sys.time()
 if(is.null(Timmer)) {
@@ -11453,7 +11453,7 @@ Timmer=rbind(Timmer,Timmer.current)
 Timmer[nrow(Timmer),3]=as.numeric(as.matrix(Timmer[nrow(Timmer),2]))-as.numeric(as.matrix(Timmer[nrow(Timmer)-1,2]))
 }
 
-#print(paste('Time used: ', Timmer[nrow(Timmer),3], ' seconds for ',Infor,sep="" )) 
+#print(paste('Time used: ', Timmer[nrow(Timmer),3], ' seconds for ',Infor,sep="" ))
 return (Timmer)
 }#end of GAPIT.Timmer function
 #=============================================================================================
@@ -11463,7 +11463,7 @@ function(Z,GAU){
 #Object: To assign the fraction of a individual belonging to a group
 #Output: Z
 #Authors: Zhiwu Zhang
-# Last update: April 14, 2011 
+# Last update: April 14, 2011
 ##############################################################################################
 #Extraction of GAU coresponding to Z, sort GAU rowwise to mach columns of Z, and make design matrix
 #print("GAPIT.ZmatrixCompress")
@@ -11490,7 +11490,7 @@ Z <- Z[,order.Z]
 
 #Z matrix from individual to group
 #Z1.numeric <- as.numeric(as.matrix(Z))
-Z <- matrix(as.numeric(as.matrix(Z)), nrow = nrow(Z), ncol = ncol(Z)) 
+Z <- matrix(as.numeric(as.matrix(Z)), nrow = nrow(Z), ncol = ncol(Z))
 Z=Z%*%DS
 
 #Z3=data.frame(cbind(as.character(Z[-1,1]),Z2))
@@ -11510,8 +11510,8 @@ return(list(Z=Z))
 function(Z,Y){
 #Object: To expande the proportion Z to final Z
 #Output: Z
-#Authors: Zhiwu Zhang 
-# Last update: April 22, 2011 
+#Authors: Zhiwu Zhang
+# Last update: April 22, 2011
 ##############################################################################################
 #split individuals in Y to the ones that are given Z and the one not
 taxa.Z=as.matrix(Z[-1,1])
@@ -11552,7 +11552,7 @@ return(Z)
 # rel:replications
 # tc:comparation folds number and value
 # Authors: You Tang,Jiabo Wang and You Zhou
-# Last update: December 31, 2014 
+# Last update: December 31, 2014
 ##############################################################################################
 if(is.null(myGD)||is.null(y)){stop("Validation Invalid. Please select read valid flies !")}
 if(is.null(rel))
@@ -11563,7 +11563,7 @@ if(is.null(rel))
 if(rel<2){stop("Validation Invalid. Please select replications >1 !")}
 #rel<-2 ##replications
 #t<-2
-y<-y[!is.na(y[,2]),] 
+y<-y[!is.na(y[,2]),]
 y<-y[,c(1,2)]
 y<- na.omit(y)
 #############
@@ -11610,28 +11610,28 @@ for(k in 1:rel)
 
 	#i=sample(1:num, size = 1)
 for(i in 1:num){
-	
+
 	 #use only genotypes that were genotyped and phenotyped
     ref <- y$Taxa[!ynew$sets==i]
-      
-     lines.cali<- ref     
+
+     lines.cali<- ref
    # ycali<- y[match(ref,y$Taxa),]
     #use only genotypes that were genotyped and phenotyped
 
     test <- y$Taxa[ynew$sets==i]
-    lines.vali<-test 
-    #yvali<- y[match(test,y$Taxa),]  	
- 
+    lines.vali<-test
+    #yvali<- y[match(test,y$Taxa),]
+
  #################end Rand group method############
 
 	 #use only genotypes that were genotyped and phenotyped
-	 commonGeno_v <- lines.vali[lines.vali %in% myK[,1]]	               
-	 yvali<- y[match(commonGeno_v,y[,1]),]    
+	 commonGeno_v <- lines.vali[lines.vali %in% myK[,1]]
+	 yvali<- y[match(commonGeno_v,y[,1]),]
 
 	 #use only genotypes that were genotyped and phenotyped
 	 commonGeno_c <- lines.cali[lines.cali %in% myK[,1]]
-	 ycali<- y[match(commonGeno_c,y[,1]),]               
-	
+	 ycali<- y[match(commonGeno_c,y[,1]),]
+
 	Y.raw=ycali[,c(1,2)]#choos a trait
 
 	myY=Y.raw
@@ -11640,7 +11640,7 @@ for(i in 1:num){
 
 #Run GAPIT
 #############################################
-	
+
 	myGAPIT <- GAPIT(
 	Y=myY,
 	KI=myKI,
@@ -11688,7 +11688,7 @@ allstorage.inf[,w]=as.matrix(rowMeans(storage.inf))
 allstorage.ref[,w]=as.matrix(rowMeans(storage.ref))
 #as.matrix(rowMeans(storage.ref))
 
-##output rel times and accuracy for every folders 
+##output rel times and accuracy for every folders
 
 combine_output=cbind(storage.inf,allstorage.inf[,w])
 combine_output1=cbind(storage.ref,allstorage.ref[,w])
@@ -11696,9 +11696,9 @@ colnames(combine_output)=c(paste("folders",c(1:num),sep=""),"mean")
 write.csv(combine_output, paste("Accuracy_folders",num,"by CMLM,rel_",rel,".csv",sep=""))
 write.csv(combine_output1, paste("Accuracy_folders  ref",num,"by CMLM,rel_",rel,".csv",sep=""))
 
-}	
+}
 sr<-nrow(tc1)
-##output means accuracy by rel for every folders 
+##output means accuracy by rel for every folders
 colnames(allstorage.inf)=c(paste(tc1[c(1:sr),]," folders",sep=""))
 write.csv(allstorage.inf, paste("Accuracy_folders",nrow(tc1),"by CMLM,rel_",rel,".compare to means",".csv",sep=""))
 write.csv(allstorage.ref, paste("Accuracy_folders  ref",nrow(tc1),"by CMLM,rel_",rel,".compare to means",".csv",sep=""))
@@ -11711,7 +11711,7 @@ ppp<-matrix(0,sr,2)
 #if(rrel!=1){
 #	aarm<-colMeans(allstorage.inf[1:rrel,])
 #	}else{
-#	aarm<-allstorage.inf[1,]	
+#	aarm<-allstorage.inf[1,]
 #	}
 #aam<-colMeans(allstorage.inf)
 aam<-allstorage.inf
@@ -11744,7 +11744,7 @@ return(list(allstorage.inf))
 #=============================================================================================
 emma.kinship <- function(snps, method="additive", use="all") {
   n0 <- sum(snps==0,na.rm=TRUE)
-  nh <- sum(snps==0.5,na.rm=TRUE)                                                                                         
+  nh <- sum(snps==0.5,na.rm=TRUE)
   n1 <- sum(snps==1,na.rm=TRUE)
   nNA <- sum(is.na(snps))
 
@@ -11841,25 +11841,25 @@ emma.eigen.R.w.Z <- function(Z, K, X, complete = TRUE) {
   n <- nrow(Z)
   t <- ncol(Z)
   q <- ncol(X)
- 
 
-  
+
+
   SZ <- Z - X%*%solve(crossprod(X,X))%*%crossprod(X,Z)
   eig <- eigen(K%*%crossprod(Z,SZ),symmetric=FALSE,EISPACK=TRUE)
   if ( is.complex(eig$values) ) {
     eig$values <- Re(eig$values)
-    eig$vectors <- Re(eig$vectors)    
+    eig$vectors <- Re(eig$vectors)
   }
   qr.X <- qr.Q(qr(X))
   return(list(values=eig$values[1:(t-q)],
               vectors=qr.Q(qr(cbind(SZ%*%eig$vectors[,1:(t-q)],qr.X)),
-                complete=TRUE)[,c(1:(t-q),(t+1):n)]))   
+                complete=TRUE)[,c(1:(t-q),(t+1):n)]))
 }
 
 emma.delta.ML.LL.wo.Z <- function(logdelta, lambda, etas, xi) {
   n <- length(xi)
   delta <- exp(logdelta)
-  return( 0.5*(n*(log(n/(2*pi))-1-log(sum((etas*etas)/(lambda+delta))))-sum(log(xi+delta))) )  
+  return( 0.5*(n*(log(n/(2*pi))-1-log(sum((etas*etas)/(lambda+delta))))-sum(log(xi+delta))) )
 }
 
 emma.delta.ML.LL.w.Z <- function(logdelta, lambda, etas.1, xi.1, n, etas.2.sq ) {
@@ -11896,7 +11896,7 @@ emma.delta.REML.LL.w.Z <- function(logdelta, lambda, etas.1, n, t, etas.2.sq ) {
   tq <- length(etas.1)
   nq <- n - t + tq
   delta <-  exp(logdelta)
-  return( 0.5*(nq*(log(nq/(2*pi))-1-log(sum(etas.1*etas.1/(lambda+delta))+etas.2.sq/delta))-(sum(log(lambda+delta))+(n-t)*logdelta)) ) 
+  return( 0.5*(nq*(log(nq/(2*pi))-1-log(sum(etas.1*etas.1/(lambda+delta))+etas.2.sq/delta))-(sum(log(lambda+delta))+(n-t)*logdelta)) )
 }
 
 emma.delta.REML.dLL.wo.Z <- function(logdelta, lambda, etas) {
@@ -11923,7 +11923,7 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
   n <- length(y)
   t <- nrow(K)
   q <- ncol(X)
-  
+
 #  stopifnot(nrow(K) == t)
   stopifnot(ncol(K) == t)
   stopifnot(nrow(X) == n)
@@ -11941,8 +11941,8 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
       eig.R <- emma.eigen.R.wo.Z(K,X)
     }
     etas <- crossprod(eig.R$vectors,y)
-    
-  
+
+
     logdelta <- (0:ngrids)/ngrids*(ulim-llim)+llim
     m <- length(logdelta)
     delta <- exp(logdelta)
@@ -11951,7 +11951,7 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
     Etasq <- matrix(etas*etas,n-q,m)
     LL <- 0.5*(n*(log(n/(2*pi))-1-log(colSums(Etasq/Lambdas)))-colSums(log(Xis)))
     dLL <- 0.5*delta*(n*colSums(Etasq/(Lambdas*Lambdas))/colSums(Etasq/Lambdas)-colSums(1/Xis))
-    
+
     optlogdelta <- vector(length=0)
     optLL <- vector(length=0)
     if ( dLL[1] < esp ) {
@@ -11965,7 +11965,7 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
     for( i in 1:(m-1) )
       {
-        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) ) 
+        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) )
         {
           r <- uniroot(emma.delta.ML.dLL.wo.Z, lower=logdelta[i], upper=logdelta[i+1], lambda=eig.R$values, etas=etas, xi=eig.L$values)
           optlogdelta <- append(optlogdelta, r$root)
@@ -11995,7 +11995,7 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
     Etasq <- matrix(etas.1*etas.1,t-q,m)
     #LL <- 0.5*(n*(log(n/(2*pi))-1-log(colSums(Etasq/Lambdas)+etas.2.sq/delta))-colSums(log(Xis))+(n-t)*log(deltas))
     dLL <- 0.5*delta*(n*(colSums(Etasq/(Lambdas*Lambdas))+etas.2.sq/(delta*delta))/(colSums(Etasq/Lambdas)+etas.2.sq/delta)-(colSums(1/Xis)+(n-t)/delta))
-    
+
     optlogdelta <- vector(length=0)
     optLL <- vector(length=0)
     if ( dLL[1] < esp ) {
@@ -12009,7 +12009,7 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
     for( i in 1:(m-1) )
       {
-        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) ) 
+        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) )
         {
           r <- uniroot(emma.delta.ML.dLL.w.Z, lower=logdelta[i], upper=logdelta[i+1], lambda=eig.R$values, etas.1=etas.1, xi.1=eig.L$values, n=n, etas.2.sq = etas.2.sq )
           optlogdelta <- append(optlogdelta, r$root)
@@ -12022,7 +12022,7 @@ emma.MLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
   maxdelta <- exp(optlogdelta[which.max(optLL)])
   maxLL <- max(optLL)
   if ( is.null(Z) ) {
-    maxva <- sum(etas*etas/(eig.R$values+maxdelta))/n    
+    maxva <- sum(etas*etas/(eig.R$values+maxdelta))/n
   }
   else {
     maxva <- (sum(etas.1*etas.1/(eig.R$values+maxdelta))+etas.2.sq/maxdelta)/n
@@ -12052,7 +12052,7 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
       eig.R <- emma.eigen.R.wo.Z(K,X)
     }
     etas <- crossprod(eig.R$vectors,y)
-  
+
     logdelta <- (0:ngrids)/ngrids*(ulim-llim)+llim
     m <- length(logdelta)
     delta <- exp(logdelta)
@@ -12060,7 +12060,7 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
     Etasq <- matrix(etas*etas,n-q,m)
     LL <- 0.5*((n-q)*(log((n-q)/(2*pi))-1-log(colSums(Etasq/Lambdas)))-colSums(log(Lambdas)))
     dLL <- 0.5*delta*((n-q)*colSums(Etasq/(Lambdas*Lambdas))/colSums(Etasq/Lambdas)-colSums(1/Lambdas))
-    
+
     optlogdelta <- vector(length=0)
     optLL <- vector(length=0)
     if ( dLL[1] < esp ) {
@@ -12074,7 +12074,7 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
     for( i in 1:(m-1) )
       {
-        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) ) 
+        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) )
         {
           r <- uniroot(emma.delta.REML.dLL.wo.Z, lower=logdelta[i], upper=logdelta[i+1], lambda=eig.R$values, etas=etas)
           optlogdelta <- append(optlogdelta, r$root)
@@ -12091,14 +12091,14 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
     etas.1 <- etas[1:(t-q)]
     etas.2 <- etas[(t-q+1):(n-q)]
     etas.2.sq <- sum(etas.2*etas.2)
-  
+
     logdelta <- (0:ngrids)/ngrids*(ulim-llim)+llim
     m <- length(logdelta)
     delta <- exp(logdelta)
     Lambdas <- matrix(eig.R$values,t-q,m) + matrix(delta,t-q,m,byrow=TRUE)
     Etasq <- matrix(etas.1*etas.1,t-q,m)
     dLL <- 0.5*delta*((n-q)*(colSums(Etasq/(Lambdas*Lambdas))+etas.2.sq/(delta*delta))/(colSums(Etasq/Lambdas)+etas.2.sq/delta)-(colSums(1/Lambdas)+(n-t)/delta))
-    
+
     optlogdelta <- vector(length=0)
     optLL <- vector(length=0)
     if ( dLL[1] < esp ) {
@@ -12112,7 +12112,7 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
     for( i in 1:(m-1) )
       {
-        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) ) 
+        if ( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) )
         {
           r <- uniroot(emma.delta.REML.dLL.w.Z, lower=logdelta[i], upper=logdelta[i+1], lambda=eig.R$values, etas.1=etas.1, n=n, t1=t, etas.2.sq = etas.2.sq )
           optlogdelta <- append(optlogdelta, r$root)
@@ -12120,12 +12120,12 @@ emma.REMLE <- function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
         }
       }
 #    optdelta <- exp(optlogdelta)
-  }  
+  }
 
   maxdelta <- exp(optlogdelta[which.max(optLL)])
   maxLL <- max(optLL)
   if ( is.null(Z) ) {
-    maxva <- sum(etas*etas/(eig.R$values+maxdelta))/(n-q)    
+    maxva <- sum(etas*etas/(eig.R$values+maxdelta))/(n-q)
   }
   else {
     maxva <- (sum(etas.1*etas.1/(eig.R$values+maxdelta))+etas.2.sq/maxdelta)/(n-q)
@@ -12144,8 +12144,8 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
   }
   if ( is.null(X0) ) {
     X0 <- matrix(1,ncol(ys),1)
-  }  
-  
+  }
+
   g <- nrow(ys)
   n <- ncol(ys)
   m <- nrow(xs)
@@ -12162,7 +12162,7 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
   stats <- matrix(nrow=m,ncol=g)
   ps <- matrix(nrow=m,ncol=g)
   ML0 <- vector(length=g)
-  
+
   stopifnot(nrow(K) == t)
   stopifnot(ncol(K) == t)
   stopifnot(nrow(X0) == n)
@@ -12170,13 +12170,13 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
   if ( sum(is.na(ys)) == 0 ) {
     eig.L <- emma.eigen.L(Z,K)
     eig.R0 <- emma.eigen.R(Z,K,X0)
-      
+
     for(i in 1:g) {
       ML0[i] <- emma.MLE(ys[i,],X0,K,Z,ngrids,llim,ulim,esp,eig.L,eig.R0)$ML
     }
 
     x.prev <- vector(length=0)
-    
+
     for(i in 1:m) {
       vids <- !is.na(xs[i,])
       nv <- sum(vids)
@@ -12211,20 +12211,20 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           vrows <- as.logical(rowSums(Z[,vids]))
           nr <- sum(vrows)
           X <- cbind(X0[vrows,,drop=FALSE],Z[vrows,vids]%*%t(xs[i,vids,drop=FALSE]))
-          eig.R1 = emma.eigen.R.w.Z(Z[vrows,vids],K[vids,vids],X)          
+          eig.R1 = emma.eigen.R.w.Z(Z[vrows,vids],K[vids,vids],X)
         }
 
         for(j in 1:g) {
           if ( nv == t ) {
             MLE <- emma.MLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.L,eig.R1)
-#            MLE <- emma.MLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.L,eig.R1)            
-            if (!ponly) { 
+#            MLE <- emma.MLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.L,eig.R1)
+            if (!ponly) {
               ML1s[i,j] <- MLE$ML
               vgs[i,j] <- MLE$vg
               ves[i,j] <- MLE$ve
             }
             stats[i,j] <- 2*(MLE$ML-ML0[j])
-            
+
           }
           else {
             if ( is.null(Z) ) {
@@ -12237,12 +12237,12 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
                 MLE1 <- emma.MLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.L)
               }
               else {
-                eig.L0 <- emma.eigen.L.w.Z(Z[vrows,vids],K[vids,vids])              
+                eig.L0 <- emma.eigen.L.w.Z(Z[vrows,vids],K[vids,vids])
                 MLE0 <- emma.MLE(ys[j,vrows],X0[vrows,,drop=FALSE],K[vids,vids],Z[vrows,vids],ngrids,llim,ulim,esp,eig.L0)
                 MLE1 <- emma.MLE(ys[j,vrows],X,K[vids,vids],Z[vrows,vids],ngrids,llim,ulim,esp,eig.L0)
               }
             }
-            if (!ponly) { 
+            if (!ponly) {
               ML1s[i,j] <- MLE1$ML
               ML0s[i,j] <- MLE0$ML
               vgs[i,j] <- MLE1$vg
@@ -12261,21 +12261,21 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
   else {
     eig.L <- emma.eigen.L(Z,K)
     eig.R0 <- emma.eigen.R(Z,K,X0)
-      
+
     for(i in 1:g) {
-      vrows <- !is.na(ys[i,])      
+      vrows <- !is.na(ys[i,])
       if ( is.null(Z) ) {
         ML0[i] <- emma.MLE(ys[i,vrows],X0[vrows,,drop=FALSE],K[vrows,vrows],NULL,ngrids,llim,ulim,esp)$ML
       }
       else {
         vids <- colSums(Z[vrows,]>0)
-            
-        ML0[i] <- emma.MLE(ys[i,vrows],X0[vrows,,drop=FALSE],K[vids,vids],Z[vrows,vids],ngrids,llim,ulim,esp)$ML        
+
+        ML0[i] <- emma.MLE(ys[i,vrows],X0[vrows,,drop=FALSE],K[vids,vids],Z[vrows,vids],ngrids,llim,ulim,esp)$ML
       }
     }
 
     x.prev <- vector(length=0)
-    
+
     for(i in 1:m) {
       vids <- !is.na(xs[i,])
       nv <- sum(vids)
@@ -12290,7 +12290,7 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           ML0s[,i] <- rep(NA,g)
         }
         ps[i,] = rep(1,g)
-      }      
+      }
       else if ( identical(x.prev, xv) ) {
         if ( !ponly ) {
           stats[i,] <- stats[i-1,]
@@ -12305,7 +12305,7 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           X <- cbind(X0,xs[i,])
           if ( nv == t ) {
             eig.R1 = emma.eigen.R.wo.Z(K,X)
-          }          
+          }
         }
         else {
           vrows <- as.logical(rowSums(Z[,vids]))
@@ -12322,7 +12322,7 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
             nr <- sum(vrows)
             if ( is.null(Z) ) {
               if ( nr == n ) {
-                MLE <- emma.MLE(ys[j,],X,K,NULL,ngrids,llim,ulim,esp,eig.L,eig.R1)                
+                MLE <- emma.MLE(ys[j,],X,K,NULL,ngrids,llim,ulim,esp,eig.L,eig.R1)
               }
               else {
                 MLE <- emma.MLE(ys[j,vrows],X[vrows,],K[vrows,vrows],NULL,ngrids,llim,ulim,esp)
@@ -12330,15 +12330,15 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
             }
             else {
               if ( nr == n ) {
-                MLE <- emma.MLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.L,eig.R1)                
+                MLE <- emma.MLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.L,eig.R1)
               }
               else {
                 vtids <- as.logical(colSums(Z[vrows,,drop=FALSE]))
                 MLE <- emma.MLE(ys[j,vrows],X[vrows,],K[vtids,vtids],Z[vrows,vtids],ngrids,llim,ulim,esp)
               }
             }
-            
-            if (!ponly) { 
+
+            if (!ponly) {
               ML1s[i,j] <- MLE$ML
               vgs[i,j] <- MLE$vg
               ves[i,j] <- MLE$ve
@@ -12359,7 +12359,7 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
               MLE0 <- emma.MLE(ys[j,vtrows],X0[vtrows,,drop=FALSE],K[vtids,vtids],Z[vtrows,vtids],ngrids,llim,ulim,esp,eig.L0)
               MLE1 <- emma.MLE(ys[j,vtrows],X[vtrows,],K[vtids,vtids],Z[vtrows,vtids],ngrids,llim,ulim,esp,eig.L0)
             }
-            if (!ponly) { 
+            if (!ponly) {
               ML1s[i,j] <- MLE1$ML
               vgs[i,j] <- MLE1$vg
               ves[i,j] <- MLE1$ve
@@ -12373,14 +12373,14 @@ emma.ML.LRT <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
         }
         ps[i,] <- pchisq(stats[i,],1,lower.tail=FALSE)
       }
-    }    
+    }
   }
   if ( ponly ) {
     return (ps)
   }
   else {
     return (list(ps=ps,ML1s=ML1s,ML0s=ML0s,stats=stats,vgs=vgs,ves=ves))
-  }  
+  }
 }
 
 emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim=10, esp=1e-10, ponly = FALSE) {
@@ -12393,14 +12393,14 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
   if ( is.null(X0) ) {
     X0 <- matrix(1,ncol(ys),1)
   }
-  
+
   g <- nrow(ys)
   n <- ncol(ys)
   m <- nrow(xs)
   t <- ncol(xs)
   q0 <- ncol(X0)
   q1 <- q0 + 1
-  
+
   stopifnot(nrow(K) == t)
   stopifnot(ncol(K) == t)
   stopifnot(nrow(X0) == n)
@@ -12433,7 +12433,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           stats[i,] <- rep(NA,g)
         }
         ps[i,] = rep(1,g)
-        
+
       }
       else if ( identical(x.prev, xv) ) {
         if ( !ponly ) {
@@ -12451,11 +12451,11 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           eig.R1 = emma.eigen.R.wo.Z(K[vids,vids],X)
         }
         else {
-          vrows <- as.logical(rowSums(Z[,vids]))              
+          vrows <- as.logical(rowSums(Z[,vids]))
           X <- cbind(X0[vrows,,drop=FALSE],Z[vrows,vids,drop=FALSE]%*%t(xs[i,vids,drop=FALSE]))
           eig.R1 = emma.eigen.R.w.Z(Z[vrows,vids],K[vids,vids],X)
         }
-        
+
         for(j in 1:g) {
           if ( nv == t ) {
             REMLE <- emma.REMLE(ys[j,],X,K,Z,ngrids,llim,ulim,esp,eig.R1)
@@ -12471,7 +12471,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
             Xt <- crossprod(U,X)
             iXX <- solve(crossprod(Xt,Xt))
             beta <- iXX%*%crossprod(Xt,yt)
-            
+
             if ( !ponly ) {
               vgs[i,j] <- REMLE$vg
               ves[i,j] <- REMLE$ve
@@ -12489,7 +12489,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
               dfs[i,j] <- nr - q1
             }
             else {
-              eig.L0 <- emma.eigen.L.w.Z(Z[vrows,vids,drop=FALSE],K[vids,vids])              
+              eig.L0 <- emma.eigen.L.w.Z(Z[vrows,vids,drop=FALSE],K[vids,vids])
               yv <- ys[j,vrows]
               nr <- sum(vrows)
               tv <- sum(vids)
@@ -12516,9 +12516,9 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
   else {
     eig.L <- emma.eigen.L(Z,K)
     eig.R0 <- emma.eigen.R(Z,K,X0)
-      
+
     x.prev <- vector(length=0)
-    
+
     for(i in 1:m) {
       vids <- !is.na(xs[i,])
       nv <- sum(vids)
@@ -12532,7 +12532,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           dfs[i,] <- rep(NA,g)
         }
         ps[i,] = rep(1,g)
-      }      
+      }
       else if ( identical(x.prev, xv) ) {
         if ( !ponly ) {
           stats[i,] <- stats[i-1,]
@@ -12555,7 +12555,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
           X <- cbind(X0,Z[,vids,drop=FALSE]%*%t(xs[i,vids,drop=FALSE]))
           if ( nv == t ) {
             eig.R1 = emma.eigen.R.w.Z(Z,K,X)
-          }          
+          }
         }
 
         for(j in 1:g) {
@@ -12566,7 +12566,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
             if ( is.null(Z) ) {
               if ( nr == n ) {
                 REMLE <- emma.REMLE(yv,X,K,NULL,ngrids,llim,ulim,esp,eig.R1)
-                U <- eig.L$vectors * matrix(sqrt(1/(eig.L$values+REMLE$delta)),n,n,byrow=TRUE)                
+                U <- eig.L$vectors * matrix(sqrt(1/(eig.L$values+REMLE$delta)),n,n,byrow=TRUE)
               }
               else {
                 eig.L0 <- emma.eigen.L.wo.Z(K[vrows,vrows,drop=FALSE])
@@ -12578,7 +12578,7 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
             else {
               if ( nr == n ) {
                 REMLE <- emma.REMLE(yv,X,K,Z,ngrids,llim,ulim,esp,eig.R1)
-                U <- eig.L$vectors * matrix(c(sqrt(1/(eig.L$values+REMLE$delta)),rep(sqrt(1/REMLE$delta),n-t)),n,n,byrow=TRUE)                
+                U <- eig.L$vectors * matrix(c(sqrt(1/(eig.L$values+REMLE$delta)),rep(sqrt(1/REMLE$delta),n-t)),n,n,byrow=TRUE)
               }
               else {
                 vtids <- as.logical(colSums(Z[vrows,,drop=FALSE]))
@@ -12631,12 +12631,12 @@ emma.REML.t <- function(ys, xs, K, Z=NULL, X0 = NULL, ngrids=100, llim=-10, ulim
               REMLs[i,j] <- REMLE$REML
             }
             stats[i,j] <- beta[q1]/sqrt(iXX[q1,q1]*REMLE$vg)
-            
+
           }
         }
-        ps[i,] <- 2*pt(abs(stats[i,]),dfs[i,],lower.tail=FALSE)        
+        ps[i,] <- 2*pt(abs(stats[i,]),dfs[i,],lower.tail=FALSE)
       }
-    }    
+    }
   }
   if ( ponly ) {
     return (ps)
@@ -12651,7 +12651,7 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
               esp=1e-10, eig.L = NULL, eig.R = NULL) {
 # Authors: Hyun Min Kang
 # Modified (only one line) by Zhiwu Zhang to handle non-defined LL ("NaN") by replacing it with the worst LL.
-# Last update: June 8, 2011 
+# Last update: June 8, 2011
 ##############################################################################################
   n <- length(y)
   t <- nrow(K)
@@ -12671,7 +12671,7 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
       eig.R <- emma.eigen.R.wo.Z(K,X)
     }
     etas <- crossprod(eig.R$vectors,y)
-  
+
     logdelta <- (0:ngrids)/ngrids*(ulim-llim)+llim
     m <- length(logdelta)
     delta <- exp(logdelta)
@@ -12679,7 +12679,7 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
     Etasq <- matrix(etas*etas,n-q,m)
     LL <- 0.5*((n-q)*(log((n-q)/(2*pi))-1-log(colSums(Etasq/Lambdas)))-colSums(log(Lambdas)))
     dLL <- 0.5*delta*((n-q)*colSums(Etasq/(Lambdas*Lambdas))/colSums(Etasq/Lambdas)-colSums(1/Lambdas))
-    
+
     optlogdelta <- vector(length=0)
     optLL <- vector(length=0)
     if( dLL[1] < esp ) {
@@ -12693,7 +12693,7 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
     for(i in 1:(m-1) )
       {
-        if( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) ) 
+        if( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) )
         {
           r <- uniroot(emma.delta.REML.dLL.wo.Z, lower=logdelta[i], upper=logdelta[i+1], lambda=eig.R$values, etas=etas)
           optlogdelta <- append(optlogdelta, r$root)
@@ -12710,14 +12710,14 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
     etas.1 <- etas[1:(t-q)]
     etas.2 <- etas[(t-q+1):(n-q)]
     etas.2.sq <- sum(etas.2*etas.2)
-  
+
     logdelta <- (0:ngrids)/ngrids*(ulim-llim)+llim
     m <- length(logdelta)
     delta <- exp(logdelta)
     Lambdas <- matrix(eig.R$values,t-q,m) + matrix(delta,t-q,m,byrow=TRUE)
     Etasq <- matrix(etas.1*etas.1,t-q,m)
     dLL <- 0.5*delta*((n-q)*(colSums(Etasq/(Lambdas*Lambdas))+etas.2.sq/(delta*delta))/(colSums(Etasq/Lambdas)+etas.2.sq/delta)-(colSums(1/Lambdas)+(n-t)/delta))
-    
+
     optlogdelta <- vector(length=0)
     optLL <- vector(length=0)
     if( dLL[1] < esp ) {
@@ -12731,7 +12731,7 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 
     for(i in 1:(m-1) )
       {
-        if( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) ) 
+        if( ( dLL[i]*dLL[i+1] < 0 ) && ( dLL[i] > 0 ) && ( dLL[i+1] < 0 ) )
         {
           r <- uniroot(emma.delta.REML.dLL.w.Z, lower=logdelta[i], upper=logdelta[i+1], lambda=eig.R$values, etas.1=etas.1, n=n, t1=t, etas.2.sq = etas.2.sq )
           optlogdelta <- append(optlogdelta, r$root)
@@ -12740,15 +12740,15 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
       }
 #    optdelta <- exp(optlogdelta)
   }
-  
+
   maxdelta <- exp(optlogdelta[which.max(optLL)])
-  
+
   #handler of grids with NaN log
-  optLL=GAPIT.replaceNaN(optLL)   
-  
+  optLL=GAPIT.replaceNaN(optLL)
+
   maxLL <- max(optLL)
   if(is.null(Z) ) {
-    maxva <- sum(etas*etas/(eig.R$values+maxdelta))/(n-q)    
+    maxva <- sum(etas*etas/(eig.R$values+maxdelta))/(n-q)
   }
   else {
     maxva <- (sum(etas.1*etas.1/(eig.R$values+maxdelta))+etas.2.sq/maxdelta)/(n-q)
@@ -12760,7 +12760,8 @@ function(y, X, K, Z=NULL, ngrids=100, llim=-10, ulim=10,
 #=============================================================================================
 
 `GAPIT.get.LL` <-
-cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
+compiler::cmpfun(
+  function(pheno,geno=NULL,snp.pool,X0=NULL){
     # evaluation of the maximum likelihood
     #Input: ys, xs, vg, delta, Z, X0, snp.pool
     #Output: LL
@@ -12775,7 +12776,7 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
     #print(length(snp.pool))
     #print(dim(X0))
     #print(length(X0))
-    
+
     y=pheno
     p=0
     deltaExpStart = -5
@@ -12792,7 +12793,7 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
     #snp.test=as.numeric(geno[,1])
     #X <- cbind(X0, snp.test)
     X=X0
-    
+
     #########SVD of X
     K.X.svd= svd(snp.pool,LINPACK=TRUE)######rivised by Jiabo Wang 2016.1.8
     # snp.pool=NA problem occurred
@@ -12802,15 +12803,15 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
     d=d^2
     U1=K.X.svd$u
     U1=U1[,1:length(d)] ##rivised 2012.4.15 by qishan wang
-    
+
     #handler of single snp
     if(is.null(dim(U1))) U1=matrix(U1,ncol=1)
 
-    
+
     ###################
     n=nrow(U1)
     #I= diag(1,nrow(U1)) #xiaolei removed, this costs lots of memory
-    
+
     U1TX=crossprod(U1,X)
     U1TY=crossprod(U1,y)
     yU1TY<- y-U1%*%U1TY
@@ -12821,13 +12822,13 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
     #IUU=(I-tcrossprod(U1,U1))
     IUX=crossprod(IU,X )
     IUY=crossprod(IU,y)
-    
+
     #Iteration on the range of delta (-5 to 5 in glog scale)
     for (m in seq(deltaExpStart,deltaExpEnd,by=0.1))
     {
         p=p+1
         delta<- exp(m)
-        
+
         #----------------------------calculate beta-------------------------------------
         #######get beta compnents 1
         beta1=0
@@ -12836,7 +12837,7 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
             beta=crossprod(one,(one/(d[i]+delta)))  #This is not real beta, confusing
             beta1= beta1+beta
         }
-        
+
         #######get beta components 2
         beta2=0
         for(i in 1:nrow(U1)){
@@ -12846,7 +12847,7 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
             beta2= beta2+beta
         }
         beta2<-beta2/delta
-        
+
         #######get b3
         beta3=0
         for(i in 1:length(d)){
@@ -12855,7 +12856,7 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
             beta=crossprod(one1,(one2/(d[i]+delta)))  #This is not real beta, confusing
             beta3= beta3+beta
         }
-        
+
         ###########get beta4
         beta4=0
         for(i in 1:nrow(U1)){
@@ -12865,18 +12866,18 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
             beta4= beta4+beta
         }
         beta4<-beta4/delta
-        
+
         #######get final beta
         #zw1=solve(beta1+beta2)
         zw1 <- try(solve(beta1+beta2),silent=TRUE)
         if(inherits(zw1, "try-error")){
             zw1 <- ginv(beta1+beta2)
         }
-        
+
         #zw1=ginv(beta1+beta2)
         zw2=(beta3+beta4)
         beta=crossprod(zw1,zw2)  #This is the real beta
-        
+
         #----------------------------calculate LL---------------------------------------
         ####part 1
         part11<-n*log(2*3.14)
@@ -12887,11 +12888,11 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
         }
         part13<- (nrow(U1)-length(d))*log(delta)
         part1<- -1/2*(part11+part12+part13)
-        
+
         ######  part2
         part21<-nrow(U1)
         ######part221
-        
+
         part221=0
         for(i in 1:length(d)){
             one1=matrix(U1TX[i,], nrow=1)
@@ -12899,10 +12900,10 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
             part221_pre=(one2-one1%*%beta)^2/(d[i]+delta) ###### beta contain covariate and snp %*%
             part221= part221+part221_pre
         }
-        
+
         ######part222
         part222=0
-        
+
         for(i in 1:n){
             one1=matrix(XU1TX[i,], nrow=1)
             one2=matrix(yU1TY[i,], nrow=1)
@@ -12911,12 +12912,12 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
         }
         part22<-n*log((1/n)*(part221+part222))
         part2<- -1/2*(part21+part22)
-        
+
         ################# likihood
         LL<-part1+part2
         part1<-0
         part2<-0
-        
+
         #-----------------------Save the optimum---------------------------------------
         if(p==1){
             beta.save=beta
@@ -12929,16 +12930,16 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
                 LL.save=LL
             }
         }
-        
+
     } # end of Iteration on the range of delta (-5 to 5 in glog scale)
-    
+
     #--------------------update with the optimum------------------------------------
     beta=beta.save
     delta=delta.save
     LL=LL.save
     names(delta)=NULL
     names(LL)=NULL
-    
+
     #--------------------calculating Va and Vem-------------------------------------
     #sigma_a1
     #U1TX=crossprod(U1,X)#xiaolei removed, it is re-calculated
@@ -12950,25 +12951,25 @@ cmpfun(function(pheno,geno=NULL,snp.pool,X0=NULL){
         sigma_a1_pre=(one2-one1%*%beta)^2/(d[i]+delta)
         sigma_a1= sigma_a1+sigma_a1_pre
     }
-    
+
     ### sigma_a2
     #xiaolei removed following 3 lines
     #IU=I-tcrossprod(U1,U1)    #This needs to be done only once
     #IUX=crossprod(IU,X)
     #IUY=crossprod(IU,y)
     sigma_a2=0
-    
+
     for(i in 1:nrow(U1)){
         one1=matrix(IUX[i,], nrow=1)
         one2=matrix(IUY[i,], nrow=1)
         sigma_a2_pre<-(one2-one1%*%beta)^2
         sigma_a2= sigma_a2+sigma_a2_pre
     }
-    
+
     sigma_a2<-sigma_a2/delta
     sigma_a<- 1/n*(sigma_a1+sigma_a2)
     sigma_e<-delta*sigma_a
-    
+
     return(list(beta=beta, delta=delta, LL=LL, vg=sigma_a,ve=sigma_e))
 }
 )#end of cmpfun(
@@ -12980,8 +12981,8 @@ function(snps,hasInbred=TRUE) {
 # Input: snps is n individual rows by m snps columns
 # Output: n by n relationship matrix
 # Authors: Zhwiu Zhang
-# Last update: March 2, 2016 
-############################################################################################## 
+# Last update: March 2, 2016
+##############################################################################################
 print("Calculating kinship with VanRaden method...")
 #Remove invariants
 fa=colSums(snps)/(2*nrow(snps))
@@ -12990,7 +12991,7 @@ snps=snps[,!index.non]
 
 nSNP=ncol(snps)
 nInd=nrow(snps)
-n=nInd 
+n=nInd
 
 ##allele frequency of second allele
 p=colSums(snps)/(2*nInd)
@@ -13017,30 +13018,30 @@ return(K)
   function(snps,hasInbred=TRUE) {
     # Object: To calculate ZHANG (Zones Harbored Adjustments of Negligent Genetic) relationship
     # Authors: Zhwiu Zhang
-    # Last update: october 25, 2014 
-    ############################################################################################## 
+    # Last update: october 25, 2014
+    ##############################################################################################
     print("Calculating ZHANG relationship defined by Zhiwu Zhang...")
     #Remove invariants
     fa=colSums(snps)/(2*nrow(snps))
     index.non=fa>=1| fa<=0
     snps=snps[,!index.non]
-    
+
     het=1-abs(snps-1)
     ind.sum=rowSums(het)
     fi=ind.sum/(2*ncol(snps))
     inbreeding=1-min(fi)
-    
+
     nSNP=ncol(snps)
     nInd=nrow(snps)
-    n=nInd 
+    n=nInd
     snpMean= apply(snps,2,mean)   #get mean for each snp
     print("substracting mean...")
     snps=t(snps)-snpMean    #operation on matrix and vector goes in direction of column
     print("Getting X'X...")
     #K=tcrossprod((snps), (snps))
-    K=crossprod((snps), (snps)) 
+    K=crossprod((snps), (snps))
     if(is.na(K[1,1])) stop ("GAPIT says: Missing data is not allowed for numerical genotype data")
-    
+
     print("Adjusting...")
     #Extract diagonals
     i =1:n
@@ -13050,27 +13051,27 @@ return(K)
     DL=min(d)
     DU=max(d)
     floor=min(K)
-    
-    
+
+
     #Set range between 0 and 2
     top=1+inbreeding
     K=top*(K-floor)/(DU-floor)
     Dmin=top*(DL-floor)/(DU-floor)
-    
+
     #Adjust based on expected minimum diagonal (1)
     if(Dmin<1) {
       print("Adjustment by the minimum diagonal")
       K[index]=(K[index]-Dmin+1)/((top+1-Dmin)*.5)
       K[-index]=K[-index]*(1/Dmin)
     }
-    
+
     #Limiting the maximum offdiagonal to the top
     Omax=max(K[-index])
     if(Omax>top){
       print("Adjustment by the minimum off diagonal")
       K[-index]=K[-index]*(top/Omax)
     }
-    
+
     print("Calculating kinship with Zhang method: done")
     return(K)
   }
@@ -13080,8 +13081,8 @@ return(K)
 function(snps, method="additive", use="all") {
 # Object: To calculate the kinship matrix using the method of Loiselle et al. (1995)
 # Authors: Alex Lipka and Hyun Min Kang
-# Last update: May 31, 2011 
-############################################################################################## 
+# Last update: May 31, 2011
+##############################################################################################
   #Number of SNP types that are 0s
   n0 <- sum(snps==0,na.rm=TRUE)
   #Number of heterozygote SNP types
@@ -13090,14 +13091,14 @@ function(snps, method="additive", use="all") {
   n1 <- sum(snps==1,na.rm=TRUE)
   #Number of SNP types that are missing
   nNA <- sum(is.na(snps))
-  
 
- 
+
+
   #Self explanatory
   dim(snps)[1]*dim(snps)[2]
   #stopifnot(n0+nh+n1+nNA == length(snps))
 
-    
+
   #Note that the two lines in if(method == "dominant") and if(method == "recessive") are found in
   #if(method == "additive").  Worry about this only if you have heterozygotes, which you do not.
   if( method == "dominant" ) {
@@ -13120,7 +13121,7 @@ function(snps, method="additive", use="all") {
 
   #mafs is a (# SNPs)x(# lines) matrix.  The columns of mafs are identical, and the ij^th element is the average
   #allele frequency for the SNP in the i^th row.
-  
+
   #if(use == "all") imputes missing SNP type values with the expected (average) allele frequency.
   if( use == "all" ) {
     mafs <- matrix(rowMeans(snps,na.rm=TRUE),nrow(snps),ncol(snps))
@@ -13132,18 +13133,18 @@ function(snps, method="additive", use="all") {
   }
   mafs_comp <- 1-mafs
   snps_comp <- 1-snps
-  
+
 
   n <- ncol(snps)
   K <- matrix(nrow=n,ncol=n)
   diag(K) <- 1
   #Create the k term on page 1422 of Loiselle et al. (1995)
 
-  missing <- rep(NA, dim(snps)[1])  
+  missing <- rep(NA, dim(snps)[1])
   for(i in 1:dim(snps)[1]) {
     missing[i] <- sum(is.na(snps[i,]))
   }
-  
+
 
   for(i in 1:(n-1)) {
     for(j in (i+1):n) {
@@ -13157,13 +13158,13 @@ function(snps, method="additive", use="all") {
       Num_Second_Term <-  Num_Second_Term_1 + Num_Second_Term_2
       Second_Term <- sum(Num_Second_Term*Num_Second_Term_Bias_Correction)
 
-      Third_Term <- sum(Num_Second_Term) 
-      
+      Third_Term <- sum(Num_Second_Term)
+
       f <- (First_Term + Second_Term)/Third_Term
 
       K[i,j] <- f
       if(K[i,j]<0) K[i,j]=0
-      
+
       K[j,i] <- K[i,j]
     }
   }
@@ -13181,7 +13182,7 @@ function(PCs=NULL,EV=NULL,nPCs=0 ){
 #Authors: Huihui Li and Zhiwu Zhang
 #Last update: April 17, 2012
 ##############################################################################################
-print("Calling GAPIT.kinship.separation")  
+print("Calling GAPIT.kinship.separation")
   Total.number.PCs=ncol(PCs)
   n=nrow(PCs)
 print(Total.number.PCs)
@@ -13191,10 +13192,10 @@ print(n)
   sep.EV=EV[(nPCs+1):Total.number.PCs]
 
   Weighted.sep.EV=sep.EV/sum(sep.EV)
-  
-  #X=t(t(sep.PCs)*Weighted.sep.EV)  
+
+  #X=t(t(sep.PCs)*Weighted.sep.EV)
   X=sep.PCs
-   
+
   XMean= apply(X,2,mean)
   X=as.matrix(X-XMean)
   K=tcrossprod((X), (X))
@@ -13207,10 +13208,10 @@ print(n)
   DL=min(d)
   DU=max(d)
   floor=min(K)
-  
+
   K=(K-floor)/(DL-floor)
   MD=(DU-floor)/(DL-floor)
-     
+
   if(is.na(K[1,1])) stop ("GAPIT says: Missing data is not allowed for numerical genotype data")
   if(MD>2)K[index]=K[index]/(MD-1)+1
 print("GAPIT.kinship.separation called succesfuly")
@@ -13234,809 +13235,809 @@ if(!'multtest'%in% installed.packages()[,"Package"]){
     BiocManager::install("multtest")
     BiocManager::install("snpStats")
 }
-############################################################################################################################################## 
- ###MLMM - Multi-Locus Mixed Model 
- ###SET OF FUNCTIONS TO CARRY GWAS CORRECTING FOR POPULATION STRUCTURE WHILE INCLUDING COFACTORS THROUGH A STEPWISE-REGRESSION APPROACH 
- ####### 
- # 
- ##note: require EMMA 
- #library(emma) 
- #source('emma.r') 
- # 
- ##REQUIRED DATA & FORMAT 
- # 
- #PHENOTYPE - Y: a vector of length m, with names(Y)=individual names 
- #GENOTYPE - X: a n by m matrix, where n=number of individuals, m=number of SNPs, with rownames(X)=individual names, and colnames(X)=SNP names 
- #KINSHIP - K: a n by n matrix, with rownames(K)=colnames(K)=individual names 
- #each of these data being sorted in the same way, according to the individual name 
- # 
- ##FOR PLOTING THE GWAS RESULTS 
- #SNP INFORMATION - snp_info: a data frame having at least 3 columns: 
- # - 1 named 'SNP', with SNP names (same as colnames(X)), 
- # - 1 named 'Chr', with the chromosome number to which belong each SNP 
- # - 1 named 'Pos', with the position of the SNP onto the chromosome it belongs to. 
- ####### 
- # 
- ##FUNCTIONS USE 
- #save this file somewhere on your computer and source it! 
- #source('path/mlmm.r') 
- # 
- ###FORWARD + BACKWARD ANALYSES 
- #mygwas<-mlmm(Y,X,K,nbchunks,maxsteps) 
- #X,Y,K as described above 
- #nbchunks: an integer defining the number of chunks of X to run the analysis, allows to decrease the memory usage ==> minimum=2, increase it if you do not have enough memory 
- #maxsteps: maximum number of steps desired in the forward approach. The forward approach breaks automatically once the pseudo-heritability is close to 0, 
- #			however to avoid doing too many steps in case the pseudo-heritability does not reach a value close to 0, this parameter is also used. 
- #			It's value must be specified as an integer >= 3 
- # 
- ###RESULTS 
- # 
- ##STEPWISE TABLE 
- #mygwas$step_table 
- # 
- ##PLOTS 
- # 
- ##PLOTS FORM THE FORWARD TABLE 
- #plot_step_table(mygwas,type=c('h2','maxpval','BIC','extBIC')) 
- # 
- ##RSS PLOT 
- #plot_step_RSS(mygwas) 
- # 
- ##GWAS MANHATTAN PLOTS 
- # 
- #FORWARD STEPS 
- #plot_fwd_GWAS(mygwas,step,snp_info,pval_filt) 
- #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- # 
- #OPTIMAL MODELS 
- #Automatic identification of the optimal models within the forwrad-backward models according to the extendedBIC or multiple-bonferonni criteria 
- # 
- #plot_opt_GWAS(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- # 
- ##GWAS MANHATTAN PLOT ZOOMED IN A REGION OF INTEREST 
- #plot_fwd_region(mygwas,step,snp_info,pval_filt,chrom,pos1,pos2) 
- #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- #chrom is an integer specifying the chromosome on which the region of interest is 
- #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info 
- # 
- #plot_opt_region(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt,chrom,pos1,pos2) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- #chrom is an integer specifying the chromosome on which the region of interest is 
- #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info 
- # 
- ##QQPLOTS of pvalues 
- #qqplot_fwd_GWAS(mygwas,nsteps) 
- #nsteps=maximum number of forward steps to be displayed 
- # 
- #qqplot_opt_GWAS(mygwas,opt=c('extBIC','mbonf')) 
- # 
- ############################################################################################################################################## 
-  
- mlmm<-function(Y,X,K,nbchunks,maxsteps,thresh = NULL) { 
-  
- n<-length(Y) 
- m<-ncol(X) 
-  
- stopifnot(ncol(K) == n) 
- stopifnot(nrow(K) == n) 
- stopifnot(nrow(X) == n) 
- stopifnot(nbchunks >= 2) 
- stopifnot(maxsteps >= 3) 
-  
- #INTERCEPT 
-  
- Xo<-rep(1,n) 
-  
- #K MATRIX NORMALISATION 
-  
- K_norm<-(n-1)/sum((diag(n)-matrix(1,n,n)/n)*K)*K 
- rm(K) 
-  
- #step 0 : NULL MODEL 
- cof_fwd<-list() 
- cof_fwd[[1]]<-as.matrix(Xo) 
- colnames(cof_fwd[[1]])<-'Xo' 
-  
- mod_fwd<-list() 
- mod_fwd[[1]]<-emma.REMLE(Y,cof_fwd[[1]],K_norm) 
-  
- herit_fwd<-list() 
- herit_fwd[[1]]<-mod_fwd[[1]]$vg/(mod_fwd[[1]]$vg+mod_fwd[[1]]$ve) 
-  
- RSSf<-list() 
- RSSf[[1]]<-'NA' 
-  
- RSS_H0<-list() 
- RSS_H0[[1]]<-'NA' 
-  
- df1<-1 
- df2<-list() 
- df2[[1]]<-'NA' 
-  
- Ftest<-list() 
- Ftest[[1]]<-'NA' 
-  
- pval<-list() 
- pval[[1]]<-'NA' 
-  
- fwd_lm<-list() 
-  
- cat('null model done! pseudo-h=',round(herit_fwd[[1]],3),'\n') 
-  
- #step 1 : EMMAX 
-  
- M<-solve(chol(mod_fwd[[1]]$vg*K_norm+mod_fwd[[1]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_fwd_t<-crossprod(M,cof_fwd[[1]]) 
- fwd_lm[[1]]<-summary(lm(Y_t~0+cof_fwd_t)) 
- Res_H0<-fwd_lm[[1]]$residuals 
- Q_<-qr.Q(qr(cof_fwd_t)) 
-  
- RSS<-list() 
- for (j in 1:(nbchunks-1)) { 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[1]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t)} 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[1]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[1]])-1))]) 
- RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t,j) 
-  
- RSSf[[2]]<-unlist(RSS) 
- RSS_H0[[2]]<-sum(Res_H0^2) 
- df2[[2]]<-n-df1-ncol(cof_fwd[[1]]) 
- Ftest[[2]]<-(rep(RSS_H0[[2]],length(RSSf[[2]]))/RSSf[[2]]-1)*df2[[2]]/df1 
- pval[[2]]<-pf(Ftest[[2]],df1,df2[[2]],lower.tail=FALSE) 
-  
- cof_fwd[[2]]<-cbind(cof_fwd[[1]],X[,colnames(X) %in% names(which(RSSf[[2]]==min(RSSf[[2]]))[1])]) 
- colnames(cof_fwd[[2]])<-c(colnames(cof_fwd[[1]]),names(which(RSSf[[2]]==min(RSSf[[2]]))[1])) 
- mod_fwd[[2]]<-emma.REMLE(Y,cof_fwd[[2]],K_norm) 
- herit_fwd[[2]]<-mod_fwd[[2]]$vg/(mod_fwd[[2]]$vg+mod_fwd[[2]]$ve) 
- rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS) 
-  
- cat('step 1 done! pseudo-h=',round(herit_fwd[[2]],3),'\n') 
-  
- #FORWARD 
-  
- for (i in 3:(maxsteps)) { 
- if (herit_fwd[[i-2]] < 0.01) break else { 
-  
- M<-solve(chol(mod_fwd[[i-1]]$vg*K_norm+mod_fwd[[i-1]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_fwd_t<-crossprod(M,cof_fwd[[i-1]]) 
- fwd_lm[[i-1]]<-summary(lm(Y_t~0+cof_fwd_t)) 
- Res_H0<-fwd_lm[[i-1]]$residuals 
- Q_ <- qr.Q(qr(cof_fwd_t)) 
-  
- RSS<-list() 
- for (j in 1:(nbchunks-1)) { 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t)} 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[i-1]])-1))]) 
- RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t,j) 
-  
- RSSf[[i]]<-unlist(RSS) 
- RSS_H0[[i]]<-sum(Res_H0^2) 
- df2[[i]]<-n-df1-ncol(cof_fwd[[i-1]]) 
- Ftest[[i]]<-(rep(RSS_H0[[i]],length(RSSf[[i]]))/RSSf[[i]]-1)*df2[[i]]/df1 
- pval[[i]]<-pf(Ftest[[i]],df1,df2[[i]],lower.tail=FALSE) 
-  
- cof_fwd[[i]]<-cbind(cof_fwd[[i-1]],X[,colnames(X) %in% names(which(RSSf[[i]]==min(RSSf[[i]]))[1])]) 
- colnames(cof_fwd[[i]])<-c(colnames(cof_fwd[[i-1]]),names(which(RSSf[[i]]==min(RSSf[[i]]))[1])) 
- mod_fwd[[i]]<-emma.REMLE(Y,cof_fwd[[i]],K_norm) 
- herit_fwd[[i]]<-mod_fwd[[i]]$vg/(mod_fwd[[i]]$vg+mod_fwd[[i]]$ve) 
- rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)} 
- cat('step ',i-1,' done! pseudo-h=',round(herit_fwd[[i]],3),'\n')} 
- rm(i) 
-  
- ##gls at last forward step 
- M<-solve(chol(mod_fwd[[length(mod_fwd)]]$vg*K_norm+mod_fwd[[length(mod_fwd)]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_fwd_t<-crossprod(M,cof_fwd[[length(mod_fwd)]]) 
- fwd_lm[[length(mod_fwd)]]<-summary(lm(Y_t~0+cof_fwd_t)) 
-  
- Res_H0<-fwd_lm[[length(mod_fwd)]]$residuals 
- Q_ <- qr.Q(qr(cof_fwd_t)) 
-  
- RSS<-list() 
- for (j in 1:(nbchunks-1)) { 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t)} 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[length(mod_fwd)]])-1))]) 
- RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t,j) 
-  
- RSSf[[length(mod_fwd)+1]]<-unlist(RSS) 
- RSS_H0[[length(mod_fwd)+1]]<-sum(Res_H0^2) 
- df2[[length(mod_fwd)+1]]<-n-df1-ncol(cof_fwd[[length(mod_fwd)]]) 
- Ftest[[length(mod_fwd)+1]]<-(rep(RSS_H0[[length(mod_fwd)+1]],length(RSSf[[length(mod_fwd)+1]]))/RSSf[[length(mod_fwd)+1]]-1)*df2[[length(mod_fwd)+1]]/df1 
- pval[[length(mod_fwd)+1]]<-pf(Ftest[[length(mod_fwd)+1]],df1,df2[[length(mod_fwd)+1]],lower.tail=FALSE) 
- rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS) 
-  
- ##get max pval at each forward step 
- max_pval_fwd<-vector(mode="numeric",length=length(fwd_lm)) 
- max_pval_fwd[1]<-0 
- for (i in 2:length(fwd_lm)) {max_pval_fwd[i]<-max(fwd_lm[[i]]$coef[2:i,4])} 
- rm(i) 
-  
- ##get the number of parameters & Loglikelihood from ML at each step 
- mod_fwd_LL<-list() 
- mod_fwd_LL[[1]]<-list(nfixed=ncol(cof_fwd[[1]]),LL=emma.MLE(Y,cof_fwd[[1]],K_norm)$ML) 
- for (i in 2:length(cof_fwd)) {mod_fwd_LL[[i]]<-list(nfixed=ncol(cof_fwd[[i]]),LL=emma.MLE(Y,cof_fwd[[i]],K_norm)$ML)} 
- rm(i) 
-  
- cat('backward analysis','\n') 
-  
- ##BACKWARD (1st step == last fwd step) 
-  
- dropcof_bwd<-list() 
- cof_bwd<-list() 
- mod_bwd <- list() 
- bwd_lm<-list() 
- herit_bwd<-list() 
-  
- dropcof_bwd[[1]]<-'NA' 
- cof_bwd[[1]]<-as.matrix(cof_fwd[[length(mod_fwd)]][,!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]]) 
- colnames(cof_bwd[[1]])<-colnames(cof_fwd[[length(mod_fwd)]])[!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]] 
- mod_bwd[[1]]<-emma.REMLE(Y,cof_bwd[[1]],K_norm) 
- herit_bwd[[1]]<-mod_bwd[[1]]$vg/(mod_bwd[[1]]$vg+mod_bwd[[1]]$ve) 
- M<-solve(chol(mod_bwd[[1]]$vg*K_norm+mod_bwd[[1]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_bwd_t<-crossprod(M,cof_bwd[[1]]) 
- bwd_lm[[1]]<-summary(lm(Y_t~0+cof_bwd_t)) 
-  
- rm(M,Y_t,cof_bwd_t) 
-  
- for (i in 2:length(mod_fwd)) { 
- dropcof_bwd[[i]]<-(colnames(cof_bwd[[i-1]])[2:ncol(cof_bwd[[i-1]])])[which(abs(bwd_lm[[i-1]]$coef[2:nrow(bwd_lm[[i-1]]$coef),3])==min(abs(bwd_lm[[i-1]]$coef[2:nrow(bwd_lm[[i-1]]$coef),3])))] 
- cof_bwd[[i]]<-as.matrix(cof_bwd[[i-1]][,!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]]) 
- colnames(cof_bwd[[i]])<-colnames(cof_bwd[[i-1]])[!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]] 
- mod_bwd[[i]]<-emma.REMLE(Y,cof_bwd[[i]],K_norm) 
- herit_bwd[[i]]<-mod_bwd[[i]]$vg/(mod_bwd[[i]]$vg+mod_bwd[[i]]$ve) 
- M<-solve(chol(mod_bwd[[i]]$vg*K_norm+mod_bwd[[i]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_bwd_t<-crossprod(M,cof_bwd[[i]]) 
- bwd_lm[[i]]<-summary(lm(Y_t~0+cof_bwd_t)) 
- rm(M,Y_t,cof_bwd_t)} 
-  
- rm(i) 
-  
- ##get max pval at each backward step 
- max_pval_bwd<-vector(mode="numeric",length=length(bwd_lm)) 
- for (i in 1:(length(bwd_lm)-1)) {max_pval_bwd[i]<-max(bwd_lm[[i]]$coef[2:(length(bwd_lm)+1-i),4])} 
- max_pval_bwd[length(bwd_lm)]<-0 
-  
- ##get the number of parameters & Loglikelihood from ML at each step 
- mod_bwd_LL<-list() 
- mod_bwd_LL[[1]]<-list(nfixed=ncol(cof_bwd[[1]]),LL=emma.MLE(Y,cof_bwd[[1]],K_norm)$ML) 
- for (i in 2:length(cof_bwd)) {mod_bwd_LL[[i]]<-list(nfixed=ncol(cof_bwd[[i]]),LL=emma.MLE(Y,cof_bwd[[i]],K_norm)$ML)} 
- rm(i) 
-  
- cat('creating output','\n') 
-  
- ##Forward Table: Fwd + Bwd Tables 
- #Compute parameters for model criteria 
- BIC<-function(x){-2*x$LL+(x$nfixed+1)*log(n)} 
- extBIC<-function(x){BIC(x)+2*lchoose(m,x$nfixed-1)} 
-  
- fwd_table<-data.frame(step=ncol(cof_fwd[[1]])-1,step_=paste('fwd',ncol(cof_fwd[[1]])-1,sep=''),cof='NA',ncof=ncol(cof_fwd[[1]])-1,h2=herit_fwd[[1]] 
- 	,maxpval=max_pval_fwd[1],BIC=BIC(mod_fwd_LL[[1]]),extBIC=extBIC(mod_fwd_LL[[1]])) 
- for (i in 2:(length(mod_fwd))) {fwd_table<-rbind(fwd_table, 
- 	data.frame(step=ncol(cof_fwd[[i]])-1,step_=paste('fwd',ncol(cof_fwd[[i]])-1,sep=''),cof=paste('+',colnames(cof_fwd[[i]])[i],sep=''),ncof=ncol(cof_fwd[[i]])-1,h2=herit_fwd[[i]] 
- 	,maxpval=max_pval_fwd[i],BIC=BIC(mod_fwd_LL[[i]]),extBIC=extBIC(mod_fwd_LL[[i]])))} 
-  
- rm(i) 
-  
- bwd_table<-data.frame(step=length(mod_fwd),step_=paste('bwd',0,sep=''),cof=paste('-',dropcof_bwd[[1]],sep=''),ncof=ncol(cof_bwd[[1]])-1,h2=herit_bwd[[1]] 
- 	,maxpval=max_pval_bwd[1],BIC=BIC(mod_bwd_LL[[1]]),extBIC=extBIC(mod_bwd_LL[[1]])) 
- for (i in 2:(length(mod_bwd))) {bwd_table<-rbind(bwd_table, 
- 	data.frame(step=length(mod_fwd)+i-1,step_=paste('bwd',i-1,sep=''),cof=paste('-',dropcof_bwd[[i]],sep=''),ncof=ncol(cof_bwd[[i]])-1,h2=herit_bwd[[i]] 
- 	,maxpval=max_pval_bwd[i],BIC=BIC(mod_bwd_LL[[i]]),extBIC=extBIC(mod_bwd_LL[[i]])))} 
-  
- rm(i,BIC,extBIC,max_pval_fwd,max_pval_bwd,dropcof_bwd) 
-  
- fwdbwd_table<-rbind(fwd_table,bwd_table) 
-  
- #RSS for plot 
- mod_fwd_RSS<-vector() 
- mod_fwd_RSS[1]<-sum((Y-cof_fwd[[1]]%*%fwd_lm[[1]]$coef[,1])^2) 
- for (i in 2:length(mod_fwd)) {mod_fwd_RSS[i]<-sum((Y-cof_fwd[[i]]%*%fwd_lm[[i]]$coef[,1])^2)} 
- mod_bwd_RSS<-vector() 
- mod_bwd_RSS[1]<-sum((Y-cof_bwd[[1]]%*%bwd_lm[[1]]$coef[,1])^2) 
- for (i in 2:length(mod_bwd)) {mod_bwd_RSS[i]<-sum((Y-cof_bwd[[i]]%*%bwd_lm[[i]]$coef[,1])^2)} 
- expl_RSS<-c(1-sapply(mod_fwd_RSS,function(x){x/mod_fwd_RSS[1]}),1-sapply(mod_bwd_RSS,function(x){x/mod_bwd_RSS[length(mod_bwd_RSS)]})) 
- h2_RSS<-c(unlist(herit_fwd),unlist(herit_bwd))*(1-expl_RSS) 
- unexpl_RSS<-1-expl_RSS-h2_RSS 
- plot_RSS<-t(apply(cbind(expl_RSS,h2_RSS,unexpl_RSS),1,cumsum)) 
-  
- #GLS pvals at each step 
- pval_step<-list() 
- pval_step[[1]]<-list(out=data.frame("SNP"=colnames(X),"pval"=pval[[2]]),"cof"=NA, "coef"=fwd_lm[[1]]$coef) 
- for (i in 2:(length(mod_fwd))) {pval_step[[i]]<-list(out=rbind(data.frame(SNP=colnames(cof_fwd[[i]])[-1],'pval'=fwd_lm[[i]]$coef[2:i,4]), 
- 	data.frame(SNP=colnames(X)[-which(colnames(X) %in% colnames(cof_fwd[[i]]))],'pval'=pval[[i+1]])),"cof"=colnames(cof_fwd[[i]])[-1], "coef"=fwd_lm[[i]]$coef)} 
-  
- #GLS pvals for best models according to extBIC and mbonf 
-  
- opt_extBIC<-fwdbwd_table[which(fwdbwd_table$extBIC==min(fwdbwd_table$extBIC))[1],] 
- opt_mbonf<-(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof))[1],] 
- if(! is.null(thresh)){ 
-   opt_thresh<-(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof))[1],] 
- } 
- bestmodel_pvals<-function(model) {if(substr(model$step_,start=0,stop=3)=='fwd') { 
- 		pval_step[[as.integer(substring(model$step_,first=4))+1]]} else if (substr(model$step_,start=0,stop=3)=='bwd') { 
- 		cof<-cof_bwd[[as.integer(substring(model$step_,first=4))+1]] 
- 		mixedmod<-emma.REMLE(Y,cof,K_norm) 
- 		M<-solve(chol(mixedmod$vg*K_norm+mixedmod$ve*diag(n))) 
- 		Y_t<-crossprod(M,Y) 
- 		cof_t<-crossprod(M,cof) 
- 		GLS_lm<-summary(lm(Y_t~0+cof_t)) 
- 		Res_H0<-GLS_lm$residuals 
- 		Q_ <- qr.Q(qr(cof_t)) 
- 		RSS<-list() 
- 		for (j in 1:(nbchunks-1)) { 
- 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- 		RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- 		rm(X_t)} 
- 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof)-1))]) 
- 		RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- 		rm(X_t,j) 
- 		RSSf<-unlist(RSS) 
- 		RSS_H0<-sum(Res_H0^2) 
- 		df2<-n-df1-ncol(cof) 
- 		Ftest<-(rep(RSS_H0,length(RSSf))/RSSf-1)*df2/df1 
- 		pval<-pf(Ftest,df1,df2,lower.tail=FALSE) 
- 		list('out'=rbind(data.frame(SNP=colnames(cof)[-1],'pval'=GLS_lm$coef[2:(ncol(cof)),4]), 
- 		                 data.frame('SNP'=colnames(X)[-which(colnames(X) %in% colnames(cof))],'pval'=pval)), 
- 		     'cof'=colnames(cof)[-1], 
- 		     'coef'=GLS_lm$coef)} else {cat('error \n')}} 
- opt_extBIC_out<-bestmodel_pvals(opt_extBIC) 
- opt_mbonf_out<-bestmodel_pvals(opt_mbonf) 
- if(! is.null(thresh)){ 
-   opt_thresh_out<-bestmodel_pvals(opt_thresh) 
- } 
- output <- list(step_table=fwdbwd_table,pval_step=pval_step,RSSout=plot_RSS,bonf_thresh=-log10(0.05/m),opt_extBIC=opt_extBIC_out,opt_mbonf=opt_mbonf_out) 
- if(! is.null(thresh)){ 
-   output$thresh <- -log10(thresh) 
-   output$opt_thresh <- opt_thresh_out 
- } 
- return(output) 
- } 
-############################################################################################################################################## 
- ###MLMM_COF - Multi-Locus Mixed Model 
- ###SET OF FUNCTIONS TO CARRY GWAS CORRECTING FOR POPULATION STRUCTURE WHILE INCLUDING COFACTORS THROUGH A STEPWISE-REGRESSION APPROACH 
- ####### 
- # 
- ##note: require EMMA 
- #library(emma) 
- #source('emma.r') 
- # 
- ##REQUIRED DATA & FORMAT 
- # 
- #PHENOTYPE - Y: a vector of length m, with names(Y)=individual names 
- #GENOTYPE - X: a n by m matrix, where n=number of individuals, m=number of SNPs, with rownames(X)=individual names, and colnames(X)=SNP names 
- #KINSHIP - K: a n by n matrix, with rownames(K)=colnames(K)=individual names 
- #COVARIANCE MATRIX - cofs: a n by p matrix, where n=number of individuals, p=number of covariates in the matrix (e.g. PC axes) 
- #each of these data being sorted in the same way, according to the individual name 
- # 
- ##FOR PLOTING THE GWAS RESULTS 
- #SNP INFORMATION - snp_info: a data frame having at least 3 columns: 
- # - 1 named 'SNP', with SNP names (same as colnames(X)), 
- # - 1 named 'Chr', with the chromosome number to which belong each SNP 
- # - 1 named 'Pos', with the position of the SNP onto the chromosome it belongs to. 
- ####### 
- # 
- ##FUNCTIONS USE 
- #save this file somewhere on your computer and source it! 
- #source('path/mlmm.r') 
- # 
- ###FORWARD + BACKWARD ANALYSES 
- #mygwas<-mlmm_cof(Y,X,K,nbchunks,maxsteps) 
- #X,Y,K as described above 
- #nbchunks: an integer defining the number of chunks of X to run the analysis, allows to decrease the memory usage ==> minimum=2, increase it if you do not have enough memory 
- #maxsteps: maximum number of steps desired in the forward approach. The forward approach breaks automatically once the pseudo-heritability is close to 0, 
- #			however to avoid doing too many steps in case the pseudo-heritability does not reach a value close to 0, this parameter is also used. 
- #			It's value must be specified as an integer >= 3 
- # 
- ###RESULTS 
- # 
- ##STEPWISE TABLE 
- #mygwas$step_table 
- # 
- ##PLOTS 
- # 
- ##PLOTS FORM THE FORWARD TABLE 
- #plot_step_table(mygwas,type=c('h2','maxpval','BIC','extBIC')) 
- # 
- ##RSS PLOT 
- #plot_step_RSS(mygwas) 
- # 
- ##GWAS MANHATTAN PLOTS 
- # 
- #FORWARD STEPS 
- #plot_fwd_GWAS(mygwas,step,snp_info,pval_filt) 
- #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- # 
- #OPTIMAL MODELS 
- #Automatic identification of the optimal models within the forwrad-backward models according to the extendedBIC or multiple-bonferonni criteria 
- # 
- #plot_opt_GWAS(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- # 
- ##GWAS MANHATTAN PLOT ZOOMED IN A REGION OF INTEREST 
- #plot_fwd_region(mygwas,step,snp_info,pval_filt,chrom,pos1,pos2) 
- #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- #chrom is an integer specifying the chromosome on which the region of interest is 
- #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info 
- # 
- #plot_opt_region(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt,chrom,pos1,pos2) 
- #snp_info as described above 
- #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot 
- #chrom is an integer specifying the chromosome on which the region of interest is 
- #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info 
- # 
- ##QQPLOTS of pvalues 
- #qqplot_fwd_GWAS(mygwas,nsteps) 
- #nsteps=maximum number of forward steps to be displayed 
- # 
- #qqplot_opt_GWAS(mygwas,opt=c('extBIC','mbonf')) 
- # 
- ############################################################################################################################################## 
-  
- mlmm_cof<-function(Y,X,cofs,K,nbchunks,maxsteps,thresh = NULL) { 
-  
- n<-length(Y) 
- m<-ncol(X) 
-  
- stopifnot(ncol(K) == n) 
- stopifnot(nrow(K) == n) 
- stopifnot(nrow(X) == n) 
- stopifnot(nrow(cofs) == n) 
- stopifnot(nbchunks >= 2) 
- stopifnot(maxsteps >= 3) 
-  
- #INTERCEPT 
-  
- Xo<-rep(1,n) 
-  
- #K MATRIX NORMALISATION 
-  
- K_norm<-(n-1)/sum((diag(n)-matrix(1,n,n)/n)*K)*K 
- rm(K) 
-  
- #step 0 : NULL MODEL 
-  
- fix_cofs<-cbind(Xo,cofs) 
- rm(cofs) 
-  
- addcof_fwd<-list() 
- addcof_fwd[[1]]<-'NA' 
-  
- cof_fwd<-list() 
- cof_fwd[[1]]<-as.matrix(X[,colnames(X) %in% addcof_fwd[[1]]]) 
-  
- mod_fwd<-list() 
- mod_fwd[[1]]<-emma.REMLE(Y,cbind(fix_cofs,cof_fwd[[1]]),K_norm) 
-  
- herit_fwd<-list() 
- herit_fwd[[1]]<-mod_fwd[[1]]$vg/(mod_fwd[[1]]$vg+mod_fwd[[1]]$ve) 
-  
- RSSf<-list() 
- RSSf[[1]]<-'NA' 
-  
- RSS_H0<-list() 
- RSS_H0[[1]]<-'NA' 
-  
- df1<-1 
- df2<-list() 
- df2[[1]]<-'NA' 
-  
- Ftest<-list() 
- Ftest[[1]]<-'NA' 
-  
- pval<-list() 
- pval[[1]]<-'NA' 
-  
- fwd_lm<-list() 
-  
- cat('null model done! pseudo-h=',round(herit_fwd[[1]],3),'\n') 
-  
- #step 1 : EMMAX 
-  
- M<-solve(chol(mod_fwd[[1]]$vg*K_norm+mod_fwd[[1]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_fwd_t<-crossprod(M,cbind(fix_cofs,cof_fwd[[1]])) 
- fwd_lm[[1]]<-summary(lm(Y_t~0+cof_fwd_t)) 
- Res_H0<-fwd_lm[[1]]$residuals 
- Q_<-qr.Q(qr(cof_fwd_t)) 
-  
- RSS<-list() 
- for (j in 1:(nbchunks-1)) { 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% addcof_fwd[[1]]])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t)} 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% addcof_fwd[[1]]])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[1]])))]) 
- RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t,j) 
-  
- RSSf[[2]]<-unlist(RSS) 
- RSS_H0[[2]]<-sum(Res_H0^2) 
- df2[[2]]<-n-df1-ncol(fix_cofs)-ncol(cof_fwd[[1]]) 
- Ftest[[2]]<-(rep(RSS_H0[[2]],length(RSSf[[2]]))/RSSf[[2]]-1)*df2[[2]]/df1 
- pval[[2]]<-pf(Ftest[[2]],df1,df2[[2]],lower.tail=FALSE) 
- addcof_fwd[[2]]<-names(which(RSSf[[2]]==min(RSSf[[2]]))[1]) 
- cof_fwd[[2]]<-cbind(cof_fwd[[1]],X[,colnames(X) %in% addcof_fwd[[2]]]) 
-  colnames(cof_fwd[[2]])[ncol(cof_fwd[[2]])]<-addcof_fwd[[2]] 
- mod_fwd[[2]]<-emma.REMLE(Y,cbind(fix_cofs,cof_fwd[[2]]),K_norm) 
- herit_fwd[[2]]<-mod_fwd[[2]]$vg/(mod_fwd[[2]]$vg+mod_fwd[[2]]$ve) 
- rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS) 
-  
- cat('step 1 done! pseudo-h=',round(herit_fwd[[2]],3),'\n') 
-  
- #FORWARD 
-  
- for (i in 3:(maxsteps)) { 
- if (herit_fwd[[i-2]] < 0.01) break else { 
-  
- M<-solve(chol(mod_fwd[[i-1]]$vg*K_norm+mod_fwd[[i-1]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_fwd_t<-crossprod(M,cbind(fix_cofs,cof_fwd[[i-1]])) 
- fwd_lm[[i-1]]<-summary(lm(Y_t~0+cof_fwd_t)) 
- Res_H0<-fwd_lm[[i-1]]$residuals 
- Q_ <- qr.Q(qr(cof_fwd_t)) 
-  
- RSS<-list() 
- for (j in 1:(nbchunks-1)) { 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t)} 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[i-1]])))]) 
- RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t,j) 
-  
- RSSf[[i]]<-unlist(RSS) 
- RSS_H0[[i]]<-sum(Res_H0^2) 
- df2[[i]]<-n-df1-ncol(fix_cofs)-ncol(cof_fwd[[i-1]]) 
- Ftest[[i]]<-(rep(RSS_H0[[i]],length(RSSf[[i]]))/RSSf[[i]]-1)*df2[[i]]/df1 
- pval[[i]]<-pf(Ftest[[i]],df1,df2[[i]],lower.tail=FALSE) 
- addcof_fwd[[i]]<-names(which(RSSf[[i]]==min(RSSf[[i]]))[1]) 
- cof_fwd[[i]]<-cbind(cof_fwd[[i-1]],X[,colnames(X) %in% addcof_fwd[[i]]]) 
- colnames(cof_fwd[[i]])[ncol(cof_fwd[[i]])]<-addcof_fwd[[i]] 
- mod_fwd[[i]]<-emma.REMLE(Y,cbind(fix_cofs,cof_fwd[[i]]),K_norm) 
- herit_fwd[[i]]<-mod_fwd[[i]]$vg/(mod_fwd[[i]]$vg+mod_fwd[[i]]$ve) 
- rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)} 
- cat('step ',i-1,' done! pseudo-h=',round(herit_fwd[[i]],3),'\n')} 
- rm(i) 
-  
- ##gls at last forward step 
- M<-solve(chol(mod_fwd[[length(mod_fwd)]]$vg*K_norm+mod_fwd[[length(mod_fwd)]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_fwd_t<-crossprod(M,cbind(fix_cofs,cof_fwd[[length(mod_fwd)]])) 
- fwd_lm[[length(mod_fwd)]]<-summary(lm(Y_t~0+cof_fwd_t)) 
-  
- Res_H0<-fwd_lm[[length(mod_fwd)]]$residuals 
- Q_ <- qr.Q(qr(cof_fwd_t)) 
-  
- RSS<-list() 
- for (j in 1:(nbchunks-1)) { 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t)} 
- X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[length(mod_fwd)]])))]) 
- RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- rm(X_t,j) 
-  
- RSSf[[length(mod_fwd)+1]]<-unlist(RSS) 
- RSS_H0[[length(mod_fwd)+1]]<-sum(Res_H0^2) 
- df2[[length(mod_fwd)+1]]<-n-df1-ncol(fix_cofs)-ncol(cof_fwd[[length(mod_fwd)]]) 
- Ftest[[length(mod_fwd)+1]]<-(rep(RSS_H0[[length(mod_fwd)+1]],length(RSSf[[length(mod_fwd)+1]]))/RSSf[[length(mod_fwd)+1]]-1)*df2[[length(mod_fwd)+1]]/df1 
- pval[[length(mod_fwd)+1]]<-pf(Ftest[[length(mod_fwd)+1]],df1,df2[[length(mod_fwd)+1]],lower.tail=FALSE) 
- rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS) 
-  
- ##get max pval at each forward step 
- max_pval_fwd<-vector(mode="numeric",length=length(fwd_lm)) 
- max_pval_fwd[1]<-0 
- for (i in 2:length(fwd_lm)) {max_pval_fwd[i]<-max(fwd_lm[[i]]$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof_fwd[[i]])),4])} 
- rm(i) 
-  
- ##get the number of parameters & Loglikelihood from ML at each step 
- mod_fwd_LL<-list() 
- mod_fwd_LL[[1]]<-list(nfixed=ncol(cbind(fix_cofs,cof_fwd[[1]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_fwd[[1]]),K_norm)$ML) 
- for (i in 2:length(cof_fwd)) {mod_fwd_LL[[i]]<-list(nfixed=ncol(cbind(fix_cofs,cof_fwd[[i]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_fwd[[i]]),K_norm)$ML)} 
- rm(i) 
-  
- cat('backward analysis','\n') 
-  
- ##BACKWARD (1st step == last fwd step) 
-  
- dropcof_bwd<-list() 
- cof_bwd<-list() 
- mod_bwd <- list() 
- bwd_lm<-list() 
- herit_bwd<-list() 
-  
- dropcof_bwd[[1]]<-'NA' 
- cof_bwd[[1]]<-as.matrix(cof_fwd[[length(mod_fwd)]][,!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]]) 
- colnames(cof_bwd[[1]])<-colnames(cof_fwd[[length(mod_fwd)]])[!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]] 
- mod_bwd[[1]]<-emma.REMLE(Y,cbind(fix_cofs,cof_bwd[[1]]),K_norm) 
- herit_bwd[[1]]<-mod_bwd[[1]]$vg/(mod_bwd[[1]]$vg+mod_bwd[[1]]$ve) 
- M<-solve(chol(mod_bwd[[1]]$vg*K_norm+mod_bwd[[1]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_bwd_t<-crossprod(M,cbind(fix_cofs,cof_bwd[[1]])) 
- bwd_lm[[1]]<-summary(lm(Y_t~0+cof_bwd_t)) 
-  
- rm(M,Y_t,cof_bwd_t) 
-  
-  
- for (i in 2:length(mod_fwd)) { 
- dropcof_bwd[[i]]<-colnames(cof_bwd[[i-1]])[which(abs(bwd_lm[[i-1]]$coef[(ncol(fix_cofs)+1):nrow(bwd_lm[[i-1]]$coef),3])==min(abs(bwd_lm[[i-1]]$coef[(ncol(fix_cofs)+1):nrow(bwd_lm[[i-1]]$coef),3])))] 
- cof_bwd[[i]]<-as.matrix(cof_bwd[[i-1]][,!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]]) 
- colnames(cof_bwd[[i]])<-colnames(cof_bwd[[i-1]])[!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]] 
- mod_bwd[[i]]<-emma.REMLE(Y,cbind(fix_cofs,cof_bwd[[i]]),K_norm) 
- herit_bwd[[i]]<-mod_bwd[[i]]$vg/(mod_bwd[[i]]$vg+mod_bwd[[i]]$ve) 
- M<-solve(chol(mod_bwd[[i]]$vg*K_norm+mod_bwd[[i]]$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- cof_bwd_t<-crossprod(M,cbind(fix_cofs,cof_bwd[[i]])) 
- bwd_lm[[i]]<-summary(lm(Y_t~0+cof_bwd_t)) 
- rm(M,Y_t,cof_bwd_t)} 
-  
- rm(i) 
-  
- ##get max pval at each backward step 
- max_pval_bwd<-vector(mode="numeric",length=length(bwd_lm)) 
- for (i in 1:(length(bwd_lm)-1)) {max_pval_bwd[i]<-max(bwd_lm[[i]]$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof_bwd[[i]])),4])} 
- max_pval_bwd[length(bwd_lm)]<-0 
-  
- ##get the number of parameters & Loglikelihood from ML at each step 
- mod_bwd_LL<-list() 
- mod_bwd_LL[[1]]<-list(nfixed=ncol(cbind(fix_cofs,cof_bwd[[1]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_bwd[[1]]),K_norm)$ML) 
- for (i in 2:length(cof_bwd)) {mod_bwd_LL[[i]]<-list(nfixed=ncol(cbind(fix_cofs,cof_bwd[[i]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_bwd[[i]]),K_norm)$ML)} 
- rm(i) 
-  
- cat('creating output','\n') 
-  
- ##Forward Table: Fwd + Bwd Tables 
- #Compute parameters for model criteria 
- BIC<-function(x){-2*x$LL+(x$nfixed+1)*log(n)} 
- extBIC<-function(x){BIC(x)+2*lchoose(m,x$nfixed-1)} 
-  
- fwd_table<-data.frame(step=ncol(cof_fwd[[1]]),step_=paste('fwd',ncol(cof_fwd[[1]]),sep=''),cof=paste('+',addcof_fwd[[1]],sep=''),ncof=ncol(cof_fwd[[1]]),h2=herit_fwd[[1]] 
- 	,maxpval=max_pval_fwd[1],BIC=BIC(mod_fwd_LL[[1]]),extBIC=extBIC(mod_fwd_LL[[1]])) 
- for (i in 2:(length(mod_fwd))) {fwd_table<-rbind(fwd_table, 
- 	data.frame(step=ncol(cof_fwd[[i]]),step_=paste('fwd',ncol(cof_fwd[[i]]),sep=''),cof=paste('+',addcof_fwd[[i]],sep=''),ncof=ncol(cof_fwd[[i]]),h2=herit_fwd[[i]] 
- 	,maxpval=max_pval_fwd[i],BIC=BIC(mod_fwd_LL[[i]]),extBIC=extBIC(mod_fwd_LL[[i]])))} 
-  
- rm(i) 
-  
- bwd_table<-data.frame(step=length(mod_fwd),step_=paste('bwd',0,sep=''),cof=paste('-',dropcof_bwd[[1]],sep=''),ncof=ncol(cof_bwd[[1]]),h2=herit_bwd[[1]] 
- 	,maxpval=max_pval_bwd[1],BIC=BIC(mod_bwd_LL[[1]]),extBIC=extBIC(mod_bwd_LL[[1]])) 
- for (i in 2:(length(mod_bwd))) {bwd_table<-rbind(bwd_table, 
- 	data.frame(step=length(mod_fwd)+i-1,step_=paste('bwd',i-1,sep=''),cof=paste('-',dropcof_bwd[[i]],sep=''),ncof=ncol(cof_bwd[[i]]),h2=herit_bwd[[i]] 
- 	,maxpval=max_pval_bwd[i],BIC=BIC(mod_bwd_LL[[i]]),extBIC=extBIC(mod_bwd_LL[[i]])))} 
-  
- rm(i,BIC,extBIC,max_pval_fwd,max_pval_bwd,dropcof_bwd) 
-  
- fwdbwd_table<-rbind(fwd_table,bwd_table) 
-  
- #RSS for plot 
-  
- #null model only with intercept 
- null<-emma.REMLE(Y,as.matrix(Xo),K_norm) 
- M<-solve(chol(null$vg*K_norm+null$ve*diag(n))) 
- Y_t<-crossprod(M,Y) 
- Xo_t<-crossprod(M,as.matrix(Xo)) 
- null_lm<-summary(lm(Y_t~0+Xo_t)) 
- rm(null,M,Y_t,Xo_t) 
- RSS_null<-sum((Y-as.matrix(Xo)%*%null_lm$coef[,1])^2) 
-  
- mod_fwd_RSS<-vector() 
- mod_fwd_RSS[1]<-sum((Y-cbind(fix_cofs,cof_fwd[[1]])%*%fwd_lm[[1]]$coef[,1])^2) 
- for (i in 2:length(mod_fwd)) {mod_fwd_RSS[i]<-sum((Y-cbind(fix_cofs,cof_fwd[[i]])%*%fwd_lm[[i]]$coef[,1])^2)} 
- mod_bwd_RSS<-vector() 
- mod_bwd_RSS[1]<-sum((Y-cbind(fix_cofs,cof_bwd[[1]])%*%bwd_lm[[1]]$coef[,1])^2) 
- for (i in 2:length(mod_bwd)) {mod_bwd_RSS[i]<-sum((Y-cbind(fix_cofs,cof_bwd[[i]])%*%bwd_lm[[i]]$coef[,1])^2)} 
-  
- expl_RSS<-c(1-sapply(mod_fwd_RSS,function(x){x/RSS_null}),1-sapply(mod_bwd_RSS,function(x){x/RSS_null})) 
- fix_cofs_RSS<-rep(expl_RSS[1],length(expl_RSS)) 
- cofs_RSS<-expl_RSS-fix_cofs_RSS 
- h2_RSS<-c(unlist(herit_fwd),unlist(herit_bwd))*(1-expl_RSS) 
- unexpl_RSS<-1-expl_RSS-h2_RSS 
- plot_RSS<-t(apply(cbind(fix_cofs_RSS,cofs_RSS,h2_RSS,unexpl_RSS),1,cumsum)) 
-  
- #GLS pvals at each step 
- pval_step<-list() 
- pval_step[[1]]<-list(out=data.frame('SNP'=names(pval[[2]]),'pval'=pval[[2]]),cof=addcof_fwd[[1]], "coef"=fwd_lm[[1]]$coef) 
- for (i in 2:(length(mod_fwd))) { 
-   pval_step[[i]]<-list('out'=rbind(data.frame('SNP'=colnames(cof_fwd[[i]]),'pval'=fwd_lm[[i]]$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof_fwd[[i]])),4]), 
-                                    data.frame('SNP'=names(pval[[i+1]]),'pval'=pval[[i+1]])), 
-                        'cof'=colnames(cof_fwd[[i]]), 
-                        'coef'=fwd_lm[[i]]$coef) 
-   } 
-  
- #GLS pvals for best models according to extBIC and mbonf 
-  
- opt_extBIC<-fwdbwd_table[which(fwdbwd_table$extBIC==min(fwdbwd_table$extBIC))[1],] 
- opt_mbonf<-(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof))[1],] 
- if(! is.null(thresh)){ 
-   opt_thresh<-(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof))[1],] 
- } 
- bestmodel_pvals<-function(model) {if(substr(model$step_,start=0,stop=3)=='fwd') { 
- 		pval_step[[as.integer(substring(model$step_,first=4))+1]]} else if (substr(model$step_,start=0,stop=3)=='bwd') { 
- 		cof<-cof_bwd[[as.integer(substring(model$step_,first=4))+1]] 
- 		mixedmod<-emma.REMLE(Y,cbind(fix_cofs,cof),K_norm) 
- 		M<-solve(chol(mixedmod$vg*K_norm+mixedmod$ve*diag(n))) 
- 		Y_t<-crossprod(M,Y) 
- 		cof_t<-crossprod(M,cbind(fix_cofs,cof)) 
- 		GLS_lm<-summary(lm(Y_t~0+cof_t)) 
- 		Res_H0<-GLS_lm$residuals 
- 		Q_ <- qr.Q(qr(cof_t)) 
- 		RSS<-list() 
- 		for (j in 1:(nbchunks-1)) { 
- 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))]) 
- 		RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- 		rm(X_t)} 
- 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j)*round(m/nbchunks)+1):(m-ncol(cof))]) 
- 		RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)}) 
- 		rm(X_t,j) 
- 		RSSf<-unlist(RSS) 
- 		RSS_H0<-sum(Res_H0^2) 
- 		df2<-n-df1-ncol(fix_cofs)-ncol(cof) 
- 		Ftest<-(rep(RSS_H0,length(RSSf))/RSSf-1)*df2/df1 
- 		pval<-pf(Ftest,df1,df2,lower.tail=FALSE) 
- 		list('out'=rbind(data.frame(SNP=colnames(cof),'pval'=GLS_lm$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof)),4]), 
- 		                 data.frame('SNP'=names(pval),'pval'=pval)), 
- 		     'cof'=colnames(cof), 
- 		     'coef'=GLS_lm$coef)} else {cat('error \n')}} 
- opt_extBIC_out<-bestmodel_pvals(opt_extBIC) 
- opt_mbonf_out<-bestmodel_pvals(opt_mbonf) 
- if(! is.null(thresh)){ 
-   opt_thresh_out<-bestmodel_pvals(opt_thresh) 
- } 
- output <- list(step_table=fwdbwd_table,pval_step=pval_step,RSSout=plot_RSS,bonf_thresh=-log10(0.05/m),opt_extBIC=opt_extBIC_out,opt_mbonf=opt_mbonf_out) 
- if(! is.null(thresh)){ 
-   output$thresh <- -log10(thresh) 
-   output$opt_thresh <- opt_thresh_out 
- } 
- return(output) 
- } 
+##############################################################################################################################################
+ ###MLMM - Multi-Locus Mixed Model
+ ###SET OF FUNCTIONS TO CARRY GWAS CORRECTING FOR POPULATION STRUCTURE WHILE INCLUDING COFACTORS THROUGH A STEPWISE-REGRESSION APPROACH
+ #######
+ #
+ ##note: require EMMA
+ #library(emma)
+ #source('emma.r')
+ #
+ ##REQUIRED DATA & FORMAT
+ #
+ #PHENOTYPE - Y: a vector of length m, with names(Y)=individual names
+ #GENOTYPE - X: a n by m matrix, where n=number of individuals, m=number of SNPs, with rownames(X)=individual names, and colnames(X)=SNP names
+ #KINSHIP - K: a n by n matrix, with rownames(K)=colnames(K)=individual names
+ #each of these data being sorted in the same way, according to the individual name
+ #
+ ##FOR PLOTING THE GWAS RESULTS
+ #SNP INFORMATION - snp_info: a data frame having at least 3 columns:
+ # - 1 named 'SNP', with SNP names (same as colnames(X)),
+ # - 1 named 'Chr', with the chromosome number to which belong each SNP
+ # - 1 named 'Pos', with the position of the SNP onto the chromosome it belongs to.
+ #######
+ #
+ ##FUNCTIONS USE
+ #save this file somewhere on your computer and source it!
+ #source('path/mlmm.r')
+ #
+ ###FORWARD + BACKWARD ANALYSES
+ #mygwas<-mlmm(Y,X,K,nbchunks,maxsteps)
+ #X,Y,K as described above
+ #nbchunks: an integer defining the number of chunks of X to run the analysis, allows to decrease the memory usage ==> minimum=2, increase it if you do not have enough memory
+ #maxsteps: maximum number of steps desired in the forward approach. The forward approach breaks automatically once the pseudo-heritability is close to 0,
+ #			however to avoid doing too many steps in case the pseudo-heritability does not reach a value close to 0, this parameter is also used.
+ #			It's value must be specified as an integer >= 3
+ #
+ ###RESULTS
+ #
+ ##STEPWISE TABLE
+ #mygwas$step_table
+ #
+ ##PLOTS
+ #
+ ##PLOTS FORM THE FORWARD TABLE
+ #plot_step_table(mygwas,type=c('h2','maxpval','BIC','extBIC'))
+ #
+ ##RSS PLOT
+ #plot_step_RSS(mygwas)
+ #
+ ##GWAS MANHATTAN PLOTS
+ #
+ #FORWARD STEPS
+ #plot_fwd_GWAS(mygwas,step,snp_info,pval_filt)
+ #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #
+ #OPTIMAL MODELS
+ #Automatic identification of the optimal models within the forwrad-backward models according to the extendedBIC or multiple-bonferonni criteria
+ #
+ #plot_opt_GWAS(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #
+ ##GWAS MANHATTAN PLOT ZOOMED IN A REGION OF INTEREST
+ #plot_fwd_region(mygwas,step,snp_info,pval_filt,chrom,pos1,pos2)
+ #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #chrom is an integer specifying the chromosome on which the region of interest is
+ #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info
+ #
+ #plot_opt_region(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt,chrom,pos1,pos2)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #chrom is an integer specifying the chromosome on which the region of interest is
+ #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info
+ #
+ ##QQPLOTS of pvalues
+ #qqplot_fwd_GWAS(mygwas,nsteps)
+ #nsteps=maximum number of forward steps to be displayed
+ #
+ #qqplot_opt_GWAS(mygwas,opt=c('extBIC','mbonf'))
+ #
+ ##############################################################################################################################################
+
+ mlmm<-function(Y,X,K,nbchunks,maxsteps,thresh = NULL) {
+
+ n<-length(Y)
+ m<-ncol(X)
+
+ stopifnot(ncol(K) == n)
+ stopifnot(nrow(K) == n)
+ stopifnot(nrow(X) == n)
+ stopifnot(nbchunks >= 2)
+ stopifnot(maxsteps >= 3)
+
+ #INTERCEPT
+
+ Xo<-rep(1,n)
+
+ #K MATRIX NORMALISATION
+
+ K_norm<-(n-1)/sum((diag(n)-matrix(1,n,n)/n)*K)*K
+ rm(K)
+
+ #step 0 : NULL MODEL
+ cof_fwd<-list()
+ cof_fwd[[1]]<-as.matrix(Xo)
+ colnames(cof_fwd[[1]])<-'Xo'
+
+ mod_fwd<-list()
+ mod_fwd[[1]]<-emma.REMLE(Y,cof_fwd[[1]],K_norm)
+
+ herit_fwd<-list()
+ herit_fwd[[1]]<-mod_fwd[[1]]$vg/(mod_fwd[[1]]$vg+mod_fwd[[1]]$ve)
+
+ RSSf<-list()
+ RSSf[[1]]<-'NA'
+
+ RSS_H0<-list()
+ RSS_H0[[1]]<-'NA'
+
+ df1<-1
+ df2<-list()
+ df2[[1]]<-'NA'
+
+ Ftest<-list()
+ Ftest[[1]]<-'NA'
+
+ pval<-list()
+ pval[[1]]<-'NA'
+
+ fwd_lm<-list()
+
+ cat('null model done! pseudo-h=',round(herit_fwd[[1]],3),'\n')
+
+ #step 1 : EMMAX
+
+ M<-solve(chol(mod_fwd[[1]]$vg*K_norm+mod_fwd[[1]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_fwd_t<-crossprod(M,cof_fwd[[1]])
+ fwd_lm[[1]]<-summary(lm(Y_t~0+cof_fwd_t))
+ Res_H0<-fwd_lm[[1]]$residuals
+ Q_<-qr.Q(qr(cof_fwd_t))
+
+ RSS<-list()
+ for (j in 1:(nbchunks-1)) {
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[1]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t)}
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[1]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[1]])-1))])
+ RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t,j)
+
+ RSSf[[2]]<-unlist(RSS)
+ RSS_H0[[2]]<-sum(Res_H0^2)
+ df2[[2]]<-n-df1-ncol(cof_fwd[[1]])
+ Ftest[[2]]<-(rep(RSS_H0[[2]],length(RSSf[[2]]))/RSSf[[2]]-1)*df2[[2]]/df1
+ pval[[2]]<-pf(Ftest[[2]],df1,df2[[2]],lower.tail=FALSE)
+
+ cof_fwd[[2]]<-cbind(cof_fwd[[1]],X[,colnames(X) %in% names(which(RSSf[[2]]==min(RSSf[[2]]))[1])])
+ colnames(cof_fwd[[2]])<-c(colnames(cof_fwd[[1]]),names(which(RSSf[[2]]==min(RSSf[[2]]))[1]))
+ mod_fwd[[2]]<-emma.REMLE(Y,cof_fwd[[2]],K_norm)
+ herit_fwd[[2]]<-mod_fwd[[2]]$vg/(mod_fwd[[2]]$vg+mod_fwd[[2]]$ve)
+ rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)
+
+ cat('step 1 done! pseudo-h=',round(herit_fwd[[2]],3),'\n')
+
+ #FORWARD
+
+ for (i in 3:(maxsteps)) {
+ if (herit_fwd[[i-2]] < 0.01) break else {
+
+ M<-solve(chol(mod_fwd[[i-1]]$vg*K_norm+mod_fwd[[i-1]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_fwd_t<-crossprod(M,cof_fwd[[i-1]])
+ fwd_lm[[i-1]]<-summary(lm(Y_t~0+cof_fwd_t))
+ Res_H0<-fwd_lm[[i-1]]$residuals
+ Q_ <- qr.Q(qr(cof_fwd_t))
+
+ RSS<-list()
+ for (j in 1:(nbchunks-1)) {
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t)}
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[i-1]])-1))])
+ RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t,j)
+
+ RSSf[[i]]<-unlist(RSS)
+ RSS_H0[[i]]<-sum(Res_H0^2)
+ df2[[i]]<-n-df1-ncol(cof_fwd[[i-1]])
+ Ftest[[i]]<-(rep(RSS_H0[[i]],length(RSSf[[i]]))/RSSf[[i]]-1)*df2[[i]]/df1
+ pval[[i]]<-pf(Ftest[[i]],df1,df2[[i]],lower.tail=FALSE)
+
+ cof_fwd[[i]]<-cbind(cof_fwd[[i-1]],X[,colnames(X) %in% names(which(RSSf[[i]]==min(RSSf[[i]]))[1])])
+ colnames(cof_fwd[[i]])<-c(colnames(cof_fwd[[i-1]]),names(which(RSSf[[i]]==min(RSSf[[i]]))[1]))
+ mod_fwd[[i]]<-emma.REMLE(Y,cof_fwd[[i]],K_norm)
+ herit_fwd[[i]]<-mod_fwd[[i]]$vg/(mod_fwd[[i]]$vg+mod_fwd[[i]]$ve)
+ rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)}
+ cat('step ',i-1,' done! pseudo-h=',round(herit_fwd[[i]],3),'\n')}
+ rm(i)
+
+ ##gls at last forward step
+ M<-solve(chol(mod_fwd[[length(mod_fwd)]]$vg*K_norm+mod_fwd[[length(mod_fwd)]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_fwd_t<-crossprod(M,cof_fwd[[length(mod_fwd)]])
+ fwd_lm[[length(mod_fwd)]]<-summary(lm(Y_t~0+cof_fwd_t))
+
+ Res_H0<-fwd_lm[[length(mod_fwd)]]$residuals
+ Q_ <- qr.Q(qr(cof_fwd_t))
+
+ RSS<-list()
+ for (j in 1:(nbchunks-1)) {
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t)}
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[length(mod_fwd)]])-1))])
+ RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t,j)
+
+ RSSf[[length(mod_fwd)+1]]<-unlist(RSS)
+ RSS_H0[[length(mod_fwd)+1]]<-sum(Res_H0^2)
+ df2[[length(mod_fwd)+1]]<-n-df1-ncol(cof_fwd[[length(mod_fwd)]])
+ Ftest[[length(mod_fwd)+1]]<-(rep(RSS_H0[[length(mod_fwd)+1]],length(RSSf[[length(mod_fwd)+1]]))/RSSf[[length(mod_fwd)+1]]-1)*df2[[length(mod_fwd)+1]]/df1
+ pval[[length(mod_fwd)+1]]<-pf(Ftest[[length(mod_fwd)+1]],df1,df2[[length(mod_fwd)+1]],lower.tail=FALSE)
+ rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)
+
+ ##get max pval at each forward step
+ max_pval_fwd<-vector(mode="numeric",length=length(fwd_lm))
+ max_pval_fwd[1]<-0
+ for (i in 2:length(fwd_lm)) {max_pval_fwd[i]<-max(fwd_lm[[i]]$coef[2:i,4])}
+ rm(i)
+
+ ##get the number of parameters & Loglikelihood from ML at each step
+ mod_fwd_LL<-list()
+ mod_fwd_LL[[1]]<-list(nfixed=ncol(cof_fwd[[1]]),LL=emma.MLE(Y,cof_fwd[[1]],K_norm)$ML)
+ for (i in 2:length(cof_fwd)) {mod_fwd_LL[[i]]<-list(nfixed=ncol(cof_fwd[[i]]),LL=emma.MLE(Y,cof_fwd[[i]],K_norm)$ML)}
+ rm(i)
+
+ cat('backward analysis','\n')
+
+ ##BACKWARD (1st step == last fwd step)
+
+ dropcof_bwd<-list()
+ cof_bwd<-list()
+ mod_bwd <- list()
+ bwd_lm<-list()
+ herit_bwd<-list()
+
+ dropcof_bwd[[1]]<-'NA'
+ cof_bwd[[1]]<-as.matrix(cof_fwd[[length(mod_fwd)]][,!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]])
+ colnames(cof_bwd[[1]])<-colnames(cof_fwd[[length(mod_fwd)]])[!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]]
+ mod_bwd[[1]]<-emma.REMLE(Y,cof_bwd[[1]],K_norm)
+ herit_bwd[[1]]<-mod_bwd[[1]]$vg/(mod_bwd[[1]]$vg+mod_bwd[[1]]$ve)
+ M<-solve(chol(mod_bwd[[1]]$vg*K_norm+mod_bwd[[1]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_bwd_t<-crossprod(M,cof_bwd[[1]])
+ bwd_lm[[1]]<-summary(lm(Y_t~0+cof_bwd_t))
+
+ rm(M,Y_t,cof_bwd_t)
+
+ for (i in 2:length(mod_fwd)) {
+ dropcof_bwd[[i]]<-(colnames(cof_bwd[[i-1]])[2:ncol(cof_bwd[[i-1]])])[which(abs(bwd_lm[[i-1]]$coef[2:nrow(bwd_lm[[i-1]]$coef),3])==min(abs(bwd_lm[[i-1]]$coef[2:nrow(bwd_lm[[i-1]]$coef),3])))]
+ cof_bwd[[i]]<-as.matrix(cof_bwd[[i-1]][,!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]])
+ colnames(cof_bwd[[i]])<-colnames(cof_bwd[[i-1]])[!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]]
+ mod_bwd[[i]]<-emma.REMLE(Y,cof_bwd[[i]],K_norm)
+ herit_bwd[[i]]<-mod_bwd[[i]]$vg/(mod_bwd[[i]]$vg+mod_bwd[[i]]$ve)
+ M<-solve(chol(mod_bwd[[i]]$vg*K_norm+mod_bwd[[i]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_bwd_t<-crossprod(M,cof_bwd[[i]])
+ bwd_lm[[i]]<-summary(lm(Y_t~0+cof_bwd_t))
+ rm(M,Y_t,cof_bwd_t)}
+
+ rm(i)
+
+ ##get max pval at each backward step
+ max_pval_bwd<-vector(mode="numeric",length=length(bwd_lm))
+ for (i in 1:(length(bwd_lm)-1)) {max_pval_bwd[i]<-max(bwd_lm[[i]]$coef[2:(length(bwd_lm)+1-i),4])}
+ max_pval_bwd[length(bwd_lm)]<-0
+
+ ##get the number of parameters & Loglikelihood from ML at each step
+ mod_bwd_LL<-list()
+ mod_bwd_LL[[1]]<-list(nfixed=ncol(cof_bwd[[1]]),LL=emma.MLE(Y,cof_bwd[[1]],K_norm)$ML)
+ for (i in 2:length(cof_bwd)) {mod_bwd_LL[[i]]<-list(nfixed=ncol(cof_bwd[[i]]),LL=emma.MLE(Y,cof_bwd[[i]],K_norm)$ML)}
+ rm(i)
+
+ cat('creating output','\n')
+
+ ##Forward Table: Fwd + Bwd Tables
+ #Compute parameters for model criteria
+ BIC<-function(x){-2*x$LL+(x$nfixed+1)*log(n)}
+ extBIC<-function(x){BIC(x)+2*lchoose(m,x$nfixed-1)}
+
+ fwd_table<-data.frame(step=ncol(cof_fwd[[1]])-1,step_=paste('fwd',ncol(cof_fwd[[1]])-1,sep=''),cof='NA',ncof=ncol(cof_fwd[[1]])-1,h2=herit_fwd[[1]]
+ 	,maxpval=max_pval_fwd[1],BIC=BIC(mod_fwd_LL[[1]]),extBIC=extBIC(mod_fwd_LL[[1]]))
+ for (i in 2:(length(mod_fwd))) {fwd_table<-rbind(fwd_table,
+ 	data.frame(step=ncol(cof_fwd[[i]])-1,step_=paste('fwd',ncol(cof_fwd[[i]])-1,sep=''),cof=paste('+',colnames(cof_fwd[[i]])[i],sep=''),ncof=ncol(cof_fwd[[i]])-1,h2=herit_fwd[[i]]
+ 	,maxpval=max_pval_fwd[i],BIC=BIC(mod_fwd_LL[[i]]),extBIC=extBIC(mod_fwd_LL[[i]])))}
+
+ rm(i)
+
+ bwd_table<-data.frame(step=length(mod_fwd),step_=paste('bwd',0,sep=''),cof=paste('-',dropcof_bwd[[1]],sep=''),ncof=ncol(cof_bwd[[1]])-1,h2=herit_bwd[[1]]
+ 	,maxpval=max_pval_bwd[1],BIC=BIC(mod_bwd_LL[[1]]),extBIC=extBIC(mod_bwd_LL[[1]]))
+ for (i in 2:(length(mod_bwd))) {bwd_table<-rbind(bwd_table,
+ 	data.frame(step=length(mod_fwd)+i-1,step_=paste('bwd',i-1,sep=''),cof=paste('-',dropcof_bwd[[i]],sep=''),ncof=ncol(cof_bwd[[i]])-1,h2=herit_bwd[[i]]
+ 	,maxpval=max_pval_bwd[i],BIC=BIC(mod_bwd_LL[[i]]),extBIC=extBIC(mod_bwd_LL[[i]])))}
+
+ rm(i,BIC,extBIC,max_pval_fwd,max_pval_bwd,dropcof_bwd)
+
+ fwdbwd_table<-rbind(fwd_table,bwd_table)
+
+ #RSS for plot
+ mod_fwd_RSS<-vector()
+ mod_fwd_RSS[1]<-sum((Y-cof_fwd[[1]]%*%fwd_lm[[1]]$coef[,1])^2)
+ for (i in 2:length(mod_fwd)) {mod_fwd_RSS[i]<-sum((Y-cof_fwd[[i]]%*%fwd_lm[[i]]$coef[,1])^2)}
+ mod_bwd_RSS<-vector()
+ mod_bwd_RSS[1]<-sum((Y-cof_bwd[[1]]%*%bwd_lm[[1]]$coef[,1])^2)
+ for (i in 2:length(mod_bwd)) {mod_bwd_RSS[i]<-sum((Y-cof_bwd[[i]]%*%bwd_lm[[i]]$coef[,1])^2)}
+ expl_RSS<-c(1-sapply(mod_fwd_RSS,function(x){x/mod_fwd_RSS[1]}),1-sapply(mod_bwd_RSS,function(x){x/mod_bwd_RSS[length(mod_bwd_RSS)]}))
+ h2_RSS<-c(unlist(herit_fwd),unlist(herit_bwd))*(1-expl_RSS)
+ unexpl_RSS<-1-expl_RSS-h2_RSS
+ plot_RSS<-t(apply(cbind(expl_RSS,h2_RSS,unexpl_RSS),1,cumsum))
+
+ #GLS pvals at each step
+ pval_step<-list()
+ pval_step[[1]]<-list(out=data.frame("SNP"=colnames(X),"pval"=pval[[2]]),"cof"=NA, "coef"=fwd_lm[[1]]$coef)
+ for (i in 2:(length(mod_fwd))) {pval_step[[i]]<-list(out=rbind(data.frame(SNP=colnames(cof_fwd[[i]])[-1],'pval'=fwd_lm[[i]]$coef[2:i,4]),
+ 	data.frame(SNP=colnames(X)[-which(colnames(X) %in% colnames(cof_fwd[[i]]))],'pval'=pval[[i+1]])),"cof"=colnames(cof_fwd[[i]])[-1], "coef"=fwd_lm[[i]]$coef)}
+
+ #GLS pvals for best models according to extBIC and mbonf
+
+ opt_extBIC<-fwdbwd_table[which(fwdbwd_table$extBIC==min(fwdbwd_table$extBIC))[1],]
+ opt_mbonf<-(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof))[1],]
+ if(! is.null(thresh)){
+   opt_thresh<-(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof))[1],]
+ }
+ bestmodel_pvals<-function(model) {if(substr(model$step_,start=0,stop=3)=='fwd') {
+ 		pval_step[[as.integer(substring(model$step_,first=4))+1]]} else if (substr(model$step_,start=0,stop=3)=='bwd') {
+ 		cof<-cof_bwd[[as.integer(substring(model$step_,first=4))+1]]
+ 		mixedmod<-emma.REMLE(Y,cof,K_norm)
+ 		M<-solve(chol(mixedmod$vg*K_norm+mixedmod$ve*diag(n)))
+ 		Y_t<-crossprod(M,Y)
+ 		cof_t<-crossprod(M,cof)
+ 		GLS_lm<-summary(lm(Y_t~0+cof_t))
+ 		Res_H0<-GLS_lm$residuals
+ 		Q_ <- qr.Q(qr(cof_t))
+ 		RSS<-list()
+ 		for (j in 1:(nbchunks-1)) {
+ 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ 		RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ 		rm(X_t)}
+ 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof)-1))])
+ 		RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ 		rm(X_t,j)
+ 		RSSf<-unlist(RSS)
+ 		RSS_H0<-sum(Res_H0^2)
+ 		df2<-n-df1-ncol(cof)
+ 		Ftest<-(rep(RSS_H0,length(RSSf))/RSSf-1)*df2/df1
+ 		pval<-pf(Ftest,df1,df2,lower.tail=FALSE)
+ 		list('out'=rbind(data.frame(SNP=colnames(cof)[-1],'pval'=GLS_lm$coef[2:(ncol(cof)),4]),
+ 		                 data.frame('SNP'=colnames(X)[-which(colnames(X) %in% colnames(cof))],'pval'=pval)),
+ 		     'cof'=colnames(cof)[-1],
+ 		     'coef'=GLS_lm$coef)} else {cat('error \n')}}
+ opt_extBIC_out<-bestmodel_pvals(opt_extBIC)
+ opt_mbonf_out<-bestmodel_pvals(opt_mbonf)
+ if(! is.null(thresh)){
+   opt_thresh_out<-bestmodel_pvals(opt_thresh)
+ }
+ output <- list(step_table=fwdbwd_table,pval_step=pval_step,RSSout=plot_RSS,bonf_thresh=-log10(0.05/m),opt_extBIC=opt_extBIC_out,opt_mbonf=opt_mbonf_out)
+ if(! is.null(thresh)){
+   output$thresh <- -log10(thresh)
+   output$opt_thresh <- opt_thresh_out
+ }
+ return(output)
+ }
+##############################################################################################################################################
+ ###MLMM_COF - Multi-Locus Mixed Model
+ ###SET OF FUNCTIONS TO CARRY GWAS CORRECTING FOR POPULATION STRUCTURE WHILE INCLUDING COFACTORS THROUGH A STEPWISE-REGRESSION APPROACH
+ #######
+ #
+ ##note: require EMMA
+ #library(emma)
+ #source('emma.r')
+ #
+ ##REQUIRED DATA & FORMAT
+ #
+ #PHENOTYPE - Y: a vector of length m, with names(Y)=individual names
+ #GENOTYPE - X: a n by m matrix, where n=number of individuals, m=number of SNPs, with rownames(X)=individual names, and colnames(X)=SNP names
+ #KINSHIP - K: a n by n matrix, with rownames(K)=colnames(K)=individual names
+ #COVARIANCE MATRIX - cofs: a n by p matrix, where n=number of individuals, p=number of covariates in the matrix (e.g. PC axes)
+ #each of these data being sorted in the same way, according to the individual name
+ #
+ ##FOR PLOTING THE GWAS RESULTS
+ #SNP INFORMATION - snp_info: a data frame having at least 3 columns:
+ # - 1 named 'SNP', with SNP names (same as colnames(X)),
+ # - 1 named 'Chr', with the chromosome number to which belong each SNP
+ # - 1 named 'Pos', with the position of the SNP onto the chromosome it belongs to.
+ #######
+ #
+ ##FUNCTIONS USE
+ #save this file somewhere on your computer and source it!
+ #source('path/mlmm.r')
+ #
+ ###FORWARD + BACKWARD ANALYSES
+ #mygwas<-mlmm_cof(Y,X,K,nbchunks,maxsteps)
+ #X,Y,K as described above
+ #nbchunks: an integer defining the number of chunks of X to run the analysis, allows to decrease the memory usage ==> minimum=2, increase it if you do not have enough memory
+ #maxsteps: maximum number of steps desired in the forward approach. The forward approach breaks automatically once the pseudo-heritability is close to 0,
+ #			however to avoid doing too many steps in case the pseudo-heritability does not reach a value close to 0, this parameter is also used.
+ #			It's value must be specified as an integer >= 3
+ #
+ ###RESULTS
+ #
+ ##STEPWISE TABLE
+ #mygwas$step_table
+ #
+ ##PLOTS
+ #
+ ##PLOTS FORM THE FORWARD TABLE
+ #plot_step_table(mygwas,type=c('h2','maxpval','BIC','extBIC'))
+ #
+ ##RSS PLOT
+ #plot_step_RSS(mygwas)
+ #
+ ##GWAS MANHATTAN PLOTS
+ #
+ #FORWARD STEPS
+ #plot_fwd_GWAS(mygwas,step,snp_info,pval_filt)
+ #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #
+ #OPTIMAL MODELS
+ #Automatic identification of the optimal models within the forwrad-backward models according to the extendedBIC or multiple-bonferonni criteria
+ #
+ #plot_opt_GWAS(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #
+ ##GWAS MANHATTAN PLOT ZOOMED IN A REGION OF INTEREST
+ #plot_fwd_region(mygwas,step,snp_info,pval_filt,chrom,pos1,pos2)
+ #step=the step to be plotted in the forward approach, where 1 is the EMMAX scan (no cofactor)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #chrom is an integer specifying the chromosome on which the region of interest is
+ #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info
+ #
+ #plot_opt_region(mygwas,opt=c('extBIC','mbonf'),snp_info,pval_filt,chrom,pos1,pos2)
+ #snp_info as described above
+ #pval_filt=a p-value threshold for filtering the output, only p-vals below this threshold will be displayed in the plot
+ #chrom is an integer specifying the chromosome on which the region of interest is
+ #pos1, pos2 are integers delimiting the region of interest in the same unit as Pos in snp_info
+ #
+ ##QQPLOTS of pvalues
+ #qqplot_fwd_GWAS(mygwas,nsteps)
+ #nsteps=maximum number of forward steps to be displayed
+ #
+ #qqplot_opt_GWAS(mygwas,opt=c('extBIC','mbonf'))
+ #
+ ##############################################################################################################################################
+
+ mlmm_cof<-function(Y,X,cofs,K,nbchunks,maxsteps,thresh = NULL) {
+
+ n<-length(Y)
+ m<-ncol(X)
+
+ stopifnot(ncol(K) == n)
+ stopifnot(nrow(K) == n)
+ stopifnot(nrow(X) == n)
+ stopifnot(nrow(cofs) == n)
+ stopifnot(nbchunks >= 2)
+ stopifnot(maxsteps >= 3)
+
+ #INTERCEPT
+
+ Xo<-rep(1,n)
+
+ #K MATRIX NORMALISATION
+
+ K_norm<-(n-1)/sum((diag(n)-matrix(1,n,n)/n)*K)*K
+ rm(K)
+
+ #step 0 : NULL MODEL
+
+ fix_cofs<-cbind(Xo,cofs)
+ rm(cofs)
+
+ addcof_fwd<-list()
+ addcof_fwd[[1]]<-'NA'
+
+ cof_fwd<-list()
+ cof_fwd[[1]]<-as.matrix(X[,colnames(X) %in% addcof_fwd[[1]]])
+
+ mod_fwd<-list()
+ mod_fwd[[1]]<-emma.REMLE(Y,cbind(fix_cofs,cof_fwd[[1]]),K_norm)
+
+ herit_fwd<-list()
+ herit_fwd[[1]]<-mod_fwd[[1]]$vg/(mod_fwd[[1]]$vg+mod_fwd[[1]]$ve)
+
+ RSSf<-list()
+ RSSf[[1]]<-'NA'
+
+ RSS_H0<-list()
+ RSS_H0[[1]]<-'NA'
+
+ df1<-1
+ df2<-list()
+ df2[[1]]<-'NA'
+
+ Ftest<-list()
+ Ftest[[1]]<-'NA'
+
+ pval<-list()
+ pval[[1]]<-'NA'
+
+ fwd_lm<-list()
+
+ cat('null model done! pseudo-h=',round(herit_fwd[[1]],3),'\n')
+
+ #step 1 : EMMAX
+
+ M<-solve(chol(mod_fwd[[1]]$vg*K_norm+mod_fwd[[1]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_fwd_t<-crossprod(M,cbind(fix_cofs,cof_fwd[[1]]))
+ fwd_lm[[1]]<-summary(lm(Y_t~0+cof_fwd_t))
+ Res_H0<-fwd_lm[[1]]$residuals
+ Q_<-qr.Q(qr(cof_fwd_t))
+
+ RSS<-list()
+ for (j in 1:(nbchunks-1)) {
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% addcof_fwd[[1]]])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t)}
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% addcof_fwd[[1]]])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[1]])))])
+ RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t,j)
+
+ RSSf[[2]]<-unlist(RSS)
+ RSS_H0[[2]]<-sum(Res_H0^2)
+ df2[[2]]<-n-df1-ncol(fix_cofs)-ncol(cof_fwd[[1]])
+ Ftest[[2]]<-(rep(RSS_H0[[2]],length(RSSf[[2]]))/RSSf[[2]]-1)*df2[[2]]/df1
+ pval[[2]]<-pf(Ftest[[2]],df1,df2[[2]],lower.tail=FALSE)
+ addcof_fwd[[2]]<-names(which(RSSf[[2]]==min(RSSf[[2]]))[1])
+ cof_fwd[[2]]<-cbind(cof_fwd[[1]],X[,colnames(X) %in% addcof_fwd[[2]]])
+  colnames(cof_fwd[[2]])[ncol(cof_fwd[[2]])]<-addcof_fwd[[2]]
+ mod_fwd[[2]]<-emma.REMLE(Y,cbind(fix_cofs,cof_fwd[[2]]),K_norm)
+ herit_fwd[[2]]<-mod_fwd[[2]]$vg/(mod_fwd[[2]]$vg+mod_fwd[[2]]$ve)
+ rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)
+
+ cat('step 1 done! pseudo-h=',round(herit_fwd[[2]],3),'\n')
+
+ #FORWARD
+
+ for (i in 3:(maxsteps)) {
+ if (herit_fwd[[i-2]] < 0.01) break else {
+
+ M<-solve(chol(mod_fwd[[i-1]]$vg*K_norm+mod_fwd[[i-1]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_fwd_t<-crossprod(M,cbind(fix_cofs,cof_fwd[[i-1]]))
+ fwd_lm[[i-1]]<-summary(lm(Y_t~0+cof_fwd_t))
+ Res_H0<-fwd_lm[[i-1]]$residuals
+ Q_ <- qr.Q(qr(cof_fwd_t))
+
+ RSS<-list()
+ for (j in 1:(nbchunks-1)) {
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t)}
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[i-1]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[i-1]])))])
+ RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t,j)
+
+ RSSf[[i]]<-unlist(RSS)
+ RSS_H0[[i]]<-sum(Res_H0^2)
+ df2[[i]]<-n-df1-ncol(fix_cofs)-ncol(cof_fwd[[i-1]])
+ Ftest[[i]]<-(rep(RSS_H0[[i]],length(RSSf[[i]]))/RSSf[[i]]-1)*df2[[i]]/df1
+ pval[[i]]<-pf(Ftest[[i]],df1,df2[[i]],lower.tail=FALSE)
+ addcof_fwd[[i]]<-names(which(RSSf[[i]]==min(RSSf[[i]]))[1])
+ cof_fwd[[i]]<-cbind(cof_fwd[[i-1]],X[,colnames(X) %in% addcof_fwd[[i]]])
+ colnames(cof_fwd[[i]])[ncol(cof_fwd[[i]])]<-addcof_fwd[[i]]
+ mod_fwd[[i]]<-emma.REMLE(Y,cbind(fix_cofs,cof_fwd[[i]]),K_norm)
+ herit_fwd[[i]]<-mod_fwd[[i]]$vg/(mod_fwd[[i]]$vg+mod_fwd[[i]]$ve)
+ rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)}
+ cat('step ',i-1,' done! pseudo-h=',round(herit_fwd[[i]],3),'\n')}
+ rm(i)
+
+ ##gls at last forward step
+ M<-solve(chol(mod_fwd[[length(mod_fwd)]]$vg*K_norm+mod_fwd[[length(mod_fwd)]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_fwd_t<-crossprod(M,cbind(fix_cofs,cof_fwd[[length(mod_fwd)]]))
+ fwd_lm[[length(mod_fwd)]]<-summary(lm(Y_t~0+cof_fwd_t))
+
+ Res_H0<-fwd_lm[[length(mod_fwd)]]$residuals
+ Q_ <- qr.Q(qr(cof_fwd_t))
+
+ RSS<-list()
+ for (j in 1:(nbchunks-1)) {
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t)}
+ X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof_fwd[[length(mod_fwd)]])])[,((j)*round(m/nbchunks)+1):(m-(ncol(cof_fwd[[length(mod_fwd)]])))])
+ RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ rm(X_t,j)
+
+ RSSf[[length(mod_fwd)+1]]<-unlist(RSS)
+ RSS_H0[[length(mod_fwd)+1]]<-sum(Res_H0^2)
+ df2[[length(mod_fwd)+1]]<-n-df1-ncol(fix_cofs)-ncol(cof_fwd[[length(mod_fwd)]])
+ Ftest[[length(mod_fwd)+1]]<-(rep(RSS_H0[[length(mod_fwd)+1]],length(RSSf[[length(mod_fwd)+1]]))/RSSf[[length(mod_fwd)+1]]-1)*df2[[length(mod_fwd)+1]]/df1
+ pval[[length(mod_fwd)+1]]<-pf(Ftest[[length(mod_fwd)+1]],df1,df2[[length(mod_fwd)+1]],lower.tail=FALSE)
+ rm(M,Y_t,cof_fwd_t,Res_H0,Q_,RSS)
+
+ ##get max pval at each forward step
+ max_pval_fwd<-vector(mode="numeric",length=length(fwd_lm))
+ max_pval_fwd[1]<-0
+ for (i in 2:length(fwd_lm)) {max_pval_fwd[i]<-max(fwd_lm[[i]]$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof_fwd[[i]])),4])}
+ rm(i)
+
+ ##get the number of parameters & Loglikelihood from ML at each step
+ mod_fwd_LL<-list()
+ mod_fwd_LL[[1]]<-list(nfixed=ncol(cbind(fix_cofs,cof_fwd[[1]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_fwd[[1]]),K_norm)$ML)
+ for (i in 2:length(cof_fwd)) {mod_fwd_LL[[i]]<-list(nfixed=ncol(cbind(fix_cofs,cof_fwd[[i]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_fwd[[i]]),K_norm)$ML)}
+ rm(i)
+
+ cat('backward analysis','\n')
+
+ ##BACKWARD (1st step == last fwd step)
+
+ dropcof_bwd<-list()
+ cof_bwd<-list()
+ mod_bwd <- list()
+ bwd_lm<-list()
+ herit_bwd<-list()
+
+ dropcof_bwd[[1]]<-'NA'
+ cof_bwd[[1]]<-as.matrix(cof_fwd[[length(mod_fwd)]][,!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]])
+ colnames(cof_bwd[[1]])<-colnames(cof_fwd[[length(mod_fwd)]])[!colnames(cof_fwd[[length(mod_fwd)]]) %in% dropcof_bwd[[1]]]
+ mod_bwd[[1]]<-emma.REMLE(Y,cbind(fix_cofs,cof_bwd[[1]]),K_norm)
+ herit_bwd[[1]]<-mod_bwd[[1]]$vg/(mod_bwd[[1]]$vg+mod_bwd[[1]]$ve)
+ M<-solve(chol(mod_bwd[[1]]$vg*K_norm+mod_bwd[[1]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_bwd_t<-crossprod(M,cbind(fix_cofs,cof_bwd[[1]]))
+ bwd_lm[[1]]<-summary(lm(Y_t~0+cof_bwd_t))
+
+ rm(M,Y_t,cof_bwd_t)
+
+
+ for (i in 2:length(mod_fwd)) {
+ dropcof_bwd[[i]]<-colnames(cof_bwd[[i-1]])[which(abs(bwd_lm[[i-1]]$coef[(ncol(fix_cofs)+1):nrow(bwd_lm[[i-1]]$coef),3])==min(abs(bwd_lm[[i-1]]$coef[(ncol(fix_cofs)+1):nrow(bwd_lm[[i-1]]$coef),3])))]
+ cof_bwd[[i]]<-as.matrix(cof_bwd[[i-1]][,!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]])
+ colnames(cof_bwd[[i]])<-colnames(cof_bwd[[i-1]])[!colnames(cof_bwd[[i-1]]) %in% dropcof_bwd[[i]]]
+ mod_bwd[[i]]<-emma.REMLE(Y,cbind(fix_cofs,cof_bwd[[i]]),K_norm)
+ herit_bwd[[i]]<-mod_bwd[[i]]$vg/(mod_bwd[[i]]$vg+mod_bwd[[i]]$ve)
+ M<-solve(chol(mod_bwd[[i]]$vg*K_norm+mod_bwd[[i]]$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ cof_bwd_t<-crossprod(M,cbind(fix_cofs,cof_bwd[[i]]))
+ bwd_lm[[i]]<-summary(lm(Y_t~0+cof_bwd_t))
+ rm(M,Y_t,cof_bwd_t)}
+
+ rm(i)
+
+ ##get max pval at each backward step
+ max_pval_bwd<-vector(mode="numeric",length=length(bwd_lm))
+ for (i in 1:(length(bwd_lm)-1)) {max_pval_bwd[i]<-max(bwd_lm[[i]]$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof_bwd[[i]])),4])}
+ max_pval_bwd[length(bwd_lm)]<-0
+
+ ##get the number of parameters & Loglikelihood from ML at each step
+ mod_bwd_LL<-list()
+ mod_bwd_LL[[1]]<-list(nfixed=ncol(cbind(fix_cofs,cof_bwd[[1]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_bwd[[1]]),K_norm)$ML)
+ for (i in 2:length(cof_bwd)) {mod_bwd_LL[[i]]<-list(nfixed=ncol(cbind(fix_cofs,cof_bwd[[i]])),LL=emma.MLE(Y,cbind(fix_cofs,cof_bwd[[i]]),K_norm)$ML)}
+ rm(i)
+
+ cat('creating output','\n')
+
+ ##Forward Table: Fwd + Bwd Tables
+ #Compute parameters for model criteria
+ BIC<-function(x){-2*x$LL+(x$nfixed+1)*log(n)}
+ extBIC<-function(x){BIC(x)+2*lchoose(m,x$nfixed-1)}
+
+ fwd_table<-data.frame(step=ncol(cof_fwd[[1]]),step_=paste('fwd',ncol(cof_fwd[[1]]),sep=''),cof=paste('+',addcof_fwd[[1]],sep=''),ncof=ncol(cof_fwd[[1]]),h2=herit_fwd[[1]]
+ 	,maxpval=max_pval_fwd[1],BIC=BIC(mod_fwd_LL[[1]]),extBIC=extBIC(mod_fwd_LL[[1]]))
+ for (i in 2:(length(mod_fwd))) {fwd_table<-rbind(fwd_table,
+ 	data.frame(step=ncol(cof_fwd[[i]]),step_=paste('fwd',ncol(cof_fwd[[i]]),sep=''),cof=paste('+',addcof_fwd[[i]],sep=''),ncof=ncol(cof_fwd[[i]]),h2=herit_fwd[[i]]
+ 	,maxpval=max_pval_fwd[i],BIC=BIC(mod_fwd_LL[[i]]),extBIC=extBIC(mod_fwd_LL[[i]])))}
+
+ rm(i)
+
+ bwd_table<-data.frame(step=length(mod_fwd),step_=paste('bwd',0,sep=''),cof=paste('-',dropcof_bwd[[1]],sep=''),ncof=ncol(cof_bwd[[1]]),h2=herit_bwd[[1]]
+ 	,maxpval=max_pval_bwd[1],BIC=BIC(mod_bwd_LL[[1]]),extBIC=extBIC(mod_bwd_LL[[1]]))
+ for (i in 2:(length(mod_bwd))) {bwd_table<-rbind(bwd_table,
+ 	data.frame(step=length(mod_fwd)+i-1,step_=paste('bwd',i-1,sep=''),cof=paste('-',dropcof_bwd[[i]],sep=''),ncof=ncol(cof_bwd[[i]]),h2=herit_bwd[[i]]
+ 	,maxpval=max_pval_bwd[i],BIC=BIC(mod_bwd_LL[[i]]),extBIC=extBIC(mod_bwd_LL[[i]])))}
+
+ rm(i,BIC,extBIC,max_pval_fwd,max_pval_bwd,dropcof_bwd)
+
+ fwdbwd_table<-rbind(fwd_table,bwd_table)
+
+ #RSS for plot
+
+ #null model only with intercept
+ null<-emma.REMLE(Y,as.matrix(Xo),K_norm)
+ M<-solve(chol(null$vg*K_norm+null$ve*diag(n)))
+ Y_t<-crossprod(M,Y)
+ Xo_t<-crossprod(M,as.matrix(Xo))
+ null_lm<-summary(lm(Y_t~0+Xo_t))
+ rm(null,M,Y_t,Xo_t)
+ RSS_null<-sum((Y-as.matrix(Xo)%*%null_lm$coef[,1])^2)
+
+ mod_fwd_RSS<-vector()
+ mod_fwd_RSS[1]<-sum((Y-cbind(fix_cofs,cof_fwd[[1]])%*%fwd_lm[[1]]$coef[,1])^2)
+ for (i in 2:length(mod_fwd)) {mod_fwd_RSS[i]<-sum((Y-cbind(fix_cofs,cof_fwd[[i]])%*%fwd_lm[[i]]$coef[,1])^2)}
+ mod_bwd_RSS<-vector()
+ mod_bwd_RSS[1]<-sum((Y-cbind(fix_cofs,cof_bwd[[1]])%*%bwd_lm[[1]]$coef[,1])^2)
+ for (i in 2:length(mod_bwd)) {mod_bwd_RSS[i]<-sum((Y-cbind(fix_cofs,cof_bwd[[i]])%*%bwd_lm[[i]]$coef[,1])^2)}
+
+ expl_RSS<-c(1-sapply(mod_fwd_RSS,function(x){x/RSS_null}),1-sapply(mod_bwd_RSS,function(x){x/RSS_null}))
+ fix_cofs_RSS<-rep(expl_RSS[1],length(expl_RSS))
+ cofs_RSS<-expl_RSS-fix_cofs_RSS
+ h2_RSS<-c(unlist(herit_fwd),unlist(herit_bwd))*(1-expl_RSS)
+ unexpl_RSS<-1-expl_RSS-h2_RSS
+ plot_RSS<-t(apply(cbind(fix_cofs_RSS,cofs_RSS,h2_RSS,unexpl_RSS),1,cumsum))
+
+ #GLS pvals at each step
+ pval_step<-list()
+ pval_step[[1]]<-list(out=data.frame('SNP'=names(pval[[2]]),'pval'=pval[[2]]),cof=addcof_fwd[[1]], "coef"=fwd_lm[[1]]$coef)
+ for (i in 2:(length(mod_fwd))) {
+   pval_step[[i]]<-list('out'=rbind(data.frame('SNP'=colnames(cof_fwd[[i]]),'pval'=fwd_lm[[i]]$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof_fwd[[i]])),4]),
+                                    data.frame('SNP'=names(pval[[i+1]]),'pval'=pval[[i+1]])),
+                        'cof'=colnames(cof_fwd[[i]]),
+                        'coef'=fwd_lm[[i]]$coef)
+   }
+
+ #GLS pvals for best models according to extBIC and mbonf
+
+ opt_extBIC<-fwdbwd_table[which(fwdbwd_table$extBIC==min(fwdbwd_table$extBIC))[1],]
+ opt_mbonf<-(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=0.05/m),]$ncof))[1],]
+ if(! is.null(thresh)){
+   opt_thresh<-(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),])[which(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof==max(fwdbwd_table[which(fwdbwd_table$maxpval<=thresh),]$ncof))[1],]
+ }
+ bestmodel_pvals<-function(model) {if(substr(model$step_,start=0,stop=3)=='fwd') {
+ 		pval_step[[as.integer(substring(model$step_,first=4))+1]]} else if (substr(model$step_,start=0,stop=3)=='bwd') {
+ 		cof<-cof_bwd[[as.integer(substring(model$step_,first=4))+1]]
+ 		mixedmod<-emma.REMLE(Y,cbind(fix_cofs,cof),K_norm)
+ 		M<-solve(chol(mixedmod$vg*K_norm+mixedmod$ve*diag(n)))
+ 		Y_t<-crossprod(M,Y)
+ 		cof_t<-crossprod(M,cbind(fix_cofs,cof))
+ 		GLS_lm<-summary(lm(Y_t~0+cof_t))
+ 		Res_H0<-GLS_lm$residuals
+ 		Q_ <- qr.Q(qr(cof_t))
+ 		RSS<-list()
+ 		for (j in 1:(nbchunks-1)) {
+ 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j-1)*round(m/nbchunks)+1):(j*round(m/nbchunks))])
+ 		RSS[[j]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ 		rm(X_t)}
+ 		X_t<-crossprod(M %*% (diag(n)-tcrossprod(Q_,Q_)),(X[,!colnames(X) %in% colnames(cof)])[,((j)*round(m/nbchunks)+1):(m-ncol(cof))])
+ 		RSS[[nbchunks]]<-apply(X_t,2,function(x){sum(lsfit(x,Res_H0,intercept = FALSE)$residuals^2)})
+ 		rm(X_t,j)
+ 		RSSf<-unlist(RSS)
+ 		RSS_H0<-sum(Res_H0^2)
+ 		df2<-n-df1-ncol(fix_cofs)-ncol(cof)
+ 		Ftest<-(rep(RSS_H0,length(RSSf))/RSSf-1)*df2/df1
+ 		pval<-pf(Ftest,df1,df2,lower.tail=FALSE)
+ 		list('out'=rbind(data.frame(SNP=colnames(cof),'pval'=GLS_lm$coef[(ncol(fix_cofs)+1):(ncol(fix_cofs)+ncol(cof)),4]),
+ 		                 data.frame('SNP'=names(pval),'pval'=pval)),
+ 		     'cof'=colnames(cof),
+ 		     'coef'=GLS_lm$coef)} else {cat('error \n')}}
+ opt_extBIC_out<-bestmodel_pvals(opt_extBIC)
+ opt_mbonf_out<-bestmodel_pvals(opt_mbonf)
+ if(! is.null(thresh)){
+   opt_thresh_out<-bestmodel_pvals(opt_thresh)
+ }
+ output <- list(step_table=fwdbwd_table,pval_step=pval_step,RSSout=plot_RSS,bonf_thresh=-log10(0.05/m),opt_extBIC=opt_extBIC_out,opt_mbonf=opt_mbonf_out)
+ if(! is.null(thresh)){
+   output$thresh <- -log10(thresh)
+   output$opt_thresh <- opt_thresh_out
+ }
+ return(output)
+ }
 `GAPIT.replaceNaN` <-
 function(LL) {
 #handler of grids with NaN log
 #Authors: Zhiwu Zhang
-# Last update: may 12, 2011 
+# Last update: may 12, 2011
 ##############################################################################################
 
-#handler of grids with NaN log 
+#handler of grids with NaN log
 index=(LL=="NaN")
 if(length(index)>0) theMin=min(LL[!index])
 if(length(index)<1) theMin="NaN"
 LL[index]=theMin
-return(LL)    
+return(LL)
 }
 #=============================================================================================
 `GAPIT2` <-
 function(Y=NULL,G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,CV.Inheritance=NULL,GP=NULL,GK=NULL,
-                group.from=1000000 ,group.to=1000000,group.by=10,DPP=100000, 
-                kinship.cluster="average", kinship.group='Mean',kinship.algorithm="VanRaden",                                                    
+                group.from=1000000 ,group.to=1000000,group.by=10,DPP=100000,
+                kinship.cluster="average", kinship.group='Mean',kinship.algorithm="VanRaden",
                 bin.from=10000,bin.to=10000,bin.by=10000,inclosure.from=10,inclosure.to=10,inclosure.by=10,
                 SNP.P3D=TRUE,SNP.effect="Add",SNP.impute="Middle",PCA.total=0, PCA.col=NULL,PCA.3d=FALSE,
                 SNP.fraction = 1, seed = 123, BINS = 20,SNP.test=TRUE,
-                SNP.MAF=0,FDR.Rate = 1, SNP.FDR=1,SNP.permutation=FALSE,SNP.CV=NULL,SNP.robust="GLM",                           
-                file.from=1, file.to=1, file.total=NULL, file.fragment = 99999,file.path=NULL, 
-                file.G=NULL, file.Ext.G=NULL,file.GD=NULL, file.GM=NULL, file.Ext.GD=NULL,file.Ext.GM=NULL, 
+                SNP.MAF=0,FDR.Rate = 1, SNP.FDR=1,SNP.permutation=FALSE,SNP.CV=NULL,SNP.robust="GLM",
+                file.from=1, file.to=1, file.total=NULL, file.fragment = 99999,file.path=NULL,
+                file.G=NULL, file.Ext.G=NULL,file.GD=NULL, file.GM=NULL, file.Ext.GD=NULL,file.Ext.GM=NULL,
                 ngrid = 100, llim = -10, ulim = 10, esp = 1e-10,
                 LD.chromosome=NULL,LD.location=NULL,LD.range=NULL,
                 sangwich.top=NULL,sangwich.bottom=NULL,QC=TRUE,GTindex=NULL,LD=0.1,
@@ -14056,7 +14057,7 @@ function(Y=NULL,G=NULL,GD=NULL,GM=NULL,KI=NULL,Z=NULL,CV=NULL,CV.Inheritance=NUL
 #Last update: Oct 23, 2015  by Jiabo Wang add REML threshold and SUPER GK
 ##############################################################################################
 print("--------------------- Welcome to GAPIT ----------------------------")
-  
+
 echo=TRUE
 #GAPIT.Version=GAPIT.0000()
 
@@ -14081,7 +14082,7 @@ storage_PCA.total<-PCA.total
  # iteration.output=iteration.output,acceleration=acceleration,iteration.method=iteration.method))
 
 myGenotype<-GAPIT.Genotype(G=G,GD=GD,GM=GM,KI=KI,kinship.algorithm=kinship.algorithm,PCA.total=PCA.total,SNP.fraction=SNP.fraction,SNP.test=SNP.test,
-                file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G, 
+                file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,
                 file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                 SNP.MAF=SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,NJtree.group=NJtree.group,NJtree.type=NJtree.type,
                 LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,
@@ -14117,10 +14118,10 @@ colnames(GD)=GI[,1]
 if(output.numerical) write.table(GD,  "GAPIT.Genotype.Numerical.txt", quote = FALSE, sep = "\t", row.names = TRUE,col.names = NA)
 if(output.hapmap) write.table(myGenotype$G,  "GAPIT.Genotype.hmp.txt", quote = FALSE, sep = "\t", row.names = FALSE,col.names = FALSE)
 
-#In case of null Y and null GP, return genotype only  
+#In case of null Y and null GP, return genotype only
 if(is.null(Y) & is.null(GP)) return (list(GWAS=NULL,GPS=NULL,Pred=NULL,compression=NULL,kinship.optimum=NULL,kinship=myGenotype$KI,PCA=myGenotype$PC,GD=data.frame(cbind(as.data.frame(GT),as.data.frame(GD))),GI=GI,G=myGenotype$G))
 
-#In case of null Y, return genotype only          
+#In case of null Y, return genotype only
 if(is.null(Y)) return (list(GWAS=NULL,GPS=NULL,Pred=NULL,compression=NULL,kinship.optimum=NULL,kinship=myGenotype$KI,PCA=myGenotype$PC,GD=data.frame(cbind(as.date.frame(GT),as.data.frame(GD))),Gi=GI,G=myGenotype$G))
 
 rm(myGenotype)
@@ -14165,12 +14166,12 @@ if(!is.null(memo)) traitname=paste(memo,".",traitname,sep="")
 gapitMain <- GAPIT.Main(Y=Y[,c(1,trait)],G=G,GD=GD,GM=GI,KI=KI,Z=Z,CV=CV,CV.Inheritance=CV.Inheritance,GP=GP,GK=GK,SNP.P3D=SNP.P3D,kinship.algorithm=kinship.algorithm,
                       bin.from=bin.from,bin.to=bin.to,bin.by=bin.by,inclosure.from=inclosure.from,inclosure.to=inclosure.to,inclosure.by=inclosure.by,
 				              group.from=group.from,group.to=group.to,group.by=group.by,kinship.cluster=kinship.cluster,kinship.group=kinship.group,name.of.trait=traitname,
-                        file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM, 
+                        file.path=file.path,file.from=file.from, file.to=file.to, file.total=file.total, file.fragment = file.fragment, file.G=file.G,file.Ext.G=file.Ext.G,file.GD=file.GD, file.GM=file.GM, file.Ext.GD=file.Ext.GD,file.Ext.GM=file.Ext.GM,
                         SNP.MAF= SNP.MAF,FDR.Rate = FDR.Rate,SNP.FDR=SNP.FDR,SNP.effect=SNP.effect,SNP.impute=SNP.impute,PCA.total=PCA.total,GAPIT.Version=GAPIT.Version,
                         GT=GT, SNP.fraction = SNP.fraction, seed = seed, BINS = BINS,SNP.test=SNP.test,DPP=DPP, SNP.permutation=SNP.permutation,NJtree.group=NJtree.group,NJtree.type=NJtree.type,plot.bin=plot.bin,
                         LD.chromosome=LD.chromosome,LD.location=LD.location,LD.range=LD.range,SNP.CV=SNP.CV,SNP.robust=SNP.robust,
                         genoFormat=genoFormat,hasGenotype=hasGenotype,byFile=byFile,fullGD=fullGD,PC=PC,GI=GI,Timmer = Timmer, Memory = Memory,
-                        sangwich.top=sangwich.top,sangwich.bottom=sangwich.bottom,QC=QC,GTindex=GTindex,LD=LD,file.output=file.output,cutOff=cutOff, 
+                        sangwich.top=sangwich.top,sangwich.bottom=sangwich.bottom,QC=QC,GTindex=GTindex,LD=LD,file.output=file.output,cutOff=cutOff,
                         Model.selection = Model.selection, Create.indicator = Create.indicator,
 						            QTN=QTN, QTN.round=QTN.round,QTN.limit=QTN.limit, QTN.update=QTN.update, QTN.method=QTN.method, Major.allele.zero=Major.allele.zero,
                         QTN.position=QTN.position,plot.style=plot.style,SUPER_GS=SUPER_GS,CG=CG,chor_taxa=chor_taxa)
@@ -14201,7 +14202,7 @@ colnames(h2)=c("Heritability")
   print("GAPIT accomplished successfully for single trait. Results are saved. GWAS are returned!")
   print("It is OK to see this: 'There were 50 or more warnings (use warnings() to see the first 50)'")
 
-  return (list(QTN=gapitMain$QTN,GWAS=gapitMain$GWAS,h2=gapitMain$h2,Pred=gapitMain$Pred,compression=as.data.frame(cbind(gapitMain$Compression,h2)), 
+  return (list(QTN=gapitMain$QTN,GWAS=gapitMain$GWAS,h2=gapitMain$h2,Pred=gapitMain$Pred,compression=as.data.frame(cbind(gapitMain$Compression,h2)),
   kinship.optimum=gapitMain$kinship.optimum,kinship=gapitMain$kinship,PCA=gapitMain$PC,
     FDR=myPower$FDR,Power=myPower$Power,Power.Alpha=myPower$Power.Alpha,alpha=myPower$alpha,SUPER_GD=gapitMain$SUPER_GD,P=gapitMain$P,effect.snp=gapitMain$effect.snp,effect.cv=gapitMain$effect.cv))
 }else{
@@ -14210,7 +14211,7 @@ colnames(h2)=c("Heritability")
   print("GAPIT accomplished successfully for single trait. Results are saved. GPS are returned!")
   print("It is OK to see this: 'There were 50 or more warnings (use warnings() to see the first 50)'")
 
-  return (list(QTN=gapitMain$QTN,GWAS=gapitMain$GWAS,h2=gapitMain$h2,Pred=gapitMain$Pred,compression=as.data.frame(cbind(gapitMain$Compression,h2)), 
+  return (list(QTN=gapitMain$QTN,GWAS=gapitMain$GWAS,h2=gapitMain$h2,Pred=gapitMain$Pred,compression=as.data.frame(cbind(gapitMain$Compression,h2)),
   kinship.optimum=gapitMain$kinship.optimum,kinship=gapitMain$kinship,PCA=gapitMain$PC,
     SUPER_GD=gapitMain$SUPER_GD,P=gapitMain$P,effect.snp=gapitMain$effect.snp,effect.cv=gapitMain$effect.cv))
 
@@ -14221,7 +14222,7 @@ colnames(h2)=c("Heritability")
   print("GAPIT accomplished successfully for multiple traits. Results are saved")
   print("It is OK to see this: 'There were 50 or more warnings (use warnings() to see the first 50)'")
 
-  
+
   return (list(QTN=NULL,GWAS=NULL,h2=NULL,Pred=NULL,compression=NULL,kinship.optimum=NULL,kinship=gapitMain$KI,PCA=gapitMain$PC,P=gapitMain$P,effect.snp=gapitMain$effect.snp,effect.cv=gapitMain$effect.cv))
 }
 
