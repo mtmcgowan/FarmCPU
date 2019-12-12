@@ -1,0 +1,19 @@
+Package: FarmCPU
+Type: Package
+Title: FarmCPU iteratively used fixed and random effect models for powerful and efficient genome-wide association studies (GWAS)
+Version: 0.1.0
+Author: Xiaolei Liu and Zhiwu Zhang
+Maintainer: None
+Description: With substantial success in finding genes underlying human diseases and agriculturally
+economic traits, Genome-Wide Association Study (GWAS) has been suffering two controversial problems: overwhelmed false positives and painful false negatives. Population structure and
+Kinship among individuals can be incorporated as covariates in a Mixed Linear Model (MLM)
+to control false positives. But the confounding problem between the covariates and test marker
+also weakens the signals of QTNs (Quantitative Trait Nucleotides), resulting false negatives.
+Here we present a user-friendly R GWAS package called FarmCPU (Fixed and random model
+Circulating Probability Unification), it implemented a method we recently developed to address
+the “confounding problem” and used several mathematical or programming strategies to increase
+the speed and save memory in order to make FarmCPU adapted for big data. Now, FarmCPU
+can deal with a data with 500,000 samples and 500,000 markers in three days.
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
